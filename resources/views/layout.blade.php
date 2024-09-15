@@ -65,7 +65,7 @@
             }
         </style>
     </head>
-    <body class="  ">
+    <body class="">
         <!-- loader Start -->
         {{-- <div id="loading">
             <div class="loader simple-loader">
