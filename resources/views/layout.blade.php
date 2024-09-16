@@ -63,6 +63,29 @@
                 --bs-primary-tint-40: #01A94D;
                 --bs-primary-shade-20: #01A94D;
             }
+
+            .no-data-image {
+                max-width: 300px;
+            }
+            .no-data-heading {
+                font-size: 2rem;
+            }
+            .no-data-subtext {
+                font-size: 1.25rem;
+            }
+
+            /* Media query for mobile screens (max-width: 576px is for small devices) */
+            @media (max-width: 576px) {
+                .no-data-image {
+                    max-width: 200px;
+                }
+                .no-data-heading {
+                    font-size: 1.5rem;
+                }
+                .no-data-subtext {
+                    font-size: 1rem;
+                }
+            }
         </style>
     </head>
     <body class="">
