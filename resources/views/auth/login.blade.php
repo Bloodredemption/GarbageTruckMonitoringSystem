@@ -78,14 +78,14 @@
                         <div class="col-md-10">
                             <div class="card card-transparent shadow-none d-flex justify-content-center mb-0 auth-card">
                                 <div class="card-body">
-                                    <a href="#" class="navbar-brand d-flex flex-column align-items-center justify-content-center mb-5 text-center w-100">
+                                    <a href="#" class="navbar-brand d-flex flex-column align-items-center justify-content-center mb-3 text-center w-100">
                                         <!--Logo start-->
                                         <div class="logo-main d-flex flex-column align-items-center">
                                             <div class="logo-normal">
-                                                <img src="{{ asset('assets/images/gtms_logo.png') }}" width="85%" alt="GTMS Logo">
+                                                <img src="{{ asset('assets/images/logo.png') }}" width="50%" alt="GTMS Logo">
                                             </div>
                                             <div class="logo-mini">
-                                                <img src="{{ asset('assets/images/gtms_logo.png') }}" alt="GTMS Logo">
+                                                <img src="{{ asset('assets/images/logo.png') }}" alt="GTMS Logo">
                                             </div>
                                         </div>
                                         <!--Logo End-->
@@ -113,7 +113,7 @@
                                                 <input type="checkbox" class="form-check-input" id="customCheck1">
                                                 <label class="form-check-label" for="customCheck1">Remember Me</label>
                                             </div>
-                                            <a href="recoverpw.html">Forgot Password?</a>
+                                            {{-- <a href="recoverpw.html">Forgot Password?</a> --}}
                                         </div>
                                         </div>
                                         <div class="d-flex justify-content-center">
@@ -128,7 +128,7 @@
                     
                 </div>
                 <div class="col-md-6 d-md-block d-none bg-primary p-0 mt-n1 vh-100 overflow-hidden">
-                    <img src="{{ asset('assets/images/auth/01.png') }}" class="img-fluid gradient-main animated-scaleX" alt="images">
+                    {{-- <img src="{{ asset('assets/images/waste-mng.svg') }}" width="70%" alt="images"> --}}
                 </div>
             </div>
         </section>
