@@ -94,18 +94,37 @@
                                     </a>
                                     <h2 class="mb-2 text-center"><strong>Welcome!</strong></h2>
                                     <p class="text-center">Please enter your login credentials.</p>
-                                    <form>
+
+                                    @if($errors->has('loginError'))
+                                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                            <svg class="bi flex-shrink-0 me-2" width="24" height="24">
+                                                <use xlink:href="#exclamation-triangle-fill" />
+                                            </svg>
+                                            <div>
+                                                {{ $errors->first('loginError') }}
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
+                                    <form method="POST" action="{{ route('login') }}">
+                                        @csrf
                                         <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label for="username" class="form-label">Username</label>
-                                                <input type="text" class="form-control" id="username" aria-describedby="username" placeholder=" ">
+                                                <input type="text" class="form-control" id="username" name="username" aria-describedby="username" placeholder=" " required>
+                                                @error('username')
+                                                    <span>{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label for="password" class="form-label">Password</label>
-                                                <input type="password" class="form-control" id="password" aria-describedby="password" placeholder=" ">
+                                                <input type="password" class="form-control" id="password" name="password" aria-describedby="password" placeholder=" " required>
+                                                @error('password')
+                                                    <span>{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-12 d-flex justify-content-between">
@@ -116,9 +135,10 @@
                                             {{-- <a href="recoverpw.html">Forgot Password?</a> --}}
                                         </div>
                                         </div>
-                                        <div class="d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-primary">Sign In</button>
+                                        <div class="d-flex justify-content-center mb-4">
+                                            <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
                                         </div>
+                                        
                                         
                                     </form>
                                 </div>
