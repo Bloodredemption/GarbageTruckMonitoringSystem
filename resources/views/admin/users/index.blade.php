@@ -70,7 +70,7 @@
                                 </div> --}}
                                 
                                 <div class="table-responsive">
-                                    <table id="datatable" class="table" role="grid" data-toggle="data-table">
+                                    <table id="datatable" class="table table-striped" role="grid" data-toggle="data-table">
                                         <thead>
                                             <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                 <th>Name</th>
@@ -86,16 +86,17 @@
                                             <tr>
                                                 <td>
                                                     <a href="#">{{ $user->fullname }}</a>
+                                                    {{-- <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> --}}
                                                 </td>
                                                 <td>{{ $user->username }}</td>
                                                 <td>{{ $user->contact_num }}</td>
                                                 <td>
                                                     @if ($user->user_type == 'admin')
-                                                        <div class="text-success">Admin</div>
+                                                        <div class="text-success">Administrator</div>
                                                     @elseif ($user->user_type == 'landfill')
-                                                        <div class="text-warning">Landfill</div>
+                                                        <div class="text-warning">Landfill Staff</div>
                                                     @elseif ($user->user_type == 'driver')
-                                                        <div class="text-warning">Driver</div>
+                                                        <div class="text-warning">Truck Driver</div>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -107,9 +108,11 @@
                                                 </td>
                                                 <td>
                                                 <div class="flex align-items-center list-user-action">
-                                                    <a class="btn btn-sm btn-icon btn-warning" data-bs-placement="top" title="Edit"
-                                                    href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditUser" aria-controls="offcanvasEditUser">
+                                                    <a class="btn btn-sm btn-icon btn-warning edit-user-btn" data-bs-placement="top" title="Edit"
+                                                    href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditUser"
+                                                    aria-controls="offcanvasEditUser" data-id="{{ $user->id }}">
                                                         <span class="btn-inner">
+                                                            <!-- SVG Icon -->
                                                             <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341"
                                                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -141,7 +144,6 @@
                     </div>
                 </div>
             </div>
-            
         </div>
     </div>
     
@@ -152,32 +154,31 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <!-- Form to Add a New User -->
             <form action="{{ route('users.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="firstname" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="firstname" name="firstname" required>
+                    <label for="add_firstname" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="add_firstname" name="firstname" required>
                 </div>
                 <div class="mb-3">
-                    <label for="middle_initial" class="form-label">Middle Initial</label>
-                    <input type="text" class="form-control" id="middle_initial" name="middle_initial" maxlength="1">
+                    <label for="add_middle_initial" class="form-label">Middle Initial</label>
+                    <input type="text" class="form-control" id="add_middle_initial" name="middle_initial" maxlength="1">
                 </div>
                 <div class="mb-3">
-                    <label for="lastname" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="lastname" name="lastname" required>
+                    <label for="add_lastname" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="add_lastname" name="lastname" required>
                 </div>
                 <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
+                    <label for="add_username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="add_username" name="username" required>
                 </div>
                 <div class="mb-3">
-                    <label for="contact_num" class="form-label">Contact Number</label>
-                    <input type="text" class="form-control" id="contact_num" name="contact_num" required>
+                    <label for="add_contact_num" class="form-label">Contact Number</label>
+                    <input type="text" class="form-control" id="add_contact_num" name="contact_num" required>
                 </div>
                 <div class="mb-3">
-                    <label for="user_type" class="form-label">Role</label>
-                    <select class="form-control" id="user_type" name="user_type" required>
+                    <label for="add_user_type" class="form-label">Role</label>
+                    <select class="form-control" id="add_user_type" name="user_type" required>
                         <option>Select Role</option>
                         <option value="admin">Admin</option>
                         <option value="landfill">Landfill</option>
@@ -185,12 +186,12 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <label for="add_password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="add_password" name="password" required>
                 </div>
                 <div class="mb-4">
-                    <label for="password_confirmation" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                    <label for="add_password_confirmation" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="add_password_confirmation" name="password_confirmation" required>
                 </div>
                 <button type="submit" class="btn btn-primary mb-3">Add User</button>
             </form>
@@ -204,7 +205,53 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            ...
+            <form action="" method="POST">
+                @csrf
+                @method('PUT') <!-- Make sure the method is PUT for updating -->
+    
+                <!-- Hidden input for user ID -->
+                <input type="hidden" id="edit_user_id" name="user_id">
+    
+                <!-- Form fields for editing user -->
+                <div class="mb-3">
+                    <label for="edit_firstname" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="edit_firstname" name="firstname" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_middle_initial" class="form-label">Middle Initial</label>
+                    <input type="text" class="form-control" id="edit_middle_initial" name="middle_initial" maxlength="1">
+                </div>
+                <div class="mb-3">
+                    <label for="edit_lastname" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="edit_lastname" name="lastname" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="edit_username" name="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_contact_num" class="form-label">Contact Number</label>
+                    <input type="text" class="form-control" id="edit_contact_num" name="contact_num" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_user_type" class="form-label">Role</label>
+                    <select class="form-control" id="edit_user_type" name="user_type" required>
+                        <option value="admin">Admin</option>
+                        <option value="landfill">Landfill</option>
+                        <option value="driver">Driver</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="edit_password" name="password">
+                </div>
+                <div class="mb-4">
+                    <label for="edit_password_confirmation" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="edit_password_confirmation" name="password_confirmation">
+                </div>
+    
+                <button type="submit" class="btn btn-primary mb-3">Update User</button>
+            </form>
         </div>
     </div>
 
@@ -212,11 +259,63 @@
     @include('partials.footer')
     <!-- Footer Section End -->    
 </main>
-
-<script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
-</script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Handle edit button click
+            document.querySelectorAll('.edit-user-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const userId = this.dataset.id;
+        
+                    // Fetch user data and pre-fill form
+                    fetch(`/admin/users/${userId}/edit`)
+                        .then(response => response.json())
+                        .then(user => {
+                            document.getElementById('edit_firstname').value = user.firstname;
+                            document.getElementById('edit_middle_initial').value = user.middle_initial;
+                            document.getElementById('edit_lastname').value = user.lastname;
+                            document.getElementById('edit_username').value = user.username;
+                            document.getElementById('edit_contact_num').value = user.contact_num;
+                            document.getElementById('edit_user_type').value = user.user_type;
+                            document.getElementById('edit_user_id').value = user.id; // Store the ID in a hidden field
+                            document.getElementById('edit_password').value = ''; // Clear password fields
+                            document.getElementById('edit_password_confirmation').value = '';
+                        })
+                        .catch(error => console.error('Error fetching user:', error));
+                });
+            });
+        
+            // Handle form submission via AJAX
+            document.querySelector("form").addEventListener("submit", function(e) {
+                e.preventDefault();
+        
+                const userId = document.getElementById('edit_user_id').value;
+                let formData = new FormData(this);
+        
+                fetch(`/admin/users/${userId}/update`, {
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-HTTP-Method-Override': 'PUT', // Laravel recognizes this as PUT
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message); // Notify user
+                        // You can add additional logic to update UI with updated user data
+                    } else if (data.status === 'error') {
+                        // Handle validation errors
+                        let errors = data.errors;
+                        for (let field in errors) {
+                            alert(errors[field][0]); // Display error for each field
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+    
 @endsection

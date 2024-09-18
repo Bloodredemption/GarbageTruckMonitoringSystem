@@ -106,7 +106,7 @@
                                         </div>
                                     @endif
                                     
-                                    <form method="POST" action="{{ route('login') }}">
+                                    <form id="loginForm" method="POST" action="{{ route('login') }}">
                                         @csrf
                                         <div class="row">
                                         <div class="col-lg-12">
@@ -136,10 +136,11 @@
                                         </div>
                                         </div>
                                         <div class="d-flex justify-content-center mb-4">
-                                            <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                                            <button id="loginButton" type="submit" class="btn btn-primary" style="width: 100%;">
+                                                <span style="display: none;" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                Login
+                                            </button>
                                         </div>
-                                        
-                                        
                                     </form>
                                 </div>
                             </div>

@@ -70,6 +70,8 @@ Route::get('/admin/residents-concerns', function () {
 // Users
 Route::get('/admin/users', [UsersController::class, 'index'])->middleware('auth')->name('users');
 Route::post('/admin/users', [UsersController::class, 'store'])->name('users.store');
+route::put('/admin/users/{id}/update', [UsersController::class, 'update'])->name('user.update');
+route::get('/dmin/users/{id}/edit', [UsersController::class, 'edit'])->name('user.edit');
 
 // Help
 Route::get('/admin/help', function () {
