@@ -20,6 +20,7 @@ class UsersSeeder extends Seeder
             'password' => Hash::make('password'),  // Ensure password is hashed
             'contact_num' => 1234567890,
             'user_type' => 'admin',
+            'status' => 'active',
         ]);
     }
 }

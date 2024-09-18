@@ -43,11 +43,10 @@
                             <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
                                 <div class="header-title">
                                     <h4 class="card-title">Users List</h4>
-                                    {{-- <p class="mb-0">Sub Title Here</p>           --}}
                                 </div>
                                 
                                 <div>
-                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasUser" aria-controls="offcanvasUser">
                                         <i class="btn-inner">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -57,45 +56,67 @@
                                     </a>
                                 </div>
                             </div>
+                            @if(session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
                             <div class="card-body px-0">
 
-                                <div class="d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
+                                {{-- <div class="d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
                                     <img src="{{ asset('assets/images/no-data.svg')}}" class="img-fluid mb-4" alt="No Data Found">
                                     <h1 style="color: #8A92A6;"><strong>No Data Found</strong></h1>
                                     <span>Start adding user by clicking the “Add New” button.</span>
-                                </div>
+                                </div> --}}
                                 
-                                {{-- <div class="table-responsive">
-                                    <table id="user-list-table" class="table table-striped" role="grid" data-bs-toggle="data-table">
+                                <div class="table-responsive">
+                                    <table id="datatable" class="table" role="grid" data-toggle="data-table">
                                         <thead>
                                             <tr class="ligth" style="background-color: #01A94D; color: white;">
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Join Date</th>
-                                                <th style="min-width: 100px">Action</th>
+                                                <th>Name</th>
+                                                <th>Username</th>
+                                                <th>Contact No.</th>
+                                                <th>Role</th>
+                                                <th>Status</th>
+                                                <th class="no-sort" style="min-width: 100px">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach($users as $user)
                                             <tr>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td><span class="badge bg-primary">active</span></td>
-                                                <td>Sample</td>
-                                                <td>2019/12/01</td>
+                                                <td>
+                                                    <a href="#">{{ $user->fullname }}</a>
+                                                </td>
+                                                <td>{{ $user->username }}</td>
+                                                <td>{{ $user->contact_num }}</td>
+                                                <td>
+                                                    @if ($user->user_type == 'admin')
+                                                        <div class="text-success">Admin</div>
+                                                    @elseif ($user->user_type == 'landfill')
+                                                        <div class="text-warning">Landfill</div>
+                                                    @elseif ($user->user_type == 'driver')
+                                                        <div class="text-warning">Driver</div>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($user->status == 'active')
+                                                        <span class="badge bg-primary">active</span>
+                                                    @else
+                                                        <span class="badge bg-danger">inactive</span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                 <div class="flex align-items-center list-user-action">
-                                                    <a class="btn btn-sm btn-icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"  href="#">
+                                                    <a class="btn btn-sm btn-icon btn-warning" data-bs-placement="top" title="Edit"
+                                                    href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditUser" aria-controls="offcanvasEditUser">
                                                         <span class="btn-inner">
                                                             <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.82812 10.921L16.3011 3.44799C17.2321 2.51799 18.7411 2.51799 19.6721 3.44799L20.8891 4.66499C21.8201 5.59599 21.8201 7.10599 20.8891 8.03599L13.3801 15.545C12.9731 15.952 12.4211 16.181 11.8451 16.181H8.09912L8.19312 12.401C8.20712 11.845 8.43412 11.315 8.82812 10.921Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            <path d="M15.1655 4.60254L19.7315 9.16854" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341"
+                                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.82812 10.921L16.3011 3.44799C17.2321 2.51799 18.7411 2.51799 19.6721 3.44799L20.8891 4.66499C21.8201 5.59599 21.8201 7.10599 20.8891 8.03599L13.3801 15.545C12.9731 15.952 12.4211 16.181 11.8451 16.181H8.09912L8.19312 12.401C8.20712 11.845 8.43412 11.315 8.82812 10.921Z"
+                                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                <path d="M15.1655 4.60254L19.7315 9.16854" stroke="currentColor" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round"></path>
                                                             </svg>
                                                         </span>
                                                     </a>
@@ -111,9 +132,10 @@
                                                 </div>
                                                 </td>
                                             </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -123,9 +145,78 @@
         </div>
     </div>
     
+    <!-- Offcanvas for Adding New User -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasUser" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">Add New User</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <!-- Form to Add a New User -->
+            <form action="{{ route('users.store') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label for="firstname" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstname" name="firstname" required>
+                </div>
+                <div class="mb-3">
+                    <label for="middle_initial" class="form-label">Middle Initial</label>
+                    <input type="text" class="form-control" id="middle_initial" name="middle_initial" maxlength="1">
+                </div>
+                <div class="mb-3">
+                    <label for="lastname" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastname" name="lastname" required>
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="contact_num" class="form-label">Contact Number</label>
+                    <input type="text" class="form-control" id="contact_num" name="contact_num" required>
+                </div>
+                <div class="mb-3">
+                    <label for="user_type" class="form-label">Role</label>
+                    <select class="form-control" id="user_type" name="user_type" required>
+                        <option>Select Role</option>
+                        <option value="admin">Admin</option>
+                        <option value="landfill">Landfill</option>
+                        <option value="driver">Driver</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password_confirmation" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                </div>
+                <button type="submit" class="btn btn-primary mb-3">Add User</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Offcanvas for Edit User -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasEditUserLabel">Edit User</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            ...
+        </div>
+    </div>
+
     <!-- Footer Section Start -->
     @include('partials.footer')
     <!-- Footer Section End -->    
 </main>
 
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+</script>
 @endsection

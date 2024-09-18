@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('fullname');
             $table->string('username');
             $table->string('password');
-            $table->integer('contact_num');
+            $table->bigInteger('contact_num');
             $table->string('user_type');
+            $table->string('status')->default('inactive');
             $table->timestamps();
         });
     }

@@ -28,6 +28,7 @@ class Users extends Authenticatable
         'password',
         'contact_num',
         'user_type',
+        'status',
     ];
 
     /**

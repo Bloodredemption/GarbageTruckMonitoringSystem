@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 
@@ -67,9 +68,8 @@ Route::get('/admin/residents-concerns', function () {
 })->name('residents-concerns');
 
 // Users
-Route::get('/admin/users', function () {
-    return view('admin.users.index');
-})->name('users');
+Route::get('/admin/users', [UsersController::class, 'index'])->middleware('auth')->name('users');
+Route::post('/admin/users', [UsersController::class, 'store'])->name('users.store');
 
 // Help
 Route::get('/admin/help', function () {
