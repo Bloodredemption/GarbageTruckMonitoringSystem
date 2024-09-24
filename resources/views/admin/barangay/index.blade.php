@@ -62,24 +62,22 @@
                                     <table id="user-list-table" class="table table-striped" role="grid" data-bs-toggle="data-table">
                                         <thead>
                                             <tr class="ligth" style="background-color: #01A94D; color: white;">
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Join Date</th>
+                                                <th>No.</th>
+                                                <th>Address</th>
+                                                <th>Area</th>
+                                                <th>Zip Code</th>
+                                                <th>Captain</th>
+                                                <th>Date Created</th>
                                                 <th style="min-width: 100px">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td><span class="badge bg-primary">active</span></td>
-                                                <td>Sample</td>
+                                                <td>1</td>
+                                                <td>Brgy. 6, Balingasag, Misamis Oriental</td>
+                                                <td>Barangay 6 Covered Court</td>
+                                                <td>9005</td>
+                                                <td>EJ Lester Pimentel</td>
                                                 <td>2019/12/01</td>
                                                 <td>
                                                 <div class="flex align-items-center list-user-action">

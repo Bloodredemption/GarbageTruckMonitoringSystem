@@ -347,11 +347,6 @@
             var offcanvasElement = document.getElementById('offcanvasAddUser');
             var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
 
-            // If the offcanvasInstance is not initialized, initialize it
-            // if (!offcanvasInstance) {
-            //     offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
-            // }
-
             $.ajax({
                 url: "{{ route('users.store') }}", // Your store route
                 type: "POST",
@@ -360,7 +355,11 @@
                     alert(response.message); // Alert success message
                     $('#addUserForm')[0].reset(); // Reset the form
                     fetchUsers(); // Reload the users list in the table
-                    offcanvasInstance.hide(); // Close the offcanvas
+
+                    var offcanvasElement = document.getElementById('offcanvasAddUser');
+                    var offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
+
+                    offcanvasInstance.hide();
                 },
                 error: function (error) {
                     console.log("Error adding user: ", error);
@@ -373,7 +372,6 @@
                 }
             });
         });
-
 
         // Edit User (Populating data into modal)
         $(document).on('click', '.edit-user-btn', function () {
