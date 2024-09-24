@@ -68,10 +68,12 @@ Route::get('/admin/residents-concerns', function () {
 })->name('residents-concerns');
 
 // Users
-Route::get('/admin/users', [UsersController::class, 'index'])->middleware('auth')->name('users');
+Route::get('/admin/users', [UsersController::class, 'index'])->middleware('auth')->name('users.index');
 Route::post('/admin/users', [UsersController::class, 'store'])->name('users.store');
-route::put('/admin/users/{id}/update', [UsersController::class, 'update'])->name('user.update');
-route::get('/dmin/users/{id}/edit', [UsersController::class, 'edit'])->name('user.edit');
+Route::get('/admin/users/{id}/edit', [UsersController::class, 'edit']);
+Route::put('/admin/users/{id}/update', [UsersController::class, 'update']);
+Route::put('/admin/users/{id}/delete', [UsersController::class, 'destroy']);
+route::get('/admin/users/{id}/show', [UsersController::class, 'show'])->name('users.show');
 
 // Help
 Route::get('/admin/help', function () {

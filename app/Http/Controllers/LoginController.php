@@ -21,6 +21,11 @@ class LoginController extends Controller
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
             
+            if ($user->status == 'inactive') {
+                $user->status = 'active';
+                $user->save();
+            }
+
             switch ($user->user_type) {
                 case 'admin':
                     return redirect()->route('dashboard');

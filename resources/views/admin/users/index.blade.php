@@ -43,6 +43,12 @@
                             <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
                                 <div class="header-title">
                                     <h4 class="card-title">Users List</h4>
+                                    
+                                    {{-- <a href="#" onclick="fetchUsers()" aria-label="Fetch users">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);">
+                                            <path d="M19.89 10.105a8.696 8.696 0 0 0-.789-1.456l-1.658 1.119a6.606 6.606 0 0 1 .987 2.345 6.659 6.659 0 0 1 0 2.648 6.495 6.495 0 0 1-.384 1.231 6.404 6.404 0 0 1-.603 1.112 6.654 6.654 0 0 1-1.776 1.775 6.606 6.606 0 0 1-2.343.987 6.734 6.734 0 0 1-2.646 0 6.55 6.55 0 0 1-3.317-1.788 6.605 6.605 0 0 1-1.408-2.088 6.613 6.613 0 0 1-.382-1.23 6.627 6.627 0 0 1 .382-3.877A6.551 6.551 0 0 1 7.36 8.797 6.628 6.628 0 0 1 9.446 7.39c.395-.167.81-.296 1.23-.382.107-.022.216-.032.324-.049V10l5-4-5-4v2.938a8.805 8.805 0 0 0-.725.111 8.512 8.512 0 0 0-3.063 1.29A8.566 8.566 0 0 0 4.11 16.77a8.535 8.535 0 0 0 1.835 2.724 8.614 8.614 0 0 0 2.721 1.833 8.55 8.55 0 0 0 5.061.499 8.576 8.576 0 0 0 6.162-5.056c.22-.52.389-1.061.5-1.608a8.643 8.643 0 0 0 0-3.45 8.684 8.684 0 0 0-.499-1.607z"></path>
+                                        </svg>
+                                    </a> --}}
                                 </div>
                                 
                                 <div>
@@ -56,11 +62,7 @@
                                     </a>
                                 </div>
                             </div>
-                            @if(session('success'))
-                                    <div class="alert alert-success">
-                                        {{ session('success') }}
-                                    </div>
-                                @endif
+
                             <div class="card-body px-0">
 
                                 {{-- <div class="d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
@@ -70,72 +72,20 @@
                                 </div> --}}
                                 
                                 <div class="table-responsive">
-                                    <table id="datatable" class="table table-striped" role="grid" data-toggle="data-table">
+                                    <table id="datatable" class="table" role="grid" data-toggle="data-table">
                                         <thead>
-                                            <tr class="ligth" style="background-color: #01A94D; color: white;">
+                                            <tr style="background-color: #01A94D; color: white;">
+                                                <th style="width: 5%;">No.</th>
                                                 <th>Name</th>
                                                 <th>Username</th>
                                                 <th>Contact No.</th>
                                                 <th>Role</th>
                                                 <th>Status</th>
-                                                <th class="no-sort" style="min-width: 100px">Action</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach($users as $user)
-                                            <tr>
-                                                <td>
-                                                    <a href="#">{{ $user->fullname }}</a>
-                                                    {{-- <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> --}}
-                                                </td>
-                                                <td>{{ $user->username }}</td>
-                                                <td>{{ $user->contact_num }}</td>
-                                                <td>
-                                                    @if ($user->user_type == 'admin')
-                                                        <div class="text-success">Administrator</div>
-                                                    @elseif ($user->user_type == 'landfill')
-                                                        <div class="text-warning">Landfill Staff</div>
-                                                    @elseif ($user->user_type == 'driver')
-                                                        <div class="text-warning">Truck Driver</div>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($user->status == 'active')
-                                                        <span class="badge bg-primary">active</span>
-                                                    @else
-                                                        <span class="badge bg-danger">inactive</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                <div class="flex align-items-center list-user-action">
-                                                    <a class="btn btn-sm btn-icon btn-warning edit-user-btn" data-bs-placement="top" title="Edit"
-                                                    href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditUser"
-                                                    aria-controls="offcanvasEditUser" data-id="{{ $user->id }}">
-                                                        <span class="btn-inner">
-                                                            <!-- SVG Icon -->
-                                                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341"
-                                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.82812 10.921L16.3011 3.44799C17.2321 2.51799 18.7411 2.51799 19.6721 3.44799L20.8891 4.66499C21.8201 5.59599 21.8201 7.10599 20.8891 8.03599L13.3801 15.545C12.9731 15.952 12.4211 16.181 11.8451 16.181H8.09912L8.19312 12.401C8.20712 11.845 8.43412 11.315 8.82812 10.921Z"
-                                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                                <path d="M15.1655 4.60254L19.7315 9.16854" stroke="currentColor" stroke-width="1.5"
-                                                                    stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
-                                                    <a class="btn btn-sm btn-icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"  href="#">
-                                                        <span class="btn-inner">
-                                                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
-                                                            <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                                </td>
-                                            </tr>
-                                            @endforeach
+                                        <tbody id="userTableBody">
+                                            <!-- Users will be loaded here via AJAX -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -149,15 +99,18 @@
     
     <!-- Offcanvas for Adding New User -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasUser" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <h5 id="offcanvasRightLabel">Add New User</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div class="offcanvas-header" style="padding-bottom: 0;">
+            <div>
+                <h5 id="offcanvasRightLabel">Add New User</h5>
+                <p style="font-size: 15px;">Please fill all the required fields <span style="color: red;">*</span></p>
+            </div>
+            {{-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> --}}
         </div>
         <div class="offcanvas-body">
-            <form action="{{ route('users.store') }}" method="POST">
+            <form id="addUserForm" action="{{ route('users.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="add_firstname" class="form-label">First Name</label>
+                    <label for="add_firstname" class="form-label">First Name <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="add_firstname" name="firstname" required>
                 </div>
                 <div class="mb-3">
@@ -165,19 +118,19 @@
                     <input type="text" class="form-control" id="add_middle_initial" name="middle_initial" maxlength="1">
                 </div>
                 <div class="mb-3">
-                    <label for="add_lastname" class="form-label">Last Name</label>
+                    <label for="add_lastname" class="form-label">Last Name <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="add_lastname" name="lastname" required>
                 </div>
                 <div class="mb-3">
-                    <label for="add_username" class="form-label">Username</label>
+                    <label for="add_username" class="form-label">Username <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="add_username" name="username" required>
                 </div>
                 <div class="mb-3">
-                    <label for="add_contact_num" class="form-label">Contact Number</label>
-                    <input type="text" class="form-control" id="add_contact_num" name="contact_num" required>
+                    <label for="add_contact_num" class="form-label">Contact Number <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="add_contact_num" name="contact_num" maxlength="13" required>
                 </div>
                 <div class="mb-3">
-                    <label for="add_user_type" class="form-label">Role</label>
+                    <label for="add_user_type" class="form-label">Role <span style="color: red;">*</span></label>
                     <select class="form-control" id="add_user_type" name="user_type" required>
                         <option>Select Role</option>
                         <option value="admin">Admin</option>
@@ -186,35 +139,37 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="add_password" class="form-label">Password</label>
+                    <label for="add_password" class="form-label">Password <span style="color: red;">*</span></label>
                     <input type="password" class="form-control" id="add_password" name="password" required>
                 </div>
                 <div class="mb-4">
-                    <label for="add_password_confirmation" class="form-label">Confirm Password</label>
+                    <label for="add_password_confirmation" class="form-label">Confirm Password <span style="color: red;">*</span></label>
                     <input type="password" class="form-control" id="add_password_confirmation" name="password_confirmation" required>
                 </div>
                 <button type="submit" class="btn btn-primary mb-3">Add User</button>
+                <button type="button" class="btn btn-light text-reset mb-3" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
             </form>
         </div>
     </div>
 
     <!-- Offcanvas for Edit User -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditUser" aria-labelledby="offcanvasEditUserLabel">
-        <div class="offcanvas-header">
-            <h5 id="offcanvasEditUserLabel">Edit User</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div class="offcanvas-header" style="padding-bottom: 0;">
+            <div>
+                <h5 id="offcanvasEditUserLabel">Edit User</h5>
+                <p style="font-size: 15px;">Please fill all the required fields <span style="color: red;">*</span></p>
+            </div>
+            {{-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> --}}
         </div>
         <div class="offcanvas-body">
-            <form action="" method="POST">
+            <form id="editUserForm" method="POST">
                 @csrf
-                @method('PUT') <!-- Make sure the method is PUT for updating -->
-    
                 <!-- Hidden input for user ID -->
                 <input type="hidden" id="edit_user_id" name="user_id">
-    
+            
                 <!-- Form fields for editing user -->
                 <div class="mb-3">
-                    <label for="edit_firstname" class="form-label">First Name</label>
+                    <label for="edit_firstname" class="form-label">First Name <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="edit_firstname" name="firstname" required>
                 </div>
                 <div class="mb-3">
@@ -222,100 +177,342 @@
                     <input type="text" class="form-control" id="edit_middle_initial" name="middle_initial" maxlength="1">
                 </div>
                 <div class="mb-3">
-                    <label for="edit_lastname" class="form-label">Last Name</label>
+                    <label for="edit_lastname" class="form-label">Last Name <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="edit_lastname" name="lastname" required>
                 </div>
                 <div class="mb-3">
-                    <label for="edit_username" class="form-label">Username</label>
+                    <label for="edit_username" class="form-label">Username <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="edit_username" name="username" required>
                 </div>
                 <div class="mb-3">
-                    <label for="edit_contact_num" class="form-label">Contact Number</label>
-                    <input type="text" class="form-control" id="edit_contact_num" name="contact_num" required>
+                    <label for="edit_contact_num" class="form-label">Contact Number <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="edit_contact_num" name="contact_num" maxlength="13" required>
                 </div>
                 <div class="mb-3">
-                    <label for="edit_user_type" class="form-label">Role</label>
+                    <label for="edit_user_type" class="form-label">Role <span style="color: red;">*</span></label>
                     <select class="form-control" id="edit_user_type" name="user_type" required>
+                        <option>Select Role</option>
                         <option value="admin">Admin</option>
                         <option value="landfill">Landfill</option>
                         <option value="driver">Driver</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="edit_password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="edit_password" name="password">
-                </div>
-                <div class="mb-4">
-                    <label for="edit_password_confirmation" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="edit_password_confirmation" name="password_confirmation">
-                </div>
-    
+            
                 <button type="submit" class="btn btn-primary mb-3">Update User</button>
+                <button type="button" class="btn btn-light text-reset mb-3" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
             </form>
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="viewUserModalLabel">User Information</h1>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-unstyled">
+                        <li><strong>Fullname:</strong> <span id="modal_fullname">Name Here</span></li>
+                        <li><strong>Role:</strong> <span id="modal_role">Sample Role</span></li>
+                        <li><strong>Account Status:</strong> <span id="modal_status">Active</span></li>
+                        <li><strong>Contact No.:</strong> <span id="modal_contact_num">Number Here</span></li>
+                        <li><strong>Date Created:</strong> <span id="modal_created_at">Date Here</span></li>
+                        <li><strong>Date Updated:</strong> <span id="modal_updated_at">Date Here</span></li>
+                        <li><strong>Login Credentials:</strong>
+                            <ul>
+                                <li>Username: <span id="modal_username">sample</span></li>
+                                <li>Password: <span id="modal_password">********</span> <!-- Masked for security reasons --></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Footer Section Start -->
     @include('partials.footer')
     <!-- Footer Section End -->    
 </main>
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Handle edit button click
-            document.querySelectorAll('.edit-user-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const userId = this.dataset.id;
-        
-                    // Fetch user data and pre-fill form
-                    fetch(`/admin/users/${userId}/edit`)
-                        .then(response => response.json())
-                        .then(user => {
-                            document.getElementById('edit_firstname').value = user.firstname;
-                            document.getElementById('edit_middle_initial').value = user.middle_initial;
-                            document.getElementById('edit_lastname').value = user.lastname;
-                            document.getElementById('edit_username').value = user.username;
-                            document.getElementById('edit_contact_num').value = user.contact_num;
-                            document.getElementById('edit_user_type').value = user.user_type;
-                            document.getElementById('edit_user_id').value = user.id; // Store the ID in a hidden field
-                            document.getElementById('edit_password').value = ''; // Clear password fields
-                            document.getElementById('edit_password_confirmation').value = '';
-                        })
-                        .catch(error => console.error('Error fetching user:', error));
-                });
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputs = ['add_contact_num', 'edit_contact_num'];
+
+        // Function to set prefix and ensure it's not removed
+        function handleContactInput(inputId) {
+            const contactInput = document.getElementById(inputId);
+
+            // Set initial value to +63
+            contactInput.value = "+63";
+
+            // Prevent erasing or changing the prefix
+            contactInput.addEventListener('input', function() {
+                if (!contactInput.value.startsWith("+63")) {
+                    contactInput.value = "+63" + contactInput.value.slice(3); // Preserve the rest of the input
+                }
             });
-        
-            // Handle form submission via AJAX
-            document.querySelector("form").addEventListener("submit", function(e) {
-                e.preventDefault();
-        
-                const userId = document.getElementById('edit_user_id').value;
-                let formData = new FormData(this);
-        
-                fetch(`/admin/users/${userId}/update`, {
-                    method: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'X-HTTP-Method-Override': 'PUT', // Laravel recognizes this as PUT
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        alert(data.message); // Notify user
-                        // You can add additional logic to update UI with updated user data
-                    } else if (data.status === 'error') {
-                        // Handle validation errors
-                        let errors = data.errors;
+
+            // Make sure the caret stays in the right place
+            contactInput.addEventListener('keydown', function(e) {
+                if (this.selectionStart < 3 && (e.key !== "ArrowRight" && e.key !== "ArrowLeft")) {
+                    e.preventDefault(); // Prevent typing before +63
+                }
+            });
+        }
+
+        // Apply to both fields
+        inputs.forEach(function(inputId) {
+            handleContactInput(inputId);
+        });
+    });
+
+    $(document).ready(function () {
+        // Fetch users and display in the table
+        function fetchUsers() {
+            $.ajax({
+                url: "{{ route('users.index') }}", // Route for fetching users
+                type: "GET",
+                success: function (response) {
+                    let rows = '';
+                    let counter = 1;
+                    // Loop through the users and create table rows dynamically
+                    $.each(response.users, function (key, user) {
+                        if (user.status !== 'deleted') { // Skip users with 'deleted' status
+                            rows += `
+                                <tr>
+                                    <td>${counter}</td>
+                                    <td><a href="#" class="view-user-btn" data-id="${user.id}">${user.fullname}</a></td>
+                                    <td>${user.username}</td>
+                                    <td>+${String(user.contact_num).replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '$1 $2 $3 $4')}</td>
+                                    <td>${user.user_type}</td>
+                                    <td>${user.status == 'active' ? '<span class="badge bg-primary">active</span>' : '<span class="badge bg-danger">inactive</span>'}</td>
+                                    <td>
+                                        <div class="flex align-items-center list-user-action">
+                                            <a class="btn btn-sm btn-icon btn-warning edit-user-btn" data-id="${user.id}">Edit</a>
+                                            <a class="btn btn-sm btn-icon btn-danger delete-user-btn" data-id="${user.id}">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                            counter++;
+                        }
+                    });
+
+                    // Destroy the existing DataTable to avoid duplication issues
+                    let dataTable = $('#datatable').DataTable();
+                    dataTable.clear(); // Clear the existing table data
+                    dataTable.destroy(); // Destroy the current instance
+
+                    // Append the new rows to the table body
+                    $('#datatable tbody').html(rows);
+
+                    // Reinitialize the DataTable to apply DataTables functionality
+                    $('#datatable').DataTable({
+                        retrieve: true, // Retrieve the existing table instead of initializing it again
+                        paging: true, // Enable pagination
+                        searching: true, // Enable search functionality
+                        info: true, // Show the number of entries info
+                        responsive: true, // Ensure responsiveness
+                    });
+                },
+                error: function (error) {
+                    console.log("Error fetching data: ", error);
+                    alert("Failed to fetch users. Please try again.");
+                }
+            });
+        }
+
+        fetchUsers();
+
+        // Add User
+        $('#addUserForm').on('submit', function (e) {
+            e.preventDefault(); // Prevent form from submitting normally
+            
+            let formData = {
+                _token: "{{ csrf_token() }}", // Laravel CSRF token
+                firstname: $('#add_firstname').val(),
+                middle_initial: $('#add_middle_initial').val(),
+                lastname: $('#add_lastname').val(),
+                username: $('#add_username').val(),
+                contact_num: $('#add_contact_num').val(),
+                user_type: $('#add_user_type').val(),
+                password: $('#add_password').val(),
+                password_confirmation: $('#add_password_confirmation').val(),
+            };
+
+            var offcanvasElement = document.getElementById('offcanvasAddUser');
+            var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+            // If the offcanvasInstance is not initialized, initialize it
+            // if (!offcanvasInstance) {
+            //     offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
+            // }
+
+            $.ajax({
+                url: "{{ route('users.store') }}", // Your store route
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    alert(response.message); // Alert success message
+                    $('#addUserForm')[0].reset(); // Reset the form
+                    fetchUsers(); // Reload the users list in the table
+                    offcanvasInstance.hide(); // Close the offcanvas
+                },
+                error: function (error) {
+                    console.log("Error adding user: ", error);
+                    if (error.responseJSON.errors) {
+                        let errors = error.responseJSON.errors;
                         for (let field in errors) {
-                            alert(errors[field][0]); // Display error for each field
+                            alert(errors[field][0]); // Display error messages for each field
                         }
                     }
-                })
-                .catch(error => console.error('Error:', error));
+                }
             });
         });
-    </script>
-    
+
+
+        // Edit User (Populating data into modal)
+        $(document).on('click', '.edit-user-btn', function () {
+            let userId = $(this).data('id');
+            var offcanvasElement = document.getElementById('offcanvasEditUser');
+            var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+            if (!offcanvasInstance) {
+                offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
+            }
+
+            $.ajax({
+                url: `/admin/users/${userId}/edit`,
+                type: "GET",
+                success: function (response) {
+                    $('#edit_user_id').val(response.user.id);
+
+                    let fullname = response.user.fullname.trim().split(" ");
+                    let firstname = "";
+                    let middleInitial = "";
+                    let lastname = "";
+                    let contactNum = String(response.user.contact_num);
+
+                    // If it starts with 63 (without the plus), add the plus sign
+                    if (contactNum.startsWith("63")) {
+                        contactNum = "+" + contactNum;
+                    } else if (!contactNum.startsWith("+63")) {
+                        // If it doesn't start with 63 or +63, enforce the +63 prefix
+                        contactNum = "+63" + contactNum;
+                    }
+
+                    // Loop through the parts of the name
+                    for (let i = 0; i < fullname.length; i++) {
+                        if (fullname[i].length === 2 && fullname[i][1] === '.') {
+                            // This part is the middle initial (1 letter + '.')
+                            middleInitial = fullname[i][0];
+                        } else if (i === fullname.length - 1) {
+                            // Last part is the last name
+                            lastname = fullname[i];
+                        } else {
+                            // Other parts are the first name
+                            firstname += fullname[i] + " ";
+                        }
+                    }
+
+                    // Trim extra spaces from the first name
+                    firstname = firstname.trim();
+
+                    // Populate the form fields
+                    $('#edit_firstname').val(firstname);
+                    $('#edit_middle_initial').val(middleInitial);
+                    $('#edit_lastname').val(lastname);
+
+                    // Set the formatted contact number in the input field
+                    $('#edit_contact_num').val(contactNum);
+                    $('#edit_username').val(response.user.username);
+                    $('#edit_user_type').val(response.user.user_type);
+                    $('#edit_status').val(response.user.status);
+
+                    offcanvasInstance.show();
+                },
+                error: function (error) {
+                    console.log("Error fetching user data: ", error);
+                }
+            });
+        });
+
+        // Update User
+        $('#editUserForm').on('submit', function (e) {
+            e.preventDefault();
+            let userId = $('#edit_user_id').val();
+
+            $.ajax({
+                url: `/admin/users/${userId}/update`,
+                type: "PUT",
+                data: $(this).serialize(),
+                success: function (response) {
+                    alert(response.message);
+                    fetchUsers();
+                },
+                error: function (error) {
+                    console.log("Error updating user: ", error);
+                }
+            });
+        });
+
+        // Delete User
+        $(document).on('click', '.delete-user-btn', function () {
+            if (confirm('Are you sure you want to delete this user?')) {
+                let userId = $(this).data('id');
+                
+                $.ajax({
+                    url: `/admin/users/${userId}/delete`,
+                    type: "PUT",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Add CSRF token header
+                    },
+                    success: function (response) {
+                        alert(response.message);
+                        fetchUsers();
+                    },
+                    error: function (error) {
+                        console.log("Error deleting user: ", error);
+                    }
+                });
+            }
+        });
+
+        // View User
+        $(document).on('click', '.view-user-btn', function (e) {
+            e.preventDefault();
+            
+            let userId = $(this).data('id');
+
+            $.ajax({
+                url: `/admin/users/${userId}/show`, // Adjust route as needed
+                type: "GET",
+                success: function (response) {
+                    // Populate modal with user data using direct ID selectors
+                    $('#modal_fullname').text(response.user.fullname);
+                    $('#modal_role').text(response.user.user_type);
+                    $('#modal_status').text(response.user.status);
+                    $('#modal_contact_num').text('+' + response.user.contact_num);
+                    $('#modal_created_at').text(response.user.created_at);
+                    $('#modal_updated_at').text(response.user.updated_at);
+                    $('#modal_username').text(response.user.username);
+                    $('#modal_password').text('********'); // Masked password for security
+
+                    // Show the modal
+                    $('#viewUserModal').modal('show');
+                },
+                error: function (error) {
+                    console.log("Error fetching user data: ", error);
+                    alert("Failed to fetch user details.");
+                }
+            });
+        });
+
+    });
+</script>
+
 @endsection

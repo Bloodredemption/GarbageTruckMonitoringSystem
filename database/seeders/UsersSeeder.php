@@ -15,10 +15,10 @@ class UsersSeeder extends Seeder
     public function run(): void
     {
         Users::create([
-            'fullname' => 'MEDRO Admin',
+            'fullname' => 'MENRO Admin',
             'username' => 'menroadmin',
             'password' => Hash::make('password'),  // Ensure password is hashed
-            'contact_num' => 1234567890,
+            'contact_num' => 639876543210,
             'user_type' => 'admin',
             'status' => 'active',
         ]);

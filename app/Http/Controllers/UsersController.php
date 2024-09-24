@@ -14,11 +14,14 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = Users::whereIn('status', ['active', 'inactive'])
-                  ->orderBy('created_at', 'asc')
-                  ->get();
+        // Check if the request is an AJAX call
+        if (request()->ajax()) {
+            $users = Users::all();
+            return response()->json(['users' => $users]);
+        }
 
-        return view('admin.users.index', compact('users'));
+        // Otherwise, return the view (for non-AJAX requests, i.e., the initial page load)
+        return view('admin.users.index');
     }
 
     /**
@@ -36,43 +39,60 @@ class UsersController extends Controller
     {
         // Validate the form data
         $request->validate([
-            'add_firstname' => 'required|string|max:255',
-            'add_middle_initial' => 'nullable|string|max:1',
-            'add_lastname' => 'required|string|max:255',
-            'add_username' => 'required|string|max:255|unique:users,username',
-            'add_contact_num' => 'required|string|max:15',
-            'add_user_type' => 'required|string|max:255',
-            'add_password' => 'required|string|min:6|confirmed',
+            'firstname' => 'required|string|max:255',
+            'middle_initial' => 'nullable|string|max:1',
+            'lastname' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username',
+            'contact_num' => 'required|string|max:15',
+            'user_type' => 'required|string|max:255',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
+        // Build the full name
         $fullname = $request->firstname . ' ' . ($request->middle_initial ? $request->middle_initial . '. ' : '') . $request->lastname;
 
         // Create a new user
         Users::create([
-            'add_fullname' => $fullname,
-            'add_username' => $request->username,
-            'add_contact_num' => $request->contact_num,
-            'add_user_type' => $request->user_type,
-            'add_password' => Hash::make($request->password),
+            'fullname' => $fullname,
+            'username' => $request->username,
+            'contact_num' => $request->contact_num,
+            'user_type' => $request->user_type,
+            'password' => Hash::make($request->password),
         ]);
 
-        // Redirect back to the user list with a success message
-        return redirect('/admin/users')->with('success', 'User added successfully');
+        // Return a JSON response (success message)
+        return response()->json(['message' => 'User added successfully']);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
-    }
-
-    public function edit($id)
-    {
+        // Find the user by ID
         $user = Users::findOrFail($id);
 
-        return response()->json($user);
+        // Return user data as JSON
+        return response()->json([
+            'user' => [
+                'fullname' => $user->fullname,
+                'user_type' => $user->user_type,
+                'contact_num' => $user->contact_num,
+                'status' => $user->status == 'active' ? 'Active' : 'Inactive',
+                'created_at' => $user->created_at->format('F d, Y h:i A'),
+                'updated_at' => $user->updated_at->format('F d, Y h:i A'),
+                'username' => $user->username,
+            ]
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $user = Users::find($id);
+        return response()->json(['user' => $user]);
     }
     
     /**
@@ -80,50 +100,30 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Validate the request data
-        $validator = Validator::make($request->all(), [
-            'edit_firstname' => 'required|string|max:255',
-            'edit_middle_initial' => 'nullable|string|max:1',
-            'edit_lastname' => 'required|string|max:255',
-            'edit_username' => 'required|string|max:255|unique:users,username,' . $id,
-            'edit_contact_num' => 'required|string|max:15',
-            'edit_user_type' => 'required|in:admin,landfill,driver',
-            'edit_password' => 'nullable|string|min:8|confirmed',
+        // Validate the form data
+        $request->validate([
+            'firstname' => 'required|string|max:255',
+            'middle_initial' => 'nullable|string|max:1',
+            'lastname' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $id, // Ensure unique username except for current user
+            'contact_num' => 'required|string|max:15',
+            'user_type' => 'required|string|max:255',
         ]);
 
-        // If validation fails, return errors as JSON response
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        // Find the user
+        // Find the user by ID
         $user = Users::findOrFail($id);
 
-        // Update the user fields
-        $user->firstname = $request->firstname;
-        $user->middle_initial = $request->middle_initial;
-        $user->lastname = $request->lastname;
+        // Update the user's full name and other attributes
+        $user->fullname = $request->firstname . ' ' . ($request->middle_initial ? $request->middle_initial . '. ' : '') . $request->lastname;
         $user->username = $request->username;
         $user->contact_num = $request->contact_num;
         $user->user_type = $request->user_type;
 
-        // Update the password only if provided
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
-        }
-
-        // Save the changes
+        // Save changes
         $user->save();
 
-        // Return success response
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User updated successfully',
-            'user' => $user,
-        ], 200);
+        // Return a JSON response (success message)
+        return response()->json(['message' => 'User updated successfully']);
     }
 
     /**
@@ -131,6 +131,10 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = Users::find($id);
+        $user->status = 'deleted';
+        $user->save();
+
+        return response()->json(['message' => 'User deleted successfully']);
     }
 }
