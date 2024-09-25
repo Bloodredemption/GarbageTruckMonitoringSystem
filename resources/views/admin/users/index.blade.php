@@ -81,7 +81,7 @@
                                                 <th>Contact No.</th>
                                                 <th>Role</th>
                                                 <th>Status</th>
-                                                <th>Action</th>
+                                                <th>Operation</th>
                                             </tr>
                                         </thead>
                                         <tbody id="userTableBody">
@@ -132,7 +132,7 @@
                 <div class="mb-3">
                     <label for="add_user_type" class="form-label">Role <span style="color: red;">*</span></label>
                     <select class="form-control" id="add_user_type" name="user_type" required>
-                        <option>Select Role</option>
+                        <option></option>
                         <option value="admin">Admin</option>
                         <option value="landfill">Landfill</option>
                         <option value="driver">Driver</option>
@@ -146,7 +146,7 @@
                     <label for="add_password_confirmation" class="form-label">Confirm Password <span style="color: red;">*</span></label>
                     <input type="password" class="form-control" id="add_password_confirmation" name="password_confirmation" required>
                 </div>
-                <button type="submit" class="btn btn-primary mb-3">Add User</button>
+                <button type="submit" class="btn btn-primary mb-3">Create</button>
                 <button type="button" class="btn btn-light text-reset mb-3" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
             </form>
         </div>
@@ -191,14 +191,14 @@
                 <div class="mb-3">
                     <label for="edit_user_type" class="form-label">Role <span style="color: red;">*</span></label>
                     <select class="form-control" id="edit_user_type" name="user_type" required>
-                        <option>Select Role</option>
+                        <option></option>
                         <option value="admin">Admin</option>
                         <option value="landfill">Landfill</option>
                         <option value="driver">Driver</option>
                     </select>
                 </div>
             
-                <button type="submit" class="btn btn-primary mb-3">Update User</button>
+                <button type="submit" class="btn btn-primary mb-3">Update</button>
                 <button type="button" class="btn btn-light text-reset mb-3" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
             </form>
         </div>
@@ -344,30 +344,56 @@
                 password_confirmation: $('#add_password_confirmation').val(),
             };
 
-            var offcanvasElement = document.getElementById('offcanvasAddUser');
-            var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
-
             $.ajax({
                 url: "{{ route('users.store') }}", // Your store route
                 type: "POST",
                 data: formData,
                 success: function (response) {
-                    alert(response.message); // Alert success message
-                    $('#addUserForm')[0].reset(); // Reset the form
-                    fetchUsers(); // Reload the users list in the table
+                    fetchUsers();
 
-                    var offcanvasElement = document.getElementById('offcanvasAddUser');
-                    var offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: "#01A94D"
+                    }).then(() => {
+                        $('#addUserForm')[0].reset();
 
-                    offcanvasInstance.hide();
+                        // Update this to match the correct ID in your HTML
+                        var offcanvasElement = document.getElementById('offcanvasUser');
+
+                        // Manually create the Offcanvas instance if it doesn't exist
+                        var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                        if (!offcanvasInstance) {
+                            offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
+                        }
+
+                        if (offcanvasInstance) {
+                            offcanvasInstance.hide();
+                        }
+                    });
                 },
                 error: function (error) {
                     console.log("Error adding user: ", error);
                     if (error.responseJSON.errors) {
                         let errors = error.responseJSON.errors;
+
+                        // Displaying all errors in a single SweetAlert2 message
+                        let errorMessage = '';
                         for (let field in errors) {
-                            alert(errors[field][0]); // Display error messages for each field
+                            errorMessage += errors[field][0] + '<br>'; // Concatenate error messages
                         }
+
+                        // Replace alert with SweetAlert2 for error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            html: errorMessage, // Use 'html' instead of 'text' for line breaks
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: "#01A94D"
+                        });
                     }
                 }
             });
@@ -429,7 +455,6 @@
                     $('#edit_contact_num').val(contactNum);
                     $('#edit_username').val(response.user.username);
                     $('#edit_user_type').val(response.user.user_type);
-                    $('#edit_status').val(response.user.status);
 
                     offcanvasInstance.show();
                 },
@@ -440,45 +465,150 @@
         });
 
         // Update User
+        // Store original values when the form is loaded
+        let originalUserValues = {};
+
+        function storeOriginalUserValues() {
+            originalUserValues = {
+                firstname: $('#edit_firstname').val(),
+                middleinitial: $('#edit_middle_initial').val(),
+                lastname: $('#edit_lastname').val(),
+                username: $('#edit_username').val(),
+                contact_num: $('#edit_contact_num').val(),
+                role: $('#edit_user_type').val(),
+            };
+        }
+
+        // Call this function when the offcanvas is displayed
+        $('#offcanvasEditUser').on('shown.bs.offcanvas', function () {
+            storeOriginalUserValues(); // Store values when the offcanvas is shown
+        });
+
         $('#editUserForm').on('submit', function (e) {
             e.preventDefault();
             let userId = $('#edit_user_id').val();
+
+            // Check for changes
+            const currentUserValues = {
+                firstname: $('#edit_firstname').val(),
+                middleinitial: $('#edit_middle_initial').val(),
+                lastname: $('#edit_lastname').val(),
+                username: $('#edit_username').val(),
+                contact_num: $('#edit_contact_num').val(),
+                role: $('#edit_user_type').val(),
+            };
+
+            const hasUserChanges = Object.keys(originalUserValues).some(key => originalUserValues[key] !== currentUserValues[key]);
+
+            if (!hasUserChanges) {
+                // No changes made
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No Changes Made!',
+                    text: 'You have not made any changes to the user details.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#007bff'
+                });
+                return; // Exit the function
+            }
 
             $.ajax({
                 url: `/admin/users/${userId}/update`,
                 type: "PUT",
                 data: $(this).serialize(),
                 success: function (response) {
-                    alert(response.message);
                     fetchUsers();
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'User Updated!',
+                        text: response.message,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: "#01A94D" // Optional: Customize the confirm button color
+                    }).then(() => {
+
+                        // Update this to match the correct ID in your HTML
+                        var offcanvasElement = document.getElementById('offcanvasEditUser');
+
+                        // Manually create the Offcanvas instance if it doesn't exist
+                        var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+                        if (!offcanvasInstance) {
+                            offcanvasInstance = new bootstrap.Offcanvas(offcanvasElement);
+                        }
+
+                        if (offcanvasInstance) {
+                            offcanvasInstance.hide();
+                        }
+                    });
                 },
                 error: function (error) {
                     console.log("Error updating user: ", error);
+
+                    // Use SweetAlert2 for error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Update Failed!',
+                        text: 'An error occurred while updating the user. Please try again.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33' // Optional: Customize error button color
+                    });
                 }
             });
         });
 
         // Delete User
         $(document).on('click', '.delete-user-btn', function () {
-            if (confirm('Are you sure you want to delete this user?')) {
-                let userId = $(this).data('id');
-                
-                $.ajax({
-                    url: `/admin/users/${userId}/delete`,
-                    type: "PUT",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Add CSRF token header
-                    },
-                    success: function (response) {
-                        alert(response.message);
-                        fetchUsers();
-                    },
-                    error: function (error) {
-                        console.log("Error deleting user: ", error);
-                    }
-                });
-            }
+            let userId = $(this).data('id');
+
+            // Use SweetAlert2 for the confirmation dialog
+            Swal.fire({
+                title: 'Delete User?',
+                text: "This action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#c03221',
+                cancelButtonColor: '#6c757d',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/admin/users/${userId}/delete`,
+                        type: "PUT",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Add CSRF token header
+                        },
+                        success: function (response) {
+                            fetchUsers();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'User Deleted!',
+                                text: response.message,
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: "#01A94D"
+                            }).then(() => {
+                                // fetchUsers();
+                            });
+                        },
+                        error: function (error) {
+                            console.log("Error deleting user: ", error);
+
+                            // Show error message
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Delete Failed!',
+                                text: 'An error occurred while deleting the user. Please try again.',
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#d33'
+                            });
+                        }
+                    });
+                }
+            });
         });
+
 
         // View User
         $(document).on('click', '.view-user-btn', function (e) {

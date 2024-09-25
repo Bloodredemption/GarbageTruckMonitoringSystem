@@ -58,6 +58,8 @@
         <!-- App Script -->
         <script src="{{ asset('assets/js/hope-ui.js') }}" defer></script>
         
+        <script src="{{ asset('assets/js/sweetalert.js') }}"></script>
+
         <style>
             :root {
                 --bs-primary: #01A94D;

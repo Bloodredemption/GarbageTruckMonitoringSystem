@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barangay;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BarangayController extends Controller
 {
@@ -11,7 +13,13 @@ class BarangayController extends Controller
      */
     public function index()
     {
-        //
+        if (request()->ajax()) {
+            $barangays = Barangay::orderBy('created_at', 'desc')->get();
+            return response()->json(['barangays' => $barangays]);
+        }
+
+        // Otherwise, return the view (for non-AJAX requests, i.e., the initial page load)
+        return view('admin.barangay.index');
     }
 
     /**
@@ -27,8 +35,22 @@ class BarangayController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'area' => 'required|string',
+            'zipcode' => 'required|digits:4',
+            'captain' => 'required|string',
+        ]);
+
+        // Get the ID of the currently logged-in user
+        $userId = Auth::id(); // Use Auth facade
+
+        // Create the Barangay with the current user's ID
+        Barangay::create(array_merge($request->all(), ['user_id' => $userId]));
+
+        return response()->json(['message' => 'Barangay successfully added.']);
     }
+
 
     /**
      * Display the specified resource.
@@ -43,7 +65,8 @@ class BarangayController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $barangay = Barangay::findOrFail($id);
+        return response()->json(['barangay' => $barangay]);
     }
 
     /**
@@ -51,7 +74,17 @@ class BarangayController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'area' => 'required|string',
+            'zipcode' => 'required|digits:4',
+            'captain' => 'required|string',
+        ]);
+
+        $barangay = Barangay::findOrFail($id);
+        $barangay->update($request->all());
+
+        return response()->json(['message' => 'Barangay updated successfully.']);
     }
 
     /**
@@ -59,6 +92,10 @@ class BarangayController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $barangay = Barangay::findOrFail($id);
+        $barangay->isDeleted = '1';
+        $barangay->save();
+
+        return response()->json(['message' => 'Barangay deleted successfully.']);
     }
 }

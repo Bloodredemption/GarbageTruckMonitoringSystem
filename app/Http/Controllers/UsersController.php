@@ -16,7 +16,7 @@ class UsersController extends Controller
     {
         // Check if the request is an AJAX call
         if (request()->ajax()) {
-            $users = Users::all();
+            $users = Users::orderBy('created_at', 'desc')->get();
             return response()->json(['users' => $users]);
         }
 

@@ -14,7 +14,7 @@
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
                                 <h1><strong>Dump Trucks</strong></h1>
-                                <p>Contains waste conversion information.</p>
+                                <p>Contains dump trucks information.</p>
                             </div>
                             <div>
                                 <a href="" class="btn btn-link btn-soft-light">
@@ -47,7 +47,7 @@
                                 </div>
                                 
                                 <div>
-                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddDT" aria-controls="offcanvasAddDT">
                                         <i class="btn-inner">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -59,51 +59,19 @@
                             </div>
                             <div class="card-body px-0">
                                 <div class="table-responsive">
-                                    <table id="user-list-table" class="table table-striped" role="grid" data-bs-toggle="data-table">
+                                    <table id="dump-trucks-tbl" class="table" role="grid" data-bs-toggle="data-table">
                                         <thead>
                                             <tr class="ligth" style="background-color: #01A94D; color: white;">
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Join Date</th>
-                                                <th style="min-width: 100px">Action</th>
+                                                <th>No.</th>
+                                                <th>Driver</th>
+                                                <th>Brand</th>
+                                                <th>Model</th>
+                                                <th>Status</th>
+                                                <th style="min-width: 100px">Operation</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td><span class="badge bg-primary">active</span></td>
-                                                <td>Sample</td>
-                                                <td>2019/12/01</td>
-                                                <td>
-                                                <div class="flex align-items-center list-user-action">
-                                                    <a class="btn btn-sm btn-icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"  href="#">
-                                                        <span class="btn-inner">
-                                                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.82812 10.921L16.3011 3.44799C17.2321 2.51799 18.7411 2.51799 19.6721 3.44799L20.8891 4.66499C21.8201 5.59599 21.8201 7.10599 20.8891 8.03599L13.3801 15.545C12.9731 15.952 12.4211 16.181 11.8451 16.181H8.09912L8.19312 12.401C8.20712 11.845 8.43412 11.315 8.82812 10.921Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            <path d="M15.1655 4.60254L19.7315 9.16854" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
-                                                    <a class="btn btn-sm btn-icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"  href="#">
-                                                        <span class="btn-inner">
-                                                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
-                                                            <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                                </td>
-                                            </tr>
+                                            <!-- Rows will be dynamically added here -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -116,9 +84,390 @@
         </div>
     </div>
     
+    <!-- Offcanvas for Adding New Dump Truck -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddDT" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header" style="padding-bottom: 0;">
+            <div>
+                <h5 id="offcanvasRightLabel">Add New Dump Truck</h5>
+                <p style="font-size: 15px;">Please fill all the required fields <span style="color: red;">*</span></p>
+            </div>
+            {{-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> --}}
+        </div>
+        <div class="offcanvas-body">
+            <form id="addDTForm" action="{{ route('dump-trucks.store') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label for="add_brand" class="form-label">Brand <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="add_brand" name="brand" required>
+                </div>
+                <div class="mb-3">
+                    <label for="add_model" class="form-label">Model <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="add_model" name="model" required>
+                </div>
+                <div class="mb-3">
+                    <label for="add_driver" class="form-label">Truck Driver <span style="color: red;">*</span></label>
+                    <select class="form-control" id="add_driver" name="driver" required>
+                        <option></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="add_status" class="form-label">Vehicle Condition <span style="color: red;">*</span></label>
+                    <select class="form-control" id="add_status" name="status" required>
+                        <option>Select</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-3">Create</button>
+                <button type="button" class="btn btn-light text-reset mb-3" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Offcanvas for Edit Dump Truck -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditDT" aria-labelledby="offcanvasEditDTLabel">
+        <div class="offcanvas-header" style="padding-bottom: 0;">
+            <div>
+                <h5 id="offcanvasEditDTLabel">Edit Dump Truck</h5>
+                <p style="font-size: 15px;">Please fill all the required fields <span style="color: red;">*</span></p>
+            </div>
+            {{-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> --}}
+        </div>
+        <div class="offcanvas-body">
+            <form id="editDTForm" method="POST">
+                @csrf
+                <!-- Hidden input for barangay ID -->
+                <input type="hidden" id="edit_dt_id" name="dt_id">
+
+                <div class="mb-3">
+                    <label for="edit_brand" class="form-label">Brand <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="edit_brand" name="brand" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_model" class="form-label">Model <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="edit_model" name="model" required>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_driver" class="form-label">Truck Driver <span style="color: red;">*</span></label>
+                    <select class="form-control" id="edit_driver" name="driver" required>
+                        <option></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_status" class="form-label">Vehicle Condition <span style="color: red;">*</span></label>
+                    <select class="form-control" id="edit_status" name="status" required>
+                        <option></option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-3">Update</button>
+                <button type="button" class="btn btn-light text-reset mb-3" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer Section Start -->
     @include('partials.footer')
     <!-- Footer Section End -->    
 </main>
+
+<script>
+    $(document).ready(function () {
+        // Fetch barangays and display in the table
+        function fetchDrivers() {
+            $.ajax({
+                url: "{{ route('drivers.index') }}", // Your route for fetching drivers
+                type: "GET",
+                success: function (response) {
+                    let driverSelect1 = $('#add_driver'); // First driver select
+                    let driverSelect2 = $('#edit_driver'); // Second driver select (new)
+
+                    // Clear the select options for both select elements
+                    driverSelect1.empty();
+                    driverSelect2.empty();
+
+                    // Add default options for both selects
+                    driverSelect1.append('<option></option>');
+                    driverSelect2.append('<option></option>');
+
+                    // Populate both selects with the drivers
+                    $.each(response.drivers, function (key, driver) {
+                        driverSelect1.append(`<option value="${driver.id}">${driver.fullname}</option>`);
+                        driverSelect2.append(`<option value="${driver.id}">${driver.fullname}</option>`);
+                    });
+                },
+                error: function (error) {
+                    console.log("Error fetching drivers: ", error);
+                }
+            });
+        }
+
+        // Call the fetch function when the page loads
+        fetchDrivers();
+
+        function fetchDumpTrucks() {
+            $.ajax({
+                url: "{{ route('dump-trucks.index') }}", // Your route for fetching barangays
+                type: "GET",
+                success: function (response) {
+                    let rows = '';
+                    let counter = 1;
+                    $.each(response.dumpTrucks, function (key, dumptruck) {
+                        if (dumptruck.status !== 'deleted') { // Skip users with 'deleted' status
+
+                            let fullname = dumptruck.user.fullname.trim().split(" ");
+                            let firstname = "";
+                            let middleInitial = "";
+                            let lastname = "";
+
+                            for (let i = 0; i < fullname.length; i++) {
+                                if (fullname[i].length === 2 && fullname[i][1] === '.') {
+                                    // This part is the middle initial (1 letter + '.')
+                                    middleInitial = fullname[i][0];
+                                } else if (i === fullname.length - 1) {
+                                    // Last part is the last name
+                                    lastname = fullname[i];
+                                } else {
+                                    // Other parts are the first name
+                                    firstname += fullname[i] + " ";
+                                }
+                            }
+                            rows += `
+                                <tr>
+                                    <td>${counter}</td>
+                                    <td>${firstname} ${lastname}</td>
+                                    <td>${dumptruck.brand}</td>
+                                    <td>${dumptruck.model}</td>
+                                    <td>${dumptruck.status == 'active' ? '<span class="badge bg-primary">active</span>' : '<span class="badge bg-danger">inactive</span>'}</td>
+                                    <td>
+                                        <div class="flex align-items-center list-user-action">
+                                            <a class="btn btn-sm btn-icon btn-warning edit-dt-btn" data-id="${dumptruck.id}">Edit</a>
+                                            <a class="btn btn-sm btn-icon btn-danger delete-dt-btn" data-id="${dumptruck.id}">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                            counter++;
+                        }
+                    });
+
+                    let dataTable = $('#dump-trucks-tbl').DataTable();
+                    dataTable.clear(); // Clear the existing table data
+                    dataTable.destroy();
+
+                    $('#dump-trucks-tbl tbody').html(rows);
+
+                    $('#dump-trucks-tbl').DataTable({
+                        retrieve: true, // Retrieve the existing table instead of initializing it again
+                        paging: true, // Enable pagination
+                        searching: true, // Enable search functionality
+                        info: true, // Show the number of entries info
+                        responsive: true, // Ensure responsiveness
+                    });
+                },
+                error: function (error) {
+                    console.log("Error fetching data: ", error);
+                    alert("Failed to fetch dump trucks. Please try again.");
+                }
+            });
+        }
+
+        fetchDumpTrucks();
+
+        // Add Dump Truck
+        $('#addDTForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let formData = {
+                _token: "{{ csrf_token() }}", // Laravel CSRF token
+                brand: $('#add_brand').val(),
+                model: $('#add_model').val(),
+                user_id: $('#add_driver').val(),
+                status: $('#add_status').val(),
+            };
+
+            $.ajax({
+                url: "{{ route('dump-trucks.store') }}", // Route for storing barangay
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    fetchDumpTrucks();
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Dump Truck Added!',
+                        text: response.message,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: "#01A94D"
+                    }).then(() => {
+                        $('#addDTForm')[0].reset();
+                        
+                        $('#offcanvasAddDT').offcanvas('hide');
+                    });
+                },
+                error: function (error) {
+                    let errors = error.responseJSON.errors;
+                    let errorMessage = '';
+                    for (let field in errors) {
+                        errorMessage += errors[field][0] + '<br>';
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        html: errorMessage,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: "#01A94D"
+                    });
+                }
+            });
+        });
+
+        // Edit Dump Truck
+        $('#dump-trucks-tbl').on('click', '.edit-dt-btn', function () {
+            let id = $(this).data('id');
+
+            $.ajax({
+                url: `/admin/dump-truck/${id}/edit`,
+                type: "GET",
+                success: function (response) {
+                    let dumptruck = response.dumpTruck;
+                    $('#edit_brand').val(dumptruck.brand);
+                    $('#edit_model').val(dumptruck.model);
+                    $('#edit_driver').val(dumptruck.user_id);
+                    $('#edit_status').val(dumptruck.status);
+                    $('#edit_dt_id').val(dumptruck.id);
+
+                    $('#offcanvasEditDT').offcanvas('show');
+                },
+                error: function (error) {
+                    console.log("Error fetching dump truck: ", error);
+                }
+            });
+        });
+        
+        // Update Dump Truck
+        // Store original values when the form is loaded
+        let originalValues = {};
+
+        function storeOriginalValues() {
+            originalValues = {
+                brand: $('#edit_brand').val(),
+                model: $('#edit_model').val(),
+                user_id: $('#edit_driver').val(),
+                status: $('#edit_status').val(),
+            };
+        }
+
+        // Call this function when the form is displayed
+        $('#offcanvasEditDT').on('shown.bs.offcanvas', function () {
+            storeOriginalValues(); // Store values when the offcanvas is shown
+        });
+
+        $('#editDTForm').on('submit', function (e) {
+            e.preventDefault();
+            let id = $('#edit_dt_id').val();
+
+            // Check for changes
+            const currentValues = {
+                brand: $('#edit_brand').val(),
+                model: $('#edit_model').val(),
+                user_id: $('#edit_driver').val(),
+                status: $('#edit_status').val(),
+            };
+
+            const hasChanges = Object.keys(originalValues).some(key => originalValues[key] !== currentValues[key]);
+
+            if (!hasChanges) {
+                // No changes made
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No Changes Made!',
+                    text: 'You have not made any changes to the dump truck details.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#007bff'
+                });
+                return; // Exit the function
+            }
+
+            let formData = {
+                _token: "{{ csrf_token() }}", // Laravel CSRF token
+                brand: $('#edit_brand').val(),
+                model: $('#edit_model').val(),
+                user_id: $('#edit_driver').val(),
+                status: $('#edit_status').val(),
+            };
+
+            $.ajax({
+                url: `/admin/dump-truck/${id}/update`,
+                type: "PUT",
+                data: formData,
+                success: function (response) {
+                    fetchDumpTrucks();
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Dump Truck Updated!',
+                        text: response.message,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: "#01A94D"
+                    }).then(() => {
+                        $('#offcanvasEditDT').offcanvas('hide');
+                    });
+                },
+                error: function (error) {
+                    console.log("Error updating dump truck: ", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Update Failed!',
+                        text: 'An error occurred while updating the dump truck. Please try again.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#d33'
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '.delete-dt-btn', function () {
+            let id = $(this).data('id');
+
+            Swal.fire({
+                title: 'Delete Dump Truck?',
+                text: "This action is irreversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#c03221',
+                cancelButtonColor: '#6c757d',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/admin/dump-truck/${id}/delete`,
+                        type: "DELETE",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (response) {
+                            fetchDumpTrucks();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Dump Truck Deleted!',
+                                text: response.message,
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: "#01A94D"
+                            }).then(() => {
+                                // fetchDumpTrucks();
+                            });
+                        },
+                        error: function (error) {
+                            console.log("Error deleting data: ", error);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
 
 @endsection
