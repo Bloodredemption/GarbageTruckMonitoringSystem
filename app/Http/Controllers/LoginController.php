@@ -21,6 +21,19 @@ class LoginController extends Controller
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
             
+            $role = match($user->user_type) {
+                'admin' => 'Administrator Account',
+                'landfill' => 'Landfill Operator',
+                'driver' => 'Driver Account',
+                default => 'Unknown Role'
+            };
+
+            // Store user name and role in session
+            session([
+                'user_name' => $user->fullname,
+                'user_role' => $role
+            ]);
+            
             if ($user->status == 'inactive') {
                 $user->status = 'active';
                 $user->save();
@@ -30,7 +43,7 @@ class LoginController extends Controller
                 case 'admin':
                     return redirect()->route('dashboard');
                 case 'landfill':
-                    return redirect()->route('lf.dashboard');
+                    return redirect()->route('wcov.index');
                 case 'driver':
                     return redirect()->route('d.dashboard');
                 default:

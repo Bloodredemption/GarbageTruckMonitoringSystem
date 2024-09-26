@@ -108,7 +108,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/waste-composition') ? 'active' : '' }}"  href="{{ route('waste-composition') }}">
+                        <a class="nav-link {{ request()->is('admin/waste-composition') ? 'active' : '' }}"  href="{{ route('awc.index') }}">
                             <i class="icon">
                                 <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     @if(request()->is('admin/waste-composition'))
@@ -134,7 +134,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/waste-conversion') ? 'active' : '' }}"  href="{{ route('waste-conversion') }}">
+                        <a class="nav-link {{ request()->is('admin/waste-conversion') ? 'active' : '' }}"  href="{{ route('awcov.index') }}">
                             <i class="icon">
                                 <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     @if(request()->is('admin/waste-conversion'))
@@ -352,7 +352,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('landfill/waste-collection') ? 'active' : '' }}" href="{{ route('lf.waste-collection') }}">
+                        <a class="nav-link {{ request()->is('landfill/waste-collection') ? 'active' : '' }}" href="{{ route('lwc.index') }}">
                             <i class="icon">
                                 <svg width="20" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     @if(request()->is('landfill/waste-collection'))
@@ -378,10 +378,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('landfill/recycled-products') ? 'active' : '' }}" href="{{ route('lf.recycled-products') }}">
+                        <a class="nav-link {{ request()->is('landfill/waste-conversions') ? 'active' : '' }}" href="{{ route('wcov.index') }}">
                             <i class="icon">
                                 <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                    @if(request()->is('landfill/recycled-products'))
+                                    @if(request()->is('landfill/waste-conversions'))
                                         <rect width="30" height="30" fill="url(#pattern0_35_525)"/>
                                         <defs>
                                             <pattern id="pattern0_35_525" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -400,7 +400,7 @@
                                     @endif
                                 </svg>
                             </i>
-                            <span class="item-name">Recycled Products</span>
+                            <span class="item-name">Waste Conversions</span>
                         </a>
                     </li>
                     <li><hr class="hr-horizontal"></li>
@@ -468,7 +468,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('driver/waste-composition') ? 'active' : '' }}" href="{{ route('d.waste-composition') }}">
+                        <a class="nav-link {{ request()->is('driver/waste-composition') ? 'active' : '' }}" href="{{ route('wc.index') }}">
                             <i class="icon">
                                 <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     @if(request()->is('driver/waste-composition'))

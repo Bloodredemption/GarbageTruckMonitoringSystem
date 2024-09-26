@@ -124,8 +124,8 @@
           <img src="../assets/images/avatars/avtar_5.png" alt="User-Profile" class="theme-color-yellow-img img-fluid avatar avatar-50 avatar-rounded">
           <img src="../assets/images/avatars/avtar_3.png" alt="User-Profile" class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
           <div class="caption ms-3 d-none d-md-block ">
-              <h6 class="mb-0 caption-title">Main Administrator</h6>
-              <p class="mb-0 caption-sub-title">System Administrator</p>
+              <h6 class="mb-0 caption-title">{{ session('user_name', 'Guest') }}</h6>
+              <p class="mb-0 caption-sub-title">{{ session('user_role', 'Unknown') }}</p>
           </div>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

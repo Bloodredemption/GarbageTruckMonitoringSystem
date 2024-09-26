@@ -7,6 +7,9 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DumpTruckController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\WasteCollectionController;
+use App\Http\Controllers\WasteCompositionController;
+use App\Http\Controllers\WasteConversionController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -41,14 +44,14 @@ Route::get('/admin/collection-schedule', function () {
 })->name('collection-schedule');
 
 // Waste Composition
-Route::get('/admin/waste-composition', function () {
-    return view('admin.waste-composition.index');
-})->name('waste-composition');
+Route::prefix('admin')->group(function () {
+    Route::get('/waste-composition', [WasteCompositionController::class, 'admin_index'])->name('awc.index');
+})->middleware('auth');
 
 // Waste Conversion
-Route::get('/admin/waste-conversion', function () {
-    return view('admin.waste-conversion.index');
-})->name('waste-conversion');
+Route::prefix('admin')->group(function () {
+    Route::get('/waste-conversion', [WasteConversionController::class, 'admin_index'])->name('awcov.index');
+})->middleware('auth');
 
 // Dump Trucks
 Route::prefix('admin')->group(function () {
@@ -115,14 +118,25 @@ Route::get('/landfill/dashboard', function () {
 })->name('lf.dashboard');
 
 // Waste Collection
-Route::get('/landfill/waste-collection', function () {
-    return view('landfill.waste-collection.index');
-})->name('lf.waste-collection');
+Route::prefix('landfill')->group(function () {
+    Route::get('/waste-collection', [WasteCollectionController::class, 'index'])->name('lwc.index');
+    Route::get('/waste-collection/getBarangay', [WasteCompositionController::class, 'getBarangay'])->name('lwc.getBrgy');
+    Route::post('/waste-collection', [WasteCompositionController::class, 'store'])->name('lwc.store');
+    Route::get('/waste-collection/{id}/edit', [WasteCompositionController::class, 'edit']);
+    Route::put('/waste-collection/{id}/update', [WasteCompositionController::class, 'update']);
+    Route::put('/waste-collection/{id}/delete', [WasteCompositionController::class, 'destroy']);
+})->middleware('auth');
 
-// Recycled Products
-Route::get('/landfill/recycled-products', function () {
-    return view('landfill.recycled-products.index');
-})->name('lf.recycled-products');
+
+// Waste Conversions
+Route::prefix('landfill')->group(function () {
+    Route::get('/waste-conversions', [WasteConversionController::class, 'index'])->name('wcov.index');
+    Route::get('/waste-conversions/wasteType', [WasteConversionController::class, 'wasteType'])->name('wcov.wasteType');
+    Route::post('/waste-conversions', [WasteConversionController::class, 'store'])->name('wcov.store');
+    Route::get('/waste-conversions/{id}/edit', [WasteConversionController::class, 'edit']);
+    Route::put('/waste-conversions/{id}/update', [WasteConversionController::class, 'update']);
+    Route::put('/waste-conversions/{id}/delete', [WasteConversionController::class, 'destroy']);
+})->middleware('auth');
 
 // Help
 Route::get('/landfill/help', function () {
@@ -139,9 +153,14 @@ Route::get('/driver/dashboard', function () {
 })->name('d.dashboard');
 
 // Waste Composition
-Route::get('/driver/waste-composition', function () {
-    return view('driver.waste-composition.index');
-})->name('d.waste-composition');
+Route::prefix('driver')->group(function () {
+    Route::get('/waste-composition', [WasteCompositionController::class, 'index'])->name('wc.index');
+    Route::get('/waste-composition/getBarangay', [WasteCompositionController::class, 'getBarangay'])->name('wc.getBrgy');
+    Route::post('/waste-composition', [WasteCompositionController::class, 'store'])->name('wc.store');
+    Route::get('/waste-composition/{id}/edit', [WasteCompositionController::class, 'edit']);
+    Route::put('/waste-composition/{id}/update', [WasteCompositionController::class, 'update']);
+    Route::put('/waste-composition/{id}/delete', [WasteCompositionController::class, 'destroy']);
+})->middleware('auth');
 
 // Collection Schedule
 Route::get('/driver/collection-schedule', function () {

@@ -6,7 +6,7 @@
       <title>GTMS Login</title>
       
         <!-- Favicon -->
-        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" />
+        <link rel="shortcut icon" href="{{ asset('assets/images/bali_logo.png') }}" />
 
         <!-- Library / Plugin Css Build -->
         <link rel="stylesheet" href="{{ asset('assets/css/core/libs.min.css') }}" />
