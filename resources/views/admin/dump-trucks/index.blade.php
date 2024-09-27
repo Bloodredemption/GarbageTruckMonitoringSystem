@@ -66,7 +66,7 @@
                                                 <th>Driver</th>
                                                 <th>Brand</th>
                                                 <th>Model</th>
-                                                <th>Status</th>
+                                                <th>Vehicle Status</th>
                                                 <th style="min-width: 100px">Operation</th>
                                             </tr>
                                         </thead>
