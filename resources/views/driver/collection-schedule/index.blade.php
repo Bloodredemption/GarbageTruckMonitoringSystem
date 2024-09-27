@@ -42,7 +42,7 @@
                         <div class="card" data-aos="fade-up" data-aos-delay="800">
                             <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
                                 <div class="header-title">
-                                    <h4 class="card-title">Waste Composition List</h4>
+                                    <h4 class="card-title">Collection Schedule List</h4>
                                     {{-- <p class="mb-0">Sub Title Here</p>           --}}
                                 </div>
                                 
