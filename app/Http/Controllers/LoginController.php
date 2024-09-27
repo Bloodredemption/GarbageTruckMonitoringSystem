@@ -43,7 +43,7 @@ class LoginController extends Controller
                 case 'admin':
                     return redirect()->route('dashboard');
                 case 'landfill':
-                    return redirect()->route('wcov.index');
+                    return redirect()->route('lf.dashboard');
                 case 'driver':
                     return redirect()->route('d.dashboard');
                 default:

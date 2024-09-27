@@ -15,7 +15,10 @@ class WasteCompositionController extends Controller
     public function index()
     {
         if (request()->ajax()) {
+            $userId = Auth::id();
+
             $wasteCompositions = WasteComposition::with('brgy:id,name')
+                            ->where('user_id', $userId)
                             ->orderBy('created_at', 'desc')
                             ->get();
         
@@ -29,6 +32,7 @@ class WasteCompositionController extends Controller
     {
         if (request()->ajax()) {
             $wasteCompositions = WasteComposition::with('brgy:id,name')
+                            ->with('user:id,user_type')
                             ->orderBy('created_at', 'desc')
                             ->get();
         
@@ -66,7 +70,21 @@ class WasteCompositionController extends Controller
 
         $userId = Auth::id();
 
-        WasteComposition::create(array_merge($request->all(), ['user_id' => $userId]));
+        // Check waste_type and assign the appropriate unit
+        $metricsWithUnit = $request->input('metrics');
+        
+        if ($request->input('waste_type') === 'Biodegradable') {
+            $metricsWithUnit .= ' kg'; // Append 'sack' for Biodegradable
+        } elseif ($request->input('waste_type') === 'Residual') {
+            $metricsWithUnit .= ' sack'; // Append 'kg' for Residual
+        }
+
+        // Merge the metrics field with the other request data
+        WasteComposition::create(array_merge(
+            $request->except('metrics'), // Exclude original metrics field
+            ['metrics' => $metricsWithUnit], // Add modified metrics with appropriate unit
+            ['user_id' => $userId] // Add user ID
+        ));
 
         return response()->json(['message' => 'Waste composition successfully added.']);
     }
@@ -100,8 +118,23 @@ class WasteCompositionController extends Controller
             'metrics' => 'required|string',
         ]);
 
+        // Find the waste composition by ID
         $wasteComposition = WasteComposition::findOrFail($id);
-        $wasteComposition->update($request->all());
+
+        // Check waste_type and assign the appropriate unit
+        $metricsWithUnit = $request->input('metrics');
+
+        if ($request->input('waste_type') === 'Biodegradable') {
+            $metricsWithUnit .= ' kg'; // Append 'sack' for Biodegradable
+        } elseif ($request->input('waste_type') === 'Residual') {
+            $metricsWithUnit .= ' sack'; // Append 'kg' for Residual
+        }
+
+        // Update the record, merging the modified metrics
+        $wasteComposition->update(array_merge(
+            $request->except('metrics'), // Exclude original metrics field
+            ['metrics' => $metricsWithUnit] // Add modified metrics with appropriate unit
+        ));
 
         return response()->json(['message' => 'Waste composition successfully updated.']);
     }

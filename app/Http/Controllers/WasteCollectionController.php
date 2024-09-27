@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\WasteComposition;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WasteCollectionController extends Controller
 {
@@ -13,7 +14,10 @@ class WasteCollectionController extends Controller
     public function index()
     {
         if (request()->ajax()) {
+            $userId = Auth::id();
+            
             $wasteCompositions = WasteComposition::with('brgy:id,name')
+                            ->where('user_id', $userId)
                             ->orderBy('created_at', 'desc')
                             ->get();
         

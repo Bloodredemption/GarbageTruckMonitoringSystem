@@ -58,6 +58,7 @@
                                                 <th>Metrics</th>
                                                 <th>Location</th>
                                                 <th>Date Created</th>
+                                                <th>Added by</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -115,6 +116,7 @@
                                     <td>${wasteComposition.metrics}</td>
                                     <td>${wasteComposition.brgy.name}</td>
                                     <td>${formattedDate2}</td>
+                                    <td>${wasteComposition.user.user_type}</td>
                                 </tr>`;
                             counter++;
                         }

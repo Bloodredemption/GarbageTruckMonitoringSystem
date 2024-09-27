@@ -101,11 +101,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="add_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
-                    <select class="form-control" id="add_cm" name="cm" required>
-                        <option></option>
-                        <option value="Method 1">Method 1</option>
-                        <option value="Method 2">Method 2</option>
-                    </select>
+                    <input type="text" class="form-control" id="add_cm" name="cm" required>
                 </div>
                 <div class="mb-3">
                     <div class="form-group">
@@ -148,11 +144,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="edit_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
-                    <select class="form-control" id="edit_cm" name="cm" required>
-                        <option></option>
-                        <option value="Method 1">Method 1</option>
-                        <option value="Method 2">Method 2</option>
-                    </select>
+                    <input type="text" class="form-control" id="edit_cm" name="cm" required>
                 </div>
                 <div class="mb-3">
                     <div class="form-group">

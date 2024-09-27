@@ -110,11 +110,15 @@
                 @csrf
                 <div class="mb-3">
                     <label for="add_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" id="add_wt" name="wt" required>
+                    <select class="form-control" id="add_wt" name="wt" required>
+                        <option></option>
+                        <option value="Biodegradable">Biodegradable</option>
+                        <option value="Residual">Residual</option>
+                    </select>
                 </div>
                 <div class="mb-3">
-                    <label for="add_metrics" class="form-label">Weight <span style="color: red;">*</span></label>
-                    <input type="number" class="form-control" id="add_metrics" name="metrics" required>
+                    <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="add_metrics" name="metrics" required>
                 </div>
                 <div class="mb-3">
                     <div class="form-group">
@@ -150,11 +154,15 @@
 
                 <div class="mb-3">
                     <label for="edit_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" id="edit_wt" name="wt" required>
+                    <select class="form-control" id="edit_wt" name="wt" required>
+                        <option></option>
+                        <option value="Biodegradable">Biodegradable</option>
+                        <option value="Residual">Residual</option>
+                    </select>
                 </div>
                 <div class="mb-3">
-                    <label for="edit_metrics" class="form-label">Weight <span style="color: red;">*</span></label>
-                    <input type="number" class="form-control" id="edit_metrics" name="metrics" required>
+                    <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="edit_metrics" name="metrics" required>
                 </div>
                 <div class="mb-3">
                     <div class="form-group">
@@ -180,7 +188,41 @@
 </main>
 
 <script>
+    
+
     $(document).ready(function () {
+        function updateMetricsLabel(selectId, labelId) {
+            const wasteTypeSelect = document.getElementById(selectId);
+            const metricsLabel = document.getElementById(labelId);
+
+            wasteTypeSelect.addEventListener('change', function() {
+                if (this.value === 'Biodegradable') {
+                    metricsLabel.innerHTML = 'Weight (kilogram/s) <span style="color: red;">*</span>';
+                } else if (this.value === 'Residual') {
+                    metricsLabel.innerHTML = 'Number of Sack/s <span style="color: red;">*</span>';
+                } else {
+                    metricsLabel.innerHTML = 'Weight <span style="color: red;">*</span>';
+                }
+            });
+        }
+
+        updateMetricsLabel('add_wt', 'add_metrics_label');
+        updateMetricsLabel('edit_wt', 'edit_metrics_label');
+
+        function updateMetricsLabelEdit(selectId, labelId) {
+            const wasteTypeSelect = document.getElementById(selectId);
+            const metricsLabel = document.getElementById(labelId);
+
+            // Use wasteTypeSelect.value instead of this.value
+            if (wasteTypeSelect.value === 'Biodegradable') {
+                metricsLabel.innerHTML = 'Weight (kilogram/s) <span style="color: red;">*</span>';
+            } else if (wasteTypeSelect.value === 'Residual') {
+                metricsLabel.innerHTML = 'Number of Sack/s <span style="color: red;">*</span>';
+            } else {
+                metricsLabel.innerHTML = 'Weight <span style="color: red;">*</span>';
+            }
+        }
+
         // Fetch barangays and display in the table
         function fetchBrgy() {
             $.ajax({
@@ -340,6 +382,7 @@
                     $('#edit_cd').val(wc.collection_date);
                     $('#edit_brgy').val(wc.brgy_id);
                     $('#edit_wc_id').val(wc.id);
+                    updateMetricsLabelEdit('edit_wt', 'edit_metrics_label');
 
                     $('#offcanvasEditWC').offcanvas('show');
                 },
