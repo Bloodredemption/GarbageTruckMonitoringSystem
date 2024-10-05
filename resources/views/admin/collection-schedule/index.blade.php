@@ -62,25 +62,23 @@
                                     <table id="user-list-table" class="table table-striped" role="grid" data-bs-toggle="data-table">
                                         <thead>
                                             <tr class="ligth" style="background-color: #01A94D; color: white;">
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Join Date</th>
+                                                <th>No.</th>
+                                                <th>User</th>
+                                                <th>Brgy</th>
+                                                <th>Dump Truck</th>
+                                                <th>Date Time</th>
+                                                <th>Status</th>
                                                 <th style="min-width: 100px">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td><span class="badge bg-primary">active</span></td>
-                                                <td>Sample</td>
+                                                <td>1</td>
+                                                <td>MENRO Admin</td>
+                                                <td>Brgy 6.</td>
+                                                <td>Truck 1</td>
                                                 <td>2019/12/01</td>
+                                                <td><span class="badge bg-primary">active</span></td>
                                                 <td>
                                                 <div class="flex align-items-center list-user-action">
                                                     <a class="btn btn-sm btn-icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"  href="#">
@@ -111,6 +109,34 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div class="card-title mb-0">
+                                <h4 class="mb-0">Calendar</h4>
+                            </div>
+                            <div class="card-action">
+                                <a href="#" class="btn btn-primary" role="button">Back</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card  ">
+                                <div class="card-body">
+                                    <div id="calendar1" class="calendar-s"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
             
         </div>

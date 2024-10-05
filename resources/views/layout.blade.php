@@ -60,6 +60,12 @@
         
         <script src="{{ asset('assets/js/sweetalert.js') }}"></script>
 
+        <!-- Fullcalender CSS -->
+        <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/core/main.css')}}' />
+        <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/daygrid/main.css')}}' />
+        <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/timegrid/main.css')}}' />
+        <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/list/main.css')}}' />
+
         <style>
             :root {
                 --bs-primary: #01A94D;
@@ -105,6 +111,15 @@
         @yield('main-content')
 
         <!-- Wrapper End-->
+
+        <!-- Fullcalender Javascript -->
+        <script src="{{ asset('assets/vendor/fullcalendar/core/main.js') }}"></script>
+        <script src="{{ asset('assets/vendor/fullcalendar/daygrid/main.js') }}"></script>
+        <script src="{{ asset('assets/vendor/fullcalendar/timegrid/main.js') }}"></script>
+        <script src="{{ asset('assets/vendor/fullcalendar/list/main.js') }}"></script>
+        <script src="{{ asset('assets/vendor/fullcalendar/interaction/main.js') }}"></script>
+        <script src="{{ asset('assets/vendor/moment.min.js') }}"></script>
+        <script src="{{ asset('assets/js/plugins/calender.js') }}"></script>
 
     </body>
 </html> 
