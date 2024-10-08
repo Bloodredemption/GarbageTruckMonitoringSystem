@@ -74,9 +74,12 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 // Barangay
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/barangay', [BarangayController::class, 'index'])->name('barangays.index');
+    Route::get('/barangay/getArchive', [BarangayController::class, 'getArchive'])->name('barangays.getArchive');
     Route::post('/barangay', [BarangayController::class, 'store'])->name('barangays.store');
     Route::get('/barangay/{id}/edit', [BarangayController::class, 'edit'])->name('barangay.edit');
     Route::put('/barangay/{id}/update', [BarangayController::class, 'update'])->name('barangay.update');
+    Route::put('/barangay/{id}/archive', [BarangayController::class, 'archive'])->name('barangay.archive');
+    Route::put('/barangay/{id}/restore', [BarangayController::class, 'restore'])->name('barangay.restore');
     Route::delete('/barangay/{id}/delete', [BarangayController::class, 'destroy'])->name('barangay.delete');
 });
 

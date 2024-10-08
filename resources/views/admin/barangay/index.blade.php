@@ -14,7 +14,12 @@
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
                                 <h1><strong>Barangay Records</strong></h1>
-                                <p>Contains barangay information.</p>
+                                <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Home</a></li>
+                                        <li class="breadcrumb-item active text-white" aria-current="page">Barangay Records</li>
+                                    </ol>
+                                </nav>
                             </div>
                             <div>
                                 <a href="" class="btn btn-link btn-soft-light">
@@ -42,11 +47,22 @@
                         <div class="card" data-aos="fade-up" data-aos-delay="800">
                             <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
                                 <div class="header-title">
-                                    <h4 class="card-title">Barangay List</h4>
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="table-view-tab" data-bs-toggle="tab" data-bs-target="#table-view" type="button" role="tab" aria-controls="table-view" aria-selected="true">
+                                                Barangay List
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="archive-tab" data-bs-toggle="tab" data-bs-target="#archive" type="button" role="tab" aria-controls="archive" aria-selected="false">
+                                                Archive List
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                                 
                                 <div>
-                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddBarangay" aria-controls="offcanvasAddBarangay">
+                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#addBarangayModal">
                                         <i class="btn-inner">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -57,25 +73,57 @@
                                 </div>
                             </div>
                             <div class="card-body px-0">
-                                <div class="table-responsive">
-                                    <table id="user-list-table" class="table" role="grid" data-bs-toggle="data-table">
-                                        <thead>
-                                            <tr class="ligth" style="background-color: #01A94D; color: white;">
-                                                <th>No.</th>
-                                                <th>Address</th>
-                                                <th>Area</th>
-                                                <th>Zip Code</th>
-                                                <th>Captain</th>
-                                                <th>Date Created</th>
-                                                <th style="min-width: 100px">Operation</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Data will be fetched here using AJAX -->
-                                        </tbody>
-                                    </table>
+                                <!-- Bootstrap Tabs -->
+                                
+                            
+                                <!-- Tab Content -->
+                                <div class="tab-content" id="myTabContent">
+                                    <!-- Table View Tab Pane -->
+                                    <div class="tab-pane fade show active" id="table-view" role="tabpanel" aria-labelledby="table-view-tab">
+                                        <div class="table-responsive mt-3">
+                                            <table id="user-list-table" class="table" role="grid" data-bs-toggle="data-table">
+                                                <thead>
+                                                    <tr class="ligth" style="background-color: #01A94D; color: white;">
+                                                        <th>No.</th>
+                                                        <th>Address</th>
+                                                        <th>Area</th>
+                                                        <th>Zip Code</th>
+                                                        <th>Captain</th>
+                                                        <th>Date Created</th>
+                                                        <th style="min-width: 100px">Operation</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Data will be fetched here using AJAX -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Archive Tab Pane -->
+                                    <div class="tab-pane fade" id="archive" role="tabpanel" aria-labelledby="archive-tab">
+                                        <div class="table-responsive mt-3">
+                                            <table id="archive-list-table" class="table" role="grid">
+                                                <thead>
+                                                    <tr class="ligth" style="background-color: #01A94D; color: white;">
+                                                        <th>No.</th>
+                                                        <th>Address</th>
+                                                        <th>Area</th>
+                                                        <th>Zip Code</th>
+                                                        <th>Captain</th>
+                                                        <th>Date Archived</th>
+                                                        <th style="min-width: 100px">Operation</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Archive data will be fetched here using AJAX -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -83,137 +131,143 @@
         </div>
     </div>
     
-    <!-- Offcanvas for Adding New Barangay -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddBarangay" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header" style="padding-bottom: 0;">
-            <div>
-                <h5 id="offcanvasRightLabel">Add New Barangay</h5>
-                <p style="font-size: 15px;">Please fill all the required fields <span style="color: red;">*</span></p>
+    {{-- Add Barangay Modal --}}
+    <div class="modal fade" id="addBarangayModal" tabindex="-1" aria-labelledby="addBarangayLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addBarangayLabel">Create Schedule</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBarangayForm" action="{{ route('barangays.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="add_name" class="form-label">Barangay <span style="color: red;">*</span></label>
+                            <select class="form-control" id="add_name" name="name" required>
+                                <option value=""></option>
+                                <option value="Brgy. 1">Brgy 1</option>
+                                <option value="Brgy. 2">Brgy 2</option>
+                                <option value="Brgy. 3">Brgy 3</option>
+                                <option value="Brgy. 4">Brgy 4</option>
+                                <option value="Brgy. 5">Brgy 5</option>
+                                <option value="Brgy. 6">Brgy 6</option>
+                                <option value="Brgy. Linggangao">Brgy Linggangao</option>
+                                <option value="Brgy. San Isidro">Brgy San Isidro</option>
+                                <option value="Brgy. Cala-Cala">Brgy Cala-Cala</option>
+                                <option value="Brgy. Talusan">Brgy Talusan</option>
+                                <option value="Brgy. Baliwagan">Brgy Baliwagan</option>
+                                <option value="Brgy. Binitinan">Brgy Binitinan</option>
+                                <option value="Brgy. Hermano">Brgy Hermano</option>
+                                <option value="Brgy. Cogon">Brgy Cogon</option>
+                                <option value="Brgy. Mandangoa">Brgy Mandangoa</option>
+                                <option value="Brgy. Mambayaan">Brgy Mambayaan</option>
+                                <option value="Brgy. Napaliran">Brgy Napaliran</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="add_muni" class="form-label">Municipality <span style="color: red;">*</span></label>
+                            <select class="form-control" id="add_muni" name="muni" >
+                                <option value="Balingasag">Balingasag</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="add_prov" class="form-label">Province <span style="color: red;">*</span></label>
+                            <select class="form-control" id="add_prov" name="prov" >
+                                <option value="Misamis Oriental">Misamis Oriental</option>
+                            </select>
+                        </div>
+        
+                        <div class="mb-3">
+                            <label for="add_area" class="form-label">Collection Area <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="add_area" name="area" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="add_zipcode" class="form-label">Zip Code <span style="color: red;">*</span></label>
+                            <input type="number" class="form-control" id="add_zipcode" name="zipcode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="add_captain" class="form-label">Captain <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="add_captain" name="captain" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" form="addBarangayForm" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
-            {{-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> --}}
-        </div>
-        <div class="offcanvas-body">
-            <form id="addBarangayForm" action="{{ route('barangays.store') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="add_name" class="form-label">Barangay <span style="color: red;">*</span></label>
-                    <select class="form-control" id="add_name" name="name" required>
-                        <option value=""></option>
-                        <option value="Brgy. 1">Brgy 1</option>
-                        <option value="Brgy. 2">Brgy 2</option>
-                        <option value="Brgy. 3">Brgy 3</option>
-                        <option value="Brgy. 4">Brgy 4</option>
-                        <option value="Brgy. 5">Brgy 5</option>
-                        <option value="Brgy. 6">Brgy 6</option>
-                        <option value="Brgy. Linggangao">Brgy Linggangao</option>
-                        <option value="Brgy. San Isidro">Brgy San Isidro</option>
-                        <option value="Brgy. Cala-Cala">Brgy Cala-Cala</option>
-                        <option value="Brgy. Talusan">Brgy Talusan</option>
-                        <option value="Brgy. Baliwagan">Brgy Baliwagan</option>
-                        <option value="Brgy. Binitinan">Brgy Binitinan</option>
-                        <option value="Brgy. Hermano">Brgy Hermano</option>
-                        <option value="Brgy. Cogon">Brgy Cogon</option>
-                        <option value="Brgy. Mandangoa">Brgy Mandangoa</option>
-                        <option value="Brgy. Mambayaan">Brgy Mambayaan</option>
-                        <option value="Brgy. Napaliran">Brgy Napaliran</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="add_muni" class="form-label">Municipality <span style="color: red;">*</span></label>
-                    <select class="form-control" id="add_muni" name="muni" >
-                        <option value="Balingasag">Balingasag</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="add_prov" class="form-label">Province <span style="color: red;">*</span></label>
-                    <select class="form-control" id="add_prov" name="prov" >
-                        <option value="Misamis Oriental">Misamis Oriental</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="add_area" class="form-label">Collection Area <span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" id="add_area" name="area" required>
-                </div>
-                <div class="mb-3">
-                    <label for="add_zipcode" class="form-label">Zip Code <span style="color: red;">*</span></label>
-                    <input type="number" class="form-control" id="add_zipcode" name="zipcode" required>
-                </div>
-                <div class="mb-3">
-                    <label for="add_captain" class="form-label">Captain <span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" id="add_captain" name="captain" required>
-                </div>
-                <button type="submit" class="btn btn-primary mb-3">Create</button>
-                <button type="button" class="btn btn-light text-reset mb-3" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
-            </form>
         </div>
     </div>
 
     <!-- Offcanvas for Edit Barangay -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditBrgy" aria-labelledby="offcanvasEditBrgyLabel">
-        <div class="offcanvas-header" style="padding-bottom: 0;">
-            <div>
-                <h5 id="offcanvasEditBrgyLabel">Edit Barangay</h5>
-                <p style="font-size: 15px;">Please fill all the required fields <span style="color: red;">*</span></p>
+    <div class="modal fade" id="editBarangayModal" tabindex="-1" aria-labelledby="editBarangayModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editBarangayModal">Update Schedule</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editBrgyForm" method="POST">
+                        @csrf
+                        <!-- Hidden input for barangay ID -->
+                        <input type="hidden" id="edit_brgy_id" name="brgy_id">
+        
+                        <div class="mb-3">
+                            <label for="edit_name" class="form-label">Barangay <span style="color: red;">*</span></label>
+                            <select class="form-control" id="edit_name" name="name" required>
+                                <option value=""></option>
+                                <option value="Brgy. 1">Brgy 1</option>
+                                <option value="Brgy. 2">Brgy 2</option>
+                                <option value="Brgy. 3">Brgy 3</option>
+                                <option value="Brgy. 4">Brgy 4</option>
+                                <option value="Brgy. 5">Brgy 5</option>
+                                <option value="Brgy. 6">Brgy 6</option>
+                                <option value="Brgy. Linggangao">Brgy Linggangao</option>
+                                <option value="Brgy. San Isidro">Brgy San Isidro</option>
+                                <option value="Brgy. Cala-Cala">Brgy Cala-Cala</option>
+                                <option value="Brgy. Talusan">Brgy Talusan</option>
+                                <option value="Brgy. Baliwagan">Brgy Baliwagan</option>
+                                <option value="Brgy. Binitinan">Brgy Binitinan</option>
+                                <option value="Brgy. Hermano">Brgy Hermano</option>
+                                <option value="Brgy. Cogon">Brgy Cogon</option>
+                                <option value="Brgy. Mandangoa">Brgy Mandangoa</option>
+                                <option value="Brgy. Mambayaan">Brgy Mambayaan</option>
+                                <option value="Brgy. Napaliran">Brgy Napaliran</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_muni" class="form-label">Municipality <span style="color: red;">*</span></label>
+                            <select class="form-control" id="edit_muni" name="muni" >
+                                <option value="Balingasag">Balingasag</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_prov" class="form-label">Province <span style="color: red;">*</span></label>
+                            <select class="form-control" id="edit_prov" name="prov" >
+                                <option value="Misamis Oriental">Misamis Oriental</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_area" class="form-label">Collection Area <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="edit_area" name="area" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_zipcode" class="form-label">Zip Code <span style="color: red;">*</span></label>
+                            <input type="number" class="form-control" id="edit_zipcode" name="zipcode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_captain" class="form-label">Captain <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="edit_captain" name="captain" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" form="editBrgyForm" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
-            {{-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> --}}
-        </div>
-        <div class="offcanvas-body">
-            <form id="editBrgyForm" method="POST">
-                @csrf
-                <!-- Hidden input for barangay ID -->
-                <input type="hidden" id="edit_brgy_id" name="brgy_id">
-
-                <div class="mb-3">
-                    <label for="edit_name" class="form-label">Barangay <span style="color: red;">*</span></label>
-                    <select class="form-control" id="edit_name" name="name" required>
-                        <option value=""></option>
-                        <option value="Brgy. 1">Brgy 1</option>
-                        <option value="Brgy. 2">Brgy 2</option>
-                        <option value="Brgy. 3">Brgy 3</option>
-                        <option value="Brgy. 4">Brgy 4</option>
-                        <option value="Brgy. 5">Brgy 5</option>
-                        <option value="Brgy. 6">Brgy 6</option>
-                        <option value="Brgy. Linggangao">Brgy Linggangao</option>
-                        <option value="Brgy. San Isidro">Brgy San Isidro</option>
-                        <option value="Brgy. Cala-Cala">Brgy Cala-Cala</option>
-                        <option value="Brgy. Talusan">Brgy Talusan</option>
-                        <option value="Brgy. Baliwagan">Brgy Baliwagan</option>
-                        <option value="Brgy. Binitinan">Brgy Binitinan</option>
-                        <option value="Brgy. Hermano">Brgy Hermano</option>
-                        <option value="Brgy. Cogon">Brgy Cogon</option>
-                        <option value="Brgy. Mandangoa">Brgy Mandangoa</option>
-                        <option value="Brgy. Mambayaan">Brgy Mambayaan</option>
-                        <option value="Brgy. Napaliran">Brgy Napaliran</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="edit_muni" class="form-label">Municipality <span style="color: red;">*</span></label>
-                    <select class="form-control" id="edit_muni" name="muni" >
-                        <option value="Balingasag">Balingasag</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="edit_prov" class="form-label">Province <span style="color: red;">*</span></label>
-                    <select class="form-control" id="edit_prov" name="prov" >
-                        <option value="Misamis Oriental">Misamis Oriental</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="edit_area" class="form-label">Collection Area <span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" id="edit_area" name="area" required>
-                </div>
-                <div class="mb-3">
-                    <label for="edit_zipcode" class="form-label">Zip Code <span style="color: red;">*</span></label>
-                    <input type="number" class="form-control" id="edit_zipcode" name="zipcode" required>
-                </div>
-                <div class="mb-3">
-                    <label for="edit_captain" class="form-label">Captain <span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" id="edit_captain" name="captain" required>
-                </div>
-                <button type="submit" class="btn btn-primary mb-3">Update</button>
-                <button type="button" class="btn btn-light text-reset mb-3" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
-            </form>
         </div>
     </div>
 
@@ -255,12 +309,28 @@
                                     <td>${formattedCreatedAt}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
-                                            <a class="btn btn-sm btn-icon btn-warning edit-barangay-btn" data-id="${barangay.id}">Edit</a>
-                                            <a class="btn btn-sm btn-icon btn-danger delete-barangay-btn" data-id="${barangay.id}">Delete</a>
+                                            <!-- Edit Button with Tooltip -->
+                                            <a class="btn btn-sm btn-icon btn-warning edit-barangay-btn" data-id="${barangay.id}" data-bs-toggle="tooltip" title="Edit Barangay">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
+                                                    <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
+                                                    <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
+                                                </svg>
+                                            </a>
+
+                                            <!-- Archive Button with Tooltip -->
+                                            <a class="btn btn-sm btn-icon btn-secondary archive-barangay-btn" data-id="${barangay.id}" data-bs-toggle="tooltip" title="Archive Barangay">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-archive">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/>
+                                                    <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"/>
+                                                    <path d="M10 12l4 0"/>
+                                                </svg>
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>`;
                             counter++;
+
                         }
                         
                     });
@@ -287,6 +357,73 @@
         }
 
         fetchBarangays();
+
+        function fetchABarangays() {
+            $.ajax({
+                url: "{{ route('barangays.getArchive') }}", // Your route for fetching barangays
+                type: "GET",
+                success: function (response) {
+                    let rows = '';
+                    let counter = 1;
+                    $.each(response.abarangays, function (key, abarangay) {
+                        if (abarangay.isDeleted == '2') { // Skip users with 'deleted' status
+                            // Format the created_at date
+                            const updatedAt = new Date(abarangay.updated_at);
+                            const formattedupdatedAt = updatedAt.toLocaleString('en-US', {
+                                month: 'long', // 'January', 'February', etc.
+                                day: '2-digit', // '01', '02', etc.
+                                year: 'numeric', // '2024'
+                                hour: '2-digit', // '01', '02', etc.
+                                minute: '2-digit', // '00', '01', etc.
+                                hour12: true // 'AM'/'PM'
+                            });
+
+                            rows += `
+                                <tr>
+                                    <td>${counter}</td>
+                                    <td>${abarangay.name}, ${abarangay.municipality}, ${abarangay.province}</td>
+                                    <td>${abarangay.area}</td>
+                                    <td>${abarangay.zipcode}</td>
+                                    <td>${abarangay.captain}</td>
+                                    <td>${formattedupdatedAt}</td>
+                                    <td>
+                                        <div class="flex align-items-center list-user-action">
+                                            <a class="btn btn-sm btn-icon btn-secondary restore-barangay-btn" data-id="${abarangay.id}">
+                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+                                            </a>
+                                            <a class="btn btn-sm btn-icon btn-danger delete-barangay-btn" data-id="${abarangay.id}">
+                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                            counter++;
+                        }
+                        
+                    });
+
+                    let dataTable = $('#archive-list-table').DataTable();
+                    dataTable.clear(); // Clear the existing table data
+                    dataTable.destroy();
+
+                    $('#archive-list-table tbody').html(rows);
+
+                    $('#archive-list-table').DataTable({
+                        retrieve: true, // Retrieve the existing table instead of initializing it again
+                        paging: true, // Enable pagination
+                        searching: true, // Enable search functionality
+                        info: true, // Show the number of entries info
+                        responsive: true, // Ensure responsiveness
+                    });
+                },
+                error: function (error) {
+                    console.log("Error fetching data: ", error);
+                    alert("Failed to fetch barangays. Please try again.");
+                }
+            });
+        }
+
+        fetchABarangays();
 
         // Add Barangay
         $('#addBarangayForm').on('submit', function (e) {
@@ -317,7 +454,9 @@
                         $('#addBarangayForm')[0].reset();
                         fetchBarangays();
                         
-                        $('#offcanvasAddBarangay').offcanvas('hide');
+                        var addBrgyModalEl = document.getElementById('addBarangayModal');
+                        var addBarangayModal = bootstrap.Modal.getInstance(addBrgyModalEl);
+                        addBarangayModal.hide();
                     });
                 },
                 error: function (error) {
@@ -352,7 +491,10 @@
                     $('#edit_area').val(response.barangay.area);
                     $('#edit_zipcode').val(response.barangay.zipcode);
                     $('#edit_captain').val(response.barangay.captain);
-                    $('#offcanvasEditBrgy').offcanvas('show');
+
+
+                    $('#editBarangayModal').modal('show');
+
                 },
                 error: function (error) {
                     console.log("Error fetching barangay data: ", error);
@@ -376,7 +518,7 @@
         }
 
         // Call this function when the form is displayed
-        $('#offcanvasEditBrgy').on('shown.bs.offcanvas', function () {
+        $('#editBarangayModal').on('shown.bs.modal', function () {
             storeOriginalValues(); // Store values when the offcanvas is shown
         });
 
@@ -431,7 +573,8 @@
                         confirmButtonColor: "#01A94D"
                     }).then(() => {
                         fetchBarangays();
-                        $('#offcanvasEditBrgy').offcanvas('hide');
+                        $('#editBarangayModal').modal('hide');
+
                     });
                 },
                 error: function (error) {
@@ -447,14 +590,13 @@
             });
         });
 
-
         // Delete Barangay
         $(document).on('click', '.delete-barangay-btn', function () {
             let barangayId = $(this).data('id');
 
             Swal.fire({
-                title: 'Delete Barangay?',
-                text: "This action is irreversible.",
+                title: 'Move to Trash?',
+                text: "Are you sure you want to remove this data?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Confirm',
@@ -479,7 +621,7 @@
                                 confirmButtonText: 'OK',
                                 confirmButtonColor: "#01A94D"
                             }).then(() => {
-                                // fetchBarangays();
+                                // 
                             });
                         },
                         error: function (error) {

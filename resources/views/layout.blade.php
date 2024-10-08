@@ -95,6 +95,18 @@
                     font-size: 1rem;
                 }
             }
+
+            .breadcrumb-item+.breadcrumb-item::before {
+                color: #fff;
+            }
+
+            .nav-link {
+                color: #000;
+            }
+
+            .nav {
+                --bs-nav-link-hover-color: #01A94D;
+            }
         </style>
     </head>
     <body class="">

@@ -40,6 +40,22 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card" data-aos="fade-up" data-aos-delay="800">
+                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
+                                <div class="header-title">
+                                    <h4 class="card-title">Collection Schedule</h4>
+                                </div>
+                                
+                                <div>
+                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                                        <i class="btn-inner">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                        </i>
+                                        <span>Add New</span>
+                                    </a>
+                                </div>
+                            </div>
 
                             <div class="card-body">
                                 <div id="calendar" class="calendar-s"></div>
@@ -58,7 +74,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addScheduleModalLabel">Add Schedule</h1>
+                    <h1 class="modal-title fs-5" id="addScheduleModalLabel">Create Schedule</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -239,7 +255,7 @@
             themeSystem: 'bootstrap5',
             initialView: 'dayGridMonth', // Set the default view to Month
 
-            dayMaxEvents: 4,
+            dayMaxEvents: 3,
             contentHeight: "auto",
 
             headerToolbar: {

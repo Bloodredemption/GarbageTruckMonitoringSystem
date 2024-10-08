@@ -22,6 +22,15 @@ class BarangayController extends Controller
         return view('admin.barangay.index');
     }
 
+    public function getArchive()
+    {
+        $abarangays = Barangay::where('isDeleted', 2)
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        return response()->json(['abarangays' => $abarangays]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -101,5 +110,23 @@ class BarangayController extends Controller
         $barangay->save();
 
         return response()->json(['message' => 'Barangay deleted successfully.']);
+    }
+
+    public function archive(string $id)
+    {
+        $barangay = Barangay::findOrFail($id);
+        $barangay->isDeleted = '2';
+        $barangay->save();
+
+        return response()->json(['message' => 'Barangay archived successfully.']);
+    }
+
+    public function restore(string $id)
+    {
+        $barangay = Barangay::findOrFail($id);
+        $barangay->isDeleted = '0';
+        $barangay->save();
+
+        return response()->json(['message' => 'Barangay restored successfully.']);
     }
 }
