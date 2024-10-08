@@ -37,6 +37,8 @@ class BarangayController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'municipality' => 'required|string',
+            'province' => 'required|string',
             'area' => 'required|string',
             'zipcode' => 'required|digits:4',
             'captain' => 'required|string',
@@ -76,6 +78,8 @@ class BarangayController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'municipality' => 'required|string',
+            'province' => 'required|string',
             'area' => 'required|string',
             'zipcode' => 'required|digits:4',
             'captain' => 'required|string',

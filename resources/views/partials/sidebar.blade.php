@@ -82,7 +82,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/collection-schedule') ? 'active' : '' }}"  href="{{ route('collection-schedule') }}">
+                        <a class="nav-link {{ request()->is('admin/collection-schedule') ? 'active' : '' }}"  href="{{ route('cs.index') }}">
                             <i class="icon">
                                 <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     @if(request()->is('admin/collection-schedule'))
@@ -263,6 +263,39 @@
                             <span class="item-name">Residents Concerns</span>
                         </a>
                     </li>
+
+                    {{-- <li><hr class="hr-horizontal"></li>
+                    <li class="nav-item static-item">
+                        <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                            <span class="default-icon">Reports</span>
+                            <span class="mini-icon">-</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link "  href="">
+                            <i class="icon">
+                                <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <rect width="30" height="30" fill="url(#pattern0_18_1469)"/>
+                                        <defs>
+                                            <pattern id="pattern0_18_1469" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                            <use xlink:href="#image0_18_1469" transform="scale(0.0333333)"/>
+                                            </pattern>
+                                            <image id="image0_18_1469" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABnUlEQVR4nO3WzUtVQRjHccNF7Vpki+jNXUYl1DKMSC8VLYSivyIobNWqfyS5/QFBtKrWZWDhwo2SXmqnC18gE3sPP3FgwKM4xzn3TuLCH5zNwzy/78w8c56Zrq597RXhNB7iNT5jLXyf8AojOJUTeAJP8dvOKsY0cbxT6C0sq68l3GwXOow/2tdf3KkLvYgfOtd39KdCD+CtfHpXeKaAr8uvRgq4GUm+nJA7EMkdTQFPR5IHEnKvRHKnUsCr8ms1Bfz1P4BXUsBTdWtcUdtaW92sW+OK2m46XBhEX8xkSH4NlRbVwqFYAxnLCB0LnofxJcRGYqs+n6llfsOF4Pm4FH+/Uwf72eElcTt4nQt9O+33wrj2tIgbwePINk1ppQraaAP4C09wLHgcxeQ248Zj0H4slAZ+wFXcw0t8LD19WiF2HydLHtcwF5nggxi4FZKeF5d50rW2kXsWz7Aegc7iYKpfFagnlOVR2JkqreFMx9AA7sWbxDOwXnSvLODSBBqhM82U6j8TYhNbHoKXssIrJtWNu3iB+eIM7Qp4T+ofbWXJ11AKmMoAAAAASUVORK5CYII="/>
+                                        </defs>
+                                        <rect width="30" height="30" fill="url(#pattern0_18_1477)"/>
+                                        <defs>
+                                            <pattern id="pattern0_18_1477" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                            <use xlink:href="#image0_18_1477" transform="scale(0.0333333)"/>
+                                            </pattern>
+                                            <image id="image0_18_1477" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAACSElEQVR4nO2Wv2sUURDHVyy0s1AL8Wenoga0lIj4gygWguJfISixshIr9c27TW5nNhYmnEHuZjYsiJWx1ghRLGwixqCdFhpBDfF3yMnbS7zDvL39cUtI4cBrlvfm877znZ1dx/kfKyVKA7XtQHIJiB9okjdAMttY/BqQRzVKr/LCbYUBFVa3aJTbgPJLk9TbrcYervT1hZs7goLHpzTKxyTgkguQTGuUk/mgvpzWxL+zQpvqeU5R7WwmqIuyX6N8zwttKudv2pOuVNB6vb5KIz/qFNri+2OTMxGsMegpCtpcfDwZTFyxHVYYHEw6qzzujoEPJYKB5IUV7HF38tngkBWMPJFCscwUX2qZSaP4S+Fg5M/JipEnsnrcxtsspeZKVo9jvf2nuUokR13iXfYkXnCs6FKbnC2ipq4OD6+1DxCSsQLBYyanuhWuA5JPjdJLr1V1yRvZW8TI1MhflV/bt6D2yt8KED+J9xqDHiD+kbu8yHPakzNR8w3InmhuU8rXS5OM5wPzB+XzCZPjun9n/ZKhhG1eLzNfcwB/AvJgf391k8lxDcONQPLcsnfcDvWkC1DeN28oTwH5MBCf1yT3AeXl4q+P6VLzTKNccG8GWxdzANaOAPFb2wVLJBfjSjwVHUK5az7mqT5rC6HKwW6NEgLyfIz3rxBH1zidhuvyBmMLIF82lWnbcCSzUK7udIqIG+VgB6A8TNnp82Z6OUVGoxmjyTTZ4v9k9Az5WYvqafBHDjjLEWEYrlYo5zTKPY38zvTQsoBXZPwBwf6jRG7aWlkAAAAASUVORK5CYII="/>
+                                        </defs>
+                                </svg>
+                            </i>
+                            <span class="item-name">Weekly Report</span>
+                        </a>
+                    </li> --}}
+
                     <li><hr class="hr-horizontal"></li>
                     <li class="nav-item static-item">
                         <a class="nav-link static-item disabled" href="#" tabindex="-1">

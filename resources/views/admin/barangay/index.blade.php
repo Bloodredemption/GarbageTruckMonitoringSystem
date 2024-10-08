@@ -96,11 +96,43 @@
             <form id="addBarangayForm" action="{{ route('barangays.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="add_name" class="form-label">Name <span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" id="add_name" name="name" required>
+                    <label for="add_name" class="form-label">Barangay <span style="color: red;">*</span></label>
+                    <select class="form-control" id="add_name" name="name" required>
+                        <option value=""></option>
+                        <option value="Brgy. 1">Brgy 1</option>
+                        <option value="Brgy. 2">Brgy 2</option>
+                        <option value="Brgy. 3">Brgy 3</option>
+                        <option value="Brgy. 4">Brgy 4</option>
+                        <option value="Brgy. 5">Brgy 5</option>
+                        <option value="Brgy. 6">Brgy 6</option>
+                        <option value="Brgy. Linggangao">Brgy Linggangao</option>
+                        <option value="Brgy. San Isidro">Brgy San Isidro</option>
+                        <option value="Brgy. Cala-Cala">Brgy Cala-Cala</option>
+                        <option value="Brgy. Talusan">Brgy Talusan</option>
+                        <option value="Brgy. Baliwagan">Brgy Baliwagan</option>
+                        <option value="Brgy. Binitinan">Brgy Binitinan</option>
+                        <option value="Brgy. Hermano">Brgy Hermano</option>
+                        <option value="Brgy. Cogon">Brgy Cogon</option>
+                        <option value="Brgy. Mandangoa">Brgy Mandangoa</option>
+                        <option value="Brgy. Mambayaan">Brgy Mambayaan</option>
+                        <option value="Brgy. Napaliran">Brgy Napaliran</option>
+                    </select>
                 </div>
                 <div class="mb-3">
-                    <label for="add_area" class="form-label">Area <span style="color: red;">*</span></label>
+                    <label for="add_muni" class="form-label">Municipality <span style="color: red;">*</span></label>
+                    <select class="form-control" id="add_muni" name="muni" >
+                        <option value="Balingasag">Balingasag</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="add_prov" class="form-label">Province <span style="color: red;">*</span></label>
+                    <select class="form-control" id="add_prov" name="prov" >
+                        <option value="Misamis Oriental">Misamis Oriental</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="add_area" class="form-label">Collection Area <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="add_area" name="area" required>
                 </div>
                 <div class="mb-3">
@@ -133,11 +165,42 @@
                 <input type="hidden" id="edit_brgy_id" name="brgy_id">
 
                 <div class="mb-3">
-                    <label for="edit_name" class="form-label">Name <span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" id="edit_name" name="name" required>
+                    <label for="edit_name" class="form-label">Barangay <span style="color: red;">*</span></label>
+                    <select class="form-control" id="edit_name" name="name" required>
+                        <option value=""></option>
+                        <option value="Brgy. 1">Brgy 1</option>
+                        <option value="Brgy. 2">Brgy 2</option>
+                        <option value="Brgy. 3">Brgy 3</option>
+                        <option value="Brgy. 4">Brgy 4</option>
+                        <option value="Brgy. 5">Brgy 5</option>
+                        <option value="Brgy. 6">Brgy 6</option>
+                        <option value="Brgy. Linggangao">Brgy Linggangao</option>
+                        <option value="Brgy. San Isidro">Brgy San Isidro</option>
+                        <option value="Brgy. Cala-Cala">Brgy Cala-Cala</option>
+                        <option value="Brgy. Talusan">Brgy Talusan</option>
+                        <option value="Brgy. Baliwagan">Brgy Baliwagan</option>
+                        <option value="Brgy. Binitinan">Brgy Binitinan</option>
+                        <option value="Brgy. Hermano">Brgy Hermano</option>
+                        <option value="Brgy. Cogon">Brgy Cogon</option>
+                        <option value="Brgy. Mandangoa">Brgy Mandangoa</option>
+                        <option value="Brgy. Mambayaan">Brgy Mambayaan</option>
+                        <option value="Brgy. Napaliran">Brgy Napaliran</option>
+                    </select>
                 </div>
                 <div class="mb-3">
-                    <label for="edit_area" class="form-label">Area <span style="color: red;">*</span></label>
+                    <label for="edit_muni" class="form-label">Municipality <span style="color: red;">*</span></label>
+                    <select class="form-control" id="edit_muni" name="muni" >
+                        <option value="Balingasag">Balingasag</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_prov" class="form-label">Province <span style="color: red;">*</span></label>
+                    <select class="form-control" id="edit_prov" name="prov" >
+                        <option value="Misamis Oriental">Misamis Oriental</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_area" class="form-label">Collection Area <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="edit_area" name="area" required>
                 </div>
                 <div class="mb-3">
@@ -185,7 +248,7 @@
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
-                                    <td>${barangay.name}</td>
+                                    <td>${barangay.name}, ${barangay.municipality}, ${barangay.province}</td>
                                     <td>${barangay.area}</td>
                                     <td>${barangay.zipcode}</td>
                                     <td>${barangay.captain}</td>
@@ -232,6 +295,8 @@
             let formData = {
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
                 name: $('#add_name').val(),
+                municipality: $('#add_muni').val(),
+                province: $('#add_prov').val(),
                 area: $('#add_area').val(),
                 zipcode: $('#add_zipcode').val(),
                 captain: $('#add_captain').val(),
@@ -282,6 +347,8 @@
                 success: function (response) {
                     $('#edit_brgy_id').val(response.barangay.id);
                     $('#edit_name').val(response.barangay.name);
+                    $('#edit_muni').val(response.barangay.municipality);
+                    $('#edit_prov').val(response.barangay.province);
                     $('#edit_area').val(response.barangay.area);
                     $('#edit_zipcode').val(response.barangay.zipcode);
                     $('#edit_captain').val(response.barangay.captain);
@@ -299,7 +366,9 @@
 
         function storeOriginalValues() {
             originalValues = {
-                name: $('#edit_name').val(), // Adjust the selector to match your input fields
+                name: $('#edit_name').val(),
+                municipality: $('#edit_muni').val(),
+                province: $('#edit_prov').val(),
                 area: $('#edit_area').val(),
                 zipcode: $('#edit_zipcode').val(),
                 captain: $('#edit_captain').val(),
@@ -318,6 +387,8 @@
             // Check for changes
             const currentValues = {
                 name: $('#edit_name').val(),
+                municipality: $('#edit_muni').val(),
+                province: $('#edit_prov').val(),
                 area: $('#edit_area').val(),
                 zipcode: $('#edit_zipcode').val(),
                 captain: $('#edit_captain').val(),
@@ -337,10 +408,20 @@
                 return; // Exit the function
             }
 
+            let formData = {
+                _token: "{{ csrf_token() }}", // Laravel CSRF token
+                name: $('#edit_name').val(),
+                municipality: $('#edit_muni').val(),
+                province: $('#edit_prov').val(),
+                area: $('#edit_area').val(),
+                zipcode: $('#edit_zipcode').val(),
+                captain: $('#edit_captain').val(),
+            };
+
             $.ajax({
                 url: `/admin/barangay/${barangayId}/update`,
                 type: "PUT",
-                data: $(this).serialize(),
+                data: formData,
                 success: function (response) {
                     Swal.fire({
                         icon: 'success',

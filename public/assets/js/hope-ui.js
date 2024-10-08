@@ -371,7 +371,7 @@ if (backToTop !== null && backToTop !== undefined) {
 -----------------------------------------------------------------------*/
 document.addEventListener('DOMContentLoaded', (event) => {
   resizePlugins()
-  loaderInit()
+  // loaderInit()
 });
 /*---------------------------------------------------------------------
               Window Resize

@@ -14,6 +14,8 @@ class Barangay extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'municipality',
+        'province',
         'area',
         'zipcode',
         'captain',

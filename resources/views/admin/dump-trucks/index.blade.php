@@ -174,6 +174,12 @@
 
 <script>
     $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+
         // Fetch barangays and display in the table
         function fetchDrivers() {
             $.ajax({
@@ -279,7 +285,6 @@
             e.preventDefault();
 
             let formData = {
-                _token: "{{ csrf_token() }}", // Laravel CSRF token
                 brand: $('#add_brand').val(),
                 model: $('#add_model').val(),
                 user_id: $('#add_driver').val(),
@@ -390,7 +395,6 @@
             }
 
             let formData = {
-                _token: "{{ csrf_token() }}", // Laravel CSRF token
                 brand: $('#edit_brand').val(),
                 model: $('#edit_model').val(),
                 user_id: $('#edit_driver').val(),
