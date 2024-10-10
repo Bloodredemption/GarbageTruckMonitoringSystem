@@ -16,12 +16,27 @@ class UsersController extends Controller
     {
         // Check if the request is an AJAX call
         if (request()->ajax()) {
-            $users = Users::orderBy('created_at', 'desc')->get();
+            $users = Users::where(function($query) {
+                $query->where('status', 'active')
+                      ->orWhere('status', 'inactive');
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
             return response()->json(['users' => $users]);
         }
 
         // Otherwise, return the view (for non-AJAX requests, i.e., the initial page load)
         return view('admin.users.index');
+    }
+
+    public function getArchive()
+    {
+        $ausers = Users::where('status', 'archive')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        return response()->json(['ausers' => $ausers]);
     }
 
     /**
@@ -136,5 +151,23 @@ class UsersController extends Controller
         $user->save();
 
         return response()->json(['message' => 'User deleted successfully']);
+    }
+
+    public function archive(string $id)
+    {
+        $user = Users::findOrFail($id);
+        $user->status = 'archive';
+        $user->save();
+
+        return response()->json(['message' => 'User archived successfully.']);
+    }
+
+    public function restore(string $id)
+    {
+        $user = Users::findOrFail($id);
+        $user->status = 'active';
+        $user->save();
+
+        return response()->json(['message' => 'User restored successfully.']);
     }
 }

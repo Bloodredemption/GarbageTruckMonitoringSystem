@@ -24,9 +24,10 @@
         <!-- Customizer Css -->
         <link rel="stylesheet" href="{{ asset('assets/css/customizer.min.css') }}" />
 
-        <!-- RTL Css -->
-        <link rel="stylesheet" href="{{ asset('assets/css/rtl.min.css') }}" />
-
+        <link rel="stylesheet" href="{{ asset('assets/vendor/flatpickr/dist/flatpickr.min.css') }}" />
+        <script src="{{ asset('assets/vendor/flatpickr/dist/flatpickr.min.js')}}"></script>
+        <script src="{{ asset('assets/js/plugins/flatpickr.js')}}" defer></script>
+    
         <!-- Library Bundle Script -->
         <script src="{{ asset('assets/js/core/libs.min.js') }}"></script>
 
@@ -65,6 +66,12 @@
         <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/daygrid/main.css')}}' />
         <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/timegrid/main.css')}}' />
         <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/list/main.css')}}' />
+
+        <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
 
         <style>
             :root {
@@ -107,6 +114,32 @@
             .nav {
                 --bs-nav-link-hover-color: #01A94D;
             }
+
+            .accordion-item {
+                color: #000;
+                background-color: var(--bs-accordion-bg);
+                border: var(--bs-accordion-border-width) solid rgb(255 255 255 / 13%);
+            }
+
+            .custom-tabs .nav-link {
+                color: #000; /* Adjust the color you want for the text */
+                border: none;
+                padding-bottom: 10px; /* Add padding for spacing between text and border */
+            }
+
+            .custom-tabs .nav-link.active {
+                color: var(--bs-primary); /* Same color as the text */
+                border-bottom: 3px solid var(--bs-primary); /* Create the bottom colored line */
+            }
+
+            .custom-tabs .nav-link:hover {
+                color: #087539; /* Optional: color change on hover */
+            }
+
+            .custom-tabs .nav-link:focus {
+                box-shadow: none; /* Remove default Bootstrap focus outline */
+            }
+
         </style>
     </head>
     <body class="">

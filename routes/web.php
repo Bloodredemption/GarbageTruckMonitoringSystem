@@ -102,10 +102,13 @@ Route::get('/admin/residents-concerns', function () {
 // Users
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+    Route::get('/users/getArchive', [UsersController::class, 'getArchive'])->name('users.getArchive');
     Route::post('/users', [UsersController::class, 'store'])->name('users.store');
     Route::get('/users/{id}/edit', [UsersController::class, 'edit']);
     Route::put('/users/{id}/update', [UsersController::class, 'update']);
     Route::put('/users/{id}/delete', [UsersController::class, 'destroy']);
+    Route::put('/users/{id}/archive', [UsersController::class, 'archive']);
+    Route::put('/users/{id}/restore', [UsersController::class, 'restore']);
     route::get('/users/{id}/show', [UsersController::class, 'show'])->name('users.show');
 });
 

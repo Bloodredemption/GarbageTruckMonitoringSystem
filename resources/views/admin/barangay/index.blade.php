@@ -16,7 +16,7 @@
                                 <h1><strong>Barangay Records</strong></h1>
                                 <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Dashboard</a></li>
                                         <li class="breadcrumb-item active text-white" aria-current="page">Barangay Records</li>
                                     </ol>
                                 </nav>
@@ -112,7 +112,7 @@
                                                         <th>Zip Code</th>
                                                         <th>Captain</th>
                                                         <th>Date Archived</th>
-                                                        <th style="min-width: 100px">Operation</th>
+                                                        <th style="min-width: 100px">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -136,11 +136,11 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addBarangayLabel">Create Schedule</h1>
+                    <h1 class="modal-title fs-5" id="addBarangayLabel">Create Barangay</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addBarangayForm" action="{{ route('barangays.store') }}" method="POST">
+                    <form id="addBarangayForm" action="{{ route('barangays.store') }}" method="POST" class="text-black">
                         @csrf
                         <div class="mb-3">
                             <label for="add_name" class="form-label">Barangay <span style="color: red;">*</span></label>
@@ -200,12 +200,12 @@
         </div>
     </div>
 
-    <!-- Offcanvas for Edit Barangay -->
+    <!-- Modal for Edit Barangay -->
     <div class="modal fade" id="editBarangayModal" tabindex="-1" aria-labelledby="editBarangayModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="editBarangayModal">Update Schedule</h1>
+                    <h1 class="modal-title fs-5" id="editBarangayModal">Update Barangay</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -626,6 +626,90 @@
                         },
                         error: function (error) {
                             console.log("Error deleting barangay: ", error);
+                        }
+                    });
+                }
+            });
+        });
+        
+        $(document).on('click', '.archive-barangay-btn', function () {
+            let barangayId = $(this).data('id');
+
+            Swal.fire({
+                title: 'Move to Archive?',
+                text: "Are you sure you want to remove this data?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#c03221',
+                cancelButtonColor: '#6c757d',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/admin/barangay/${barangayId}/archive`,
+                        type: "PUT",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (response) {
+                            fetchBarangays();
+                            fetchABarangays();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Barangay Archived!',
+                                text: response.message,
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: "#01A94D"
+                            }).then(() => {
+                                // 
+                            });
+                        },
+                        error: function (error) {
+                            console.log("Error archiving barangay: ", error);
+                        }
+                    });
+                }
+            });
+        });
+        
+        $(document).on('click', '.restore-barangay-btn', function () {
+            let barangayId = $(this).data('id');
+
+            Swal.fire({
+                title: 'Restore data?',
+                text: "Are you sure you want to restore this data?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#01A94D',
+                cancelButtonColor: '#6c757d',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/admin/barangay/${barangayId}/restore`,
+                        type: "PUT",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (response) {
+                            fetchBarangays();
+                            fetchABarangays();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Barangay Restored!',
+                                text: response.message,
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: "#01A94D"
+                            }).then(() => {
+                                // 
+                            });
+                        },
+                        error: function (error) {
+                            console.log("Error restoring barangay: ", error);
                         }
                     });
                 }
