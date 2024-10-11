@@ -64,12 +64,24 @@
             .logo-img {
                 width: 150px; /* Increase logo size for larger screens */
             }
+
+            .d-actions {
+                --bs-btn-padding-y: .25rem; 
+                --bs-btn-padding-x: .5rem; 
+                --bs-btn-font-size: .75rem;
+            }
         }
 
         /* Further adjustments for very small screens (mobile) */
         @media (max-width: 576px) {
             .logo-img {
                 width: 150px; /* Smaller logo for mobile */
+            }
+
+            .d-actions {
+                --bs-btn-padding-y: .15rem; 
+                --bs-btn-padding-x: .3rem; 
+                --bs-btn-font-size: .55rem;
             }
         }
         
@@ -185,6 +197,9 @@
             font-size: 0.8rem; /* Adjust search label text */
         }
 
+        .dt-info, .dt-search-1 {
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>

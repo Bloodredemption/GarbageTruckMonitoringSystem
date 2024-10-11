@@ -103,6 +103,13 @@
                     <label for="add_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="add_cm" name="cm" required>
                 </div>
+                <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
+                <div class="input-group mb-3">
+                    <input type="number" class="form-control" id="add_metrics" name="metrics" required aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">kg/s</span>
+                    </div>
+                </div>
                 <div class="mb-3">
                     <div class="form-group">
                         <label for="add_sd" class="form-label">Start Date <span style="color: red;">*</span></label>
@@ -172,6 +179,27 @@
 
 <script>
     $(document).ready(function () {
+        function updateMetricsLabel(selectId, labelId, addonId) {
+            const wasteTypeSelect = document.getElementById(selectId);
+            const metricsLabel = document.getElementById(labelId);
+            const addonText = document.getElementById(addonId); // Get the element for unit (kg. or sack)
+
+            wasteTypeSelect.addEventListener('change', function() {
+                if (this.value === 'Biodegradable') {
+                    metricsLabel.innerHTML = 'Weight (kilogram/s) <span style="color: red;">*</span>';
+                    addonText.innerHTML = 'kg/s'; // Set the unit to kg.
+                } else if (this.value === 'Residual') {
+                    metricsLabel.innerHTML = 'Number of Sack/s <span style="color: red;">*</span>';
+                    addonText.innerHTML = 'sack/s'; // Set the unit to sack
+                } else {
+                    metricsLabel.innerHTML = 'Weight <span style="color: red;">*</span>';
+                    addonText.innerHTML = 'kg/s'; // Default unit is kg.
+                }
+            });
+        }
+
+        updateMetricsLabel('add_wt', 'add_metrics_label','basic-addon2');
+
         // Fetch barangays and display in the table
         function fetchWasteT() {
             $.ajax({
@@ -191,7 +219,7 @@
 
                     // Populate both selects with the drivers
                     $.each(response.wastetype, function (key, wastetype) {
-                        driverSelect1.append(`<option value="${wastetype.id}">${wastetype.waste_type}</option>`);
+                        driverSelect1.append(`<option value="${wastetype.waste_type}">${wastetype.waste_type}</option>`);
                         driverSelect2.append(`<option value="${wastetype.id}">${wastetype.waste_type}</option>`);
                     });
                 },

@@ -17,6 +17,7 @@
                             <h6><strong>Today's Schedule</strong></h6>
                         </div>
                     </div>
+                        
                     <!-- First Schedule -->
                     <div class="card card-custom schedule-card mb-3">
                         <div class="card-body">

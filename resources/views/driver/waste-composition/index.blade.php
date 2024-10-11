@@ -20,6 +20,7 @@
                         <th>Location</th>
                         <th>Type</th>
                         <th>Metrics</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,7 +77,7 @@
         </div>
 
         {{-- Edit Waste Modal --}}
-        <div class="modal fade z-100" id="editWasteModal" tabindex="-1" aria-labelledby="editWasteLabel" aria-hidden="true">
+        <div class="modal fade z-100" id="editWasteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editWasteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -96,14 +97,17 @@
                                     <option value="Residual">Residual</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" id="edit_metrics" name="metrics" required>
+                            <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" id="edit_metrics" name="metrics" required aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="editbasic-addon2">kg/s</span>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label for="edit_cd" class="form-label">Collection Date <span style="color: red;">*</span></label>
-                                    <input type="datetime-local" class="form-control" id="edit_cd" name="cd" value="2019-12-19T13:45:00">
+                                    <input type="datetime-local" class="form-control" id="edit_cd" name="cd" value="2019-12-19T13:45:00" readonly>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -128,7 +132,6 @@
     <i class='bx bx-plus'></i>
 </a>
 
-
 <script>
     $(document).ready(function () {
         function updateMetricsLabel(selectId, labelId, addonId) {
@@ -151,19 +154,23 @@
         }
 
         updateMetricsLabel('add_wt', 'add_metrics_label','basic-addon2');
-        updateMetricsLabel('edit_wt', 'edit_metrics_label');
+        updateMetricsLabel('edit_wt', 'edit_metrics_label', 'editbasic-addon2');
 
-        function updateMetricsLabelEdit(selectId, labelId) {
+        function updateMetricsLabelEdit(selectId, labelId, addonId) {
             const wasteTypeSelect = document.getElementById(selectId);
             const metricsLabel = document.getElementById(labelId);
+            const addonText = document.getElementById(addonId); // Get the element for unit (kg. or sack)
 
             // Use wasteTypeSelect.value instead of this.value
             if (wasteTypeSelect.value === 'Biodegradable') {
                 metricsLabel.innerHTML = 'Weight (kilogram/s) <span style="color: red;">*</span>';
+                addonText.innerHTML = 'kg/s'; // Set the unit to kg.
             } else if (wasteTypeSelect.value === 'Residual') {
                 metricsLabel.innerHTML = 'Number of Sack/s <span style="color: red;">*</span>';
+                addonText.innerHTML = 'sack/s'; // Set the unit to sack
             } else {
                 metricsLabel.innerHTML = 'Weight <span style="color: red;">*</span>';
+                addonText.innerHTML = 'kg/s'; // Default unit is kg.
             }
         }
 
@@ -224,11 +231,30 @@
                             // Convert the date to the desired format
                             let formattedDate = collectionDate.toLocaleString('en-US', options);
 
+                            var updatedMetrics;
+
+                            if (wasteComposition.waste_type == 'Biodegradable') {
+                                updatedMetrics = wasteComposition.metrics + ' kg/s';
+                            } else if (wasteComposition.waste_type == 'Residual') {
+                                updatedMetrics = wasteComposition.metrics + ' sack/s';
+                            } else {
+                                updatedMetrics = 'Error';
+                            }
+
                             rows += `
                                 <tr class="wc-row" data-id="${wasteComposition.id}">
                                     <td>${wasteComposition.brgy.name}</td>
                                     <td>${wasteComposition.waste_type}</td>
-                                    <td>${wasteComposition.metrics}</td>
+                                    <td>${updatedMetrics}</td>
+                                    <td>
+                                        <a class="btn btn-icon btn-success d-actions" data-id="${wasteComposition.id}" title="Edit User">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
+                                                    <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
+                                                    <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
+                                                </svg>
+                                                Edit
+                                            </a>
+                                    </td>
                                 </tr>`;
                             counter++;
                         }
@@ -245,8 +271,8 @@
                         bSort: false,
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
-                        searching: false, // Enable search functionality
-                        info: false, // Show the number of entries info
+                        searching: true, // Enable search functionality
+                        info: true, // Show the number of entries info
                         responsive: true, // Ensure responsiveness
                         lengthChange: false, // Disable entries per page
                         fixedHeader: true,
@@ -327,7 +353,7 @@
                     $('#edit_cd').val(wc.collection_date);
                     $('#edit_brgy').val(wc.brgy_id);
                     $('#edit_wc_id').val(wc.id);
-                    updateMetricsLabelEdit('edit_wt', 'edit_metrics_label');
+                    updateMetricsLabelEdit('edit_wt', 'edit_metrics_label', 'editbasic-addon2');
 
                     $('#editWasteModal').modal('show'); // Display the modal after populating the form
                 },
