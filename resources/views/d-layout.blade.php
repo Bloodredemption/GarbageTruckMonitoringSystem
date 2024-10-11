@@ -75,12 +75,12 @@
         
         /* Sticky bottom nav styling */
         .sticky-bottom-nav {
+            font-size: 1rem;
             position: fixed;
             bottom: 0;
             width: 100%;
             background-color: #f8f9fa;
             z-index: 1000;
-            height: 70px;
             border-top: 1px solid #dee2e6; /* Optional border for better separation */
         }
 
@@ -96,18 +96,23 @@
 
         /* Active menu item styling */
         .nav-link.active {
+            width: 35%;
             background-color: #01A94D; /* Inverse background color for active state */
             color: #fff !important; /* Inverse text color for active */
             border-radius: 10px; /* Rounded button appearance */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to make it stand out */
+            
+            /* Flexbox properties to center text and icon */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            text-align: center; /* Ensure the text is centered */
         }
 
         /* Ensure the icon inside the active link also changes color */
         .nav-link.active .nav-icon {
             color: #fff; /* Icon color changes to match the text when active */
         }
-
-        
 
         /* Optional: Add spacing between the icon and the text */
         .nav-icon {
@@ -151,6 +156,33 @@
         /* Ensure the icon inside the floating button is centered */
         .floating-btn i {
             font-size: 28px; /* Size of the plus (+) icon */
+        }
+
+        /* Set the font size for the table headers */
+        #wc-tbl thead th {
+            font-size: 0.8rem; /* 1rem for columns */
+        }
+
+        /* Set the font size for the data rows */
+        #wc-tbl tbody td {
+            font-size: 13px; /* 13px for data rows */
+        }
+
+        /* Adjust font size of the search input */
+        .dataTables_filter input {
+            font-size: 13px; /* Adjust the search input text size */
+            height: 30px; /* Adjust input height if necessary */
+        }
+
+        /* Adjust the placeholder text */
+        ::placeholder {
+            font-size: 13px; /* Adjust the placeholder text size */
+            color: #888; /* Optional: You can also change the placeholder color */
+        }
+
+        /* Adjust the search label text (if any) */
+        .dataTables_filter label {
+            font-size: 0.8rem; /* Adjust search label text */
         }
 
     </style>

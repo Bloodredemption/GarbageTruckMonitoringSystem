@@ -74,9 +74,9 @@ class WasteCompositionController extends Controller
         $metricsWithUnit = $request->input('metrics');
         
         if ($request->input('waste_type') === 'Biodegradable') {
-            $metricsWithUnit .= ' kg'; // Append 'sack' for Biodegradable
+            $metricsWithUnit .= ''; // Append 'sack' for Biodegradable
         } elseif ($request->input('waste_type') === 'Residual') {
-            $metricsWithUnit .= ' sack'; // Append 'kg' for Residual
+            $metricsWithUnit .= ''; // Append 'kg' for Residual
         }
 
         // Merge the metrics field with the other request data
@@ -125,9 +125,9 @@ class WasteCompositionController extends Controller
         $metricsWithUnit = $request->input('metrics');
 
         if ($request->input('waste_type') === 'Biodegradable') {
-            $metricsWithUnit .= ' kg'; // Append 'sack' for Biodegradable
+            $metricsWithUnit .= ''; // Append 'sack' for Biodegradable
         } elseif ($request->input('waste_type') === 'Residual') {
-            $metricsWithUnit .= ' sack'; // Append 'kg' for Residual
+            $metricsWithUnit .= ''; // Append 'kg' for Residual
         }
 
         // Update the record, merging the modified metrics

@@ -4,14 +4,16 @@
 
 <main class="main-content">
     <div class="container">
-        <div class="text-center flex-wrap d-flex justify-content-between align-items-center">
-            <div>
-                <h1><strong>Waste Composition Records</strong></h1>
-                <p>Contains waste composition information.</p>
-            </div>
-        </div>
+        
 
         <div class="table-responsive mb-5">
+            <h6><strong>Waste Composition Records</strong></h6>
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb" style="font-size: 13px;">
+                    <li class="breadcrumb-item"><a href="{{ route('d.dashboard')}}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Waste Composition</li>
+                </ol>
+            </nav>
             <table id="wc-tbl" class="table" role="grid" data-bs-toggle="data-table">
                 <thead>
                     <tr class="ligth" style="background-color: #01A94D; color: white;">
@@ -45,9 +47,12 @@
                                     <option value="Residual">Residual</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" id="add_metrics" name="metrics" required>
+                            <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" id="add_metrics" name="metrics" required aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">kg/s</span>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
@@ -126,22 +131,26 @@
 
 <script>
     $(document).ready(function () {
-        function updateMetricsLabel(selectId, labelId) {
+        function updateMetricsLabel(selectId, labelId, addonId) {
             const wasteTypeSelect = document.getElementById(selectId);
             const metricsLabel = document.getElementById(labelId);
+            const addonText = document.getElementById(addonId); // Get the element for unit (kg. or sack)
 
             wasteTypeSelect.addEventListener('change', function() {
                 if (this.value === 'Biodegradable') {
                     metricsLabel.innerHTML = 'Weight (kilogram/s) <span style="color: red;">*</span>';
+                    addonText.innerHTML = 'kg/s'; // Set the unit to kg.
                 } else if (this.value === 'Residual') {
                     metricsLabel.innerHTML = 'Number of Sack/s <span style="color: red;">*</span>';
+                    addonText.innerHTML = 'sack/s'; // Set the unit to sack
                 } else {
                     metricsLabel.innerHTML = 'Weight <span style="color: red;">*</span>';
+                    addonText.innerHTML = 'kg/s'; // Default unit is kg.
                 }
             });
         }
 
-        updateMetricsLabel('add_wt', 'add_metrics_label');
+        updateMetricsLabel('add_wt', 'add_metrics_label','basic-addon2');
         updateMetricsLabel('edit_wt', 'edit_metrics_label');
 
         function updateMetricsLabelEdit(selectId, labelId) {
@@ -236,7 +245,7 @@
                         bSort: false,
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
-                        searching: true, // Enable search functionality
+                        searching: false, // Enable search functionality
                         info: false, // Show the number of entries info
                         responsive: true, // Ensure responsiveness
                         lengthChange: false, // Disable entries per page
@@ -365,7 +374,7 @@
                 Swal.fire({
                     icon: 'info',
                     title: 'No Changes Made!',
-                    text: 'You have not made any changes to the dump truck details.',
+                    text: 'You have not made any changes.',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#007bff'
                 });

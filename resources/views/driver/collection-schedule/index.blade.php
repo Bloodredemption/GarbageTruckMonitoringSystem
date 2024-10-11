@@ -4,21 +4,20 @@
 
 <main class="main-content">
     <div class="container">
-        <div class="text-center flex-wrap d-flex justify-content-between align-items-center mb-3">
-            <div>
-                <h1><strong>Today's Schedule</strong></h1>
-            </div>
-        </div>
+        
 
         <div class="container">
             <!-- Schedule Header -->
-            
         
-            <!-- Time Line with Time Markers -->
             <div class="row">
                 <!-- Schedule Cards -->
                 <div class="col-12">
-                <!-- First Schedule -->
+                    <div class="text-center flex-wrap d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6><strong>Today's Schedule</strong></h6>
+                        </div>
+                    </div>
+                    <!-- First Schedule -->
                     <div class="card card-custom schedule-card mb-3">
                         <div class="card-body">
                             <div class="row align-items-center">
