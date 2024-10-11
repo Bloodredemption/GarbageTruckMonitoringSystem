@@ -1,91 +1,94 @@
-@extends('layout')
+@extends('d-layout')
 
 @section('main-content')
 
 <main class="main-content">
-    <div class="position-relative iq-banner">
-        <!--Nav Start-->
-        @include('partials.header')
-        <!-- Nav Header Component Start -->
-        <div class="iq-navbar-header" style="height: 215px;">
-            <div class="container-fluid iq-container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="flex-wrap d-flex justify-content-between align-items-center">
-                            <div>
-                                <h1><strong>Collection Schedule Records</strong></h1>
-                                <p>Contains collection schedule details.</p>
-                            </div>
-                            {{-- <div>
-                                <a href="" class="btn btn-link btn-soft-light">
-                                    <img src="data:image/svg+xml,%3Csvg width='20' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Crect width='30' height='30' fill='url(%23pattern0_135_433)'/%3E%3Cdefs%3E%3Cpattern id='pattern0_135_433' patternContentUnits='objectBoundingBox' width='1' height='1'%3E%3Cuse xlink:href='%23image0_135_433' transform='scale(0.0333333)'/%3E%3C/pattern%3E%3Cimage id='image0_135_433' width='30' height='30' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAaklEQVR4nO3UUQqAIAyA4R0v6djRRax7/FHPC8JNabXvVeWHoYqk3wJW7JaWsIs44e8DZmCnnw0oWvhc6K1q4SEkw7xt1NL+SjJ8yVHL3c/lfLmqtrFoccdwBabHB63hcQfDh63ihJM4OwBPnU7F1RVbMAAAAABJRU5ErkJggg=='/%3E%3C/defs%3E%3C/svg%3E%0A" alt="img">
-                                    Print
-                                </a>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
+    <div class="container">
+        <div class="text-center flex-wrap d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h1><strong>Today's Schedule</strong></h1>
             </div>
-            <div class="iq-header-img" style="background-color: #01A94D;">
-                
-            </div>
-        </div>          
-        <!-- Nav Header Component End -->
-        <!--Nav End-->
-    </div>
-    <div class="conatiner-fluid content-inner mt-n5 py-0">
-        <div class="row">
+        </div>
+
+        <div class="container">
+            <!-- Schedule Header -->
             
-            <div class="col-md-12 col-lg-12">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card" data-aos="fade-up" data-aos-delay="800">
-                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
-                                <div class="header-title">
-                                    <h4 class="card-title">Collection Schedule List</h4>
-                                    {{-- <p class="mb-0">Sub Title Here</p>           --}}
+        
+            <!-- Time Line with Time Markers -->
+            <div class="row">
+                <!-- Schedule Cards -->
+                <div class="col-12">
+                <!-- First Schedule -->
+                    <div class="card card-custom schedule-card mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <h5 class="card-title">Physics</h5>
+                                    <p class="schedule-time">12:00 PM - 02:00 PM</p>
                                 </div>
-                                
+                                    <div class="col-4 text-end">
+                                    <span class="badge bg-primary">Class</span>
+                                </div>
                             </div>
-                            <div class="card-body px-0">
-                                <div class="table-responsive">
-                                    <table id="user-list-table" class="table table-striped" role="grid" data-bs-toggle="data-table">
-                                        <thead>
-                                            <tr class="ligth" style="background-color: #01A94D; color: white;">
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Sample</th>
-                                                <th>Join Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td>Sample</td>
-                                                <td><span class="badge bg-primary">active</span></td>
-                                                <td>Sample</td>
-                                                <td>2019/12/01</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            <div class="row align-items-center schedule-info">
+                                <div class="col">
+                                    <img src="https://via.placeholder.com/30" alt="Member">
+                                    <img src="https://via.placeholder.com/30" alt="Member">
+                                    <img src="https://via.placeholder.com/30" alt="Member">
+                                    <span>+ 5 members</span>
                                 </div>
                             </div>
                         </div>
                     </div>
+            
+                    <!-- Second Schedule -->
+                    <div class="card card-custom schedule-card mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <h5 class="card-title">Geometry</h5>
+                                    <p class="schedule-time">02:00 PM - 04:00 PM</p>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <span class="badge bg-success">Consultation</span>
+                                </div>
+                            </div>
+                            <div class="row align-items-center schedule-info">
+                                <div class="col">
+                                    <img src="https://via.placeholder.com/30" alt="Member">
+                                    <img src="https://via.placeholder.com/30" alt="Member">
+                                    <span>+ 7 members</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Third Schedule -->
+                    <div class="card card-custom schedule-card mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <h5 class="card-title">Chemistry</h5>
+                                    <p class="schedule-time">04:00 PM - 06:00 PM</p>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <span class="badge bg-primary">Class</span>
+                                </div>
+                            </div>
+                            <div class="row align-items-center schedule-info">
+                                <div class="col">
+                                <img src="https://via.placeholder.com/30" alt="Member">
+                                <img src="https://via.placeholder.com/30" alt="Member">
+                                <img src="https://via.placeholder.com/30" alt="Member">
+                                <span>+ 4 members</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
         </div>
     </div>
-    
-    <!-- Footer Section Start -->
-    @include('partials.footer')
-    <!-- Footer Section End -->    
 </main>
 
 @endsection

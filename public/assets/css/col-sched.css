@@ -1,0 +1,113 @@
+.schedule-header {
+    background-color: #ff6b6b;
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.schedule-header img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.card-custom {
+    border-left: 5px solid #ff6b6b;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.time-line {
+position: relative;
+width: 2px;
+background-color: #ff6b6b;
+height: 100%;
+margin-left: 35px;
+}
+
+.time-line .time-marker {
+position: absolute;
+left: -60px;
+width: 50px;
+font-size: 0.85rem;
+color: gray;
+}
+
+.time-line .dot {
+position: absolute;
+left: -10px;
+width: 10px;
+height: 10px;
+background-color: #ff6b6b;
+border-radius: 50%;
+}
+
+.schedule-card {
+position: relative;
+}
+
+.schedule-time {
+font-weight: bold;
+}
+
+.schedule-info img {
+width: 30px;
+height: 30px;
+border-radius: 50%;
+}
+
+.schedule-type {
+color: #888;
+font-size: 0.9rem;
+margin-top: 10px;
+}
+
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+.time-line {
+    margin-left: 20px;
+}
+
+.time-line .time-marker {
+    left: -40px;
+}
+
+.schedule-header {
+    text-align: center;
+}
+
+.schedule-header img {
+    margin-bottom: 10px;
+}
+
+.schedule-header h4, 
+.schedule-header p {
+    font-size: 1rem;
+}
+
+.schedule-card {
+    padding-left: 20px;
+    margin-left: 30px;
+}
+}
+
+/* Small screen schedule cards adjustment */
+@media (max-width: 576px) {
+.schedule-card {
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.time-line {
+    margin-left: 15px;
+}
+
+.time-line .time-marker {
+    left: -30px;
+}
+
+.schedule-card .card-body {
+    padding-left: 15px;
+}
+}

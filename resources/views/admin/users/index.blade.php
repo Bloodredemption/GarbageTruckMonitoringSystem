@@ -520,6 +520,8 @@
 
                     // Reinitialize the DataTable with export buttons but without displaying the default buttons
                     let table = $('#datatable').DataTable({
+                        bSort: false,
+                        fixedHeader: true, // Enable fixed header
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
                         searching: true, // Enable search functionality

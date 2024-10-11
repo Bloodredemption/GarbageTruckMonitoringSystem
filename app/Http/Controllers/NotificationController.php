@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Notification;
 use App\Models\Users;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; 
 
 class NotificationController extends Controller
 {
@@ -114,5 +115,19 @@ class NotificationController extends Controller
                 'error' => 'Error sending notification: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function getNotifications()
+    {
+        // Get the logged-in user's ID
+        $userId = Auth::id();
+
+        // Fetch notifications from the database where the user_id matches the logged-in user
+        $notifications = Notification::where('user_id', $userId)
+                            ->orderBy('created_at', 'desc')  // Optional: Order by most recent
+                            ->get(['id', 'notification_msg', 'created_at']);  // Specify the columns to fetch
+
+        // Return as JSON
+        return response()->json($notifications);
     }
 }

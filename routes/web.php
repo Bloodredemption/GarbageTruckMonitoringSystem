@@ -182,3 +182,5 @@ Route::get('/driver/collection-schedule', function () {
 })->name('d.collection-schedule');
 
 // End Driver Side //
+
+Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
