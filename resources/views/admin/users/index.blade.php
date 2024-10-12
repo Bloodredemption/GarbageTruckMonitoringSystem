@@ -54,7 +54,7 @@
             <div class="iq-header-img" style="background-color: #01A94D;">
                 
             </div>
-        </div>          
+        </div>
         <!-- Nav Header Component End -->
         <!--Nav End-->
     </div>
@@ -181,39 +181,6 @@
                             
                                     <!-- Archive Tab Pane -->
                                     <div class="tab-pane fade" id="archive" role="tabpanel" aria-labelledby="archive-tab">
-                                        <div class="p-3">
-                                            <div class="accordion" id="accordionExample">
-                                                <div class="accordion-item">
-                                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                                        <div class="accordion-body">
-                                                            <div class="row">
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label for="date" class="form-label">Date Archive </label>
-                                                                    <input type="text" name="start" class="form-control flatpickr_humandate flatpickr-input active" readonly>
-                                                                </div>
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label for="role" class="form-label">Role </label>
-                                                                    <select class="form-control" id="role" name="role" >
-                                                                        <option value=""></option>
-                                                                        <option value="admin">Admin</option>
-                                                                        <option value="driver">Driver</option>
-                                                                        <option value="landfill">Landfill</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label for="role" class="form-label">Status </label>
-                                                                    <select class="form-control" id="role" name="role" >
-                                                                        <option value=""></option>
-                                                                        <option value="active">Active</option>
-                                                                        <option value="inactive">Inactive</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         
                                         <div class="table-responsive mt-3">
                                             <table id="arch-datatable" class="table" role="grid">

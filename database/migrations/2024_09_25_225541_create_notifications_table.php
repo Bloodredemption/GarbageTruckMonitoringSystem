@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->String('notification_msg');
-            $table->String('status')->default('pending');
+            $table->String('status')->default('sent');
             $table->timestamps();
         });
     }

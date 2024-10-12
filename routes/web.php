@@ -86,10 +86,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 // Notifications
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    
+    Route::get('/notifications/getArchive', [NotificationController::class, 'getArchive'])->name('notifications.getArchive');
+    
     Route::get('/notifications/getDrivers', [NotificationController::class, 'getDrivers'])->name('notifications.getDrivers');
     Route::get('/notifications/{id}/send', [NotificationController::class, 'sendNotification'])->name('notifications.send');
     Route::get('/notifications/{id}/edit', [NotificationController::class, 'edit'])->name('notifications.edit');
     Route::put('/notifications/{id}/update', [NotificationController::class, 'update'])->name('notifications.update');
+    
+    Route::put('/notifications/{id}/archive', [NotificationController::class, 'archive']);
+    Route::put('/notifications/{id}/restore', [NotificationController::class, 'restore']);
+
     Route::delete('/notifications/{id}/delete', [NotificationController::class, 'destroy'])->name('notifications.delete');
     Route::post('/notifications', [NotificationController::class, 'store'])->name('notifications.store');
 });

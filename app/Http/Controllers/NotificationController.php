@@ -24,6 +24,15 @@ class NotificationController extends Controller
         return view('admin.notifications.index');
     }
 
+    public function getArchive()
+    {
+        $anotifs = Notification::where('status', 'archive')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        return response()->json(['anotifs' => $anotifs]);
+    }
+
     public function getDrivers()
     {
         $drivers = Users::where('user_type', 'driver')->get(['id', 'fullname']);
@@ -129,5 +138,23 @@ class NotificationController extends Controller
 
         // Return as JSON
         return response()->json($notifications);
+    }
+
+    public function archive(string $id)
+    {
+        $notifications = Notification::findOrFail($id);
+        $notifications->status = 'archive';
+        $notifications->save();
+
+        return response()->json(['message' => 'Notification archived successfully.']);
+    }
+
+    public function restore(string $id)
+    {
+        $notifications = Notification::findOrFail($id);
+        $notifications->status = 'sent';
+        $notifications->save();
+
+        return response()->json(['message' => 'Notification restored successfully.']);
     }
 }
