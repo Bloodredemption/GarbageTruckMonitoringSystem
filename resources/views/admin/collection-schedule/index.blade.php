@@ -377,7 +377,7 @@
 
                     // Optionally, add a visual indication (e.g., grayed-out past dates)
                     info.el.style.backgroundColor = '#f0f0f0'; // Light gray background
-                    info.el.style.color = '#999999'; // Gray text for past dates
+                    info.el.style.color = '#01A94D'; // Gray text for past dates
                 }
             }
         });
@@ -434,7 +434,7 @@
         });
 
         let originalValues = {};
-
+ 
         function storeOriginalValues() {
             originalValues = {
                 brgy_id: $('#edit_brgy').val(),
