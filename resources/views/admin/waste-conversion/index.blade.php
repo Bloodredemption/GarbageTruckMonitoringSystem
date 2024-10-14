@@ -57,7 +57,7 @@
         <!-- Nav Header Component End -->
         <!--Nav End-->
     </div>
-    <div class="conatiner-fluid content-inner mt-n5 py-0">
+    <div class="container-fluid content-inner mt-n5 py-0">
         <div class="row">
             
             <div class="col-md-12 col-lg-12">
@@ -69,7 +69,6 @@
                                     <h4 class="card-title">Waste Conversion List</h4>
                                     {{-- <p class="mb-0">Sub Title Here</p>           --}}
                                 </div>
-                                
                             </div>
                             <div class="card-body px-0">
                                 <div class="table-responsive">
@@ -93,18 +92,29 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12">
-                        <div class="card" data-aos="fade-up" data-aos-delay="800">
-                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
+                    <div class="col-md-12 col-xl-6">
+                        <div class="card aos-init aos-animate" data-aos="fade-up" data-aos-delay="900">
+                            <div class="flex-wrap card-header d-flex justify-content-between">
                                 <div class="header-title">
-                                    <h4 class="card-title">Statistics</h4>
-                                    <p class="mb-0">Sub Title Here</p>          
+                                    <h4 class="card-title">Waste Converted</h4>            
+                                </div>   
+                                <div class="dropdown">
+                                    <a href="#" class="text-gray dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    This Day
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1" style="">
+                                        <li><a class="dropdown-item" href="#">This Day</a></li>
+                                        <li><a class="dropdown-item" href="#">This Week</a></li>
+                                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                                    </ul>
                                 </div>
-                                
                             </div>
-                            <div class="card-body px-0">
-                                <div class="table-responsive">
-                                    
+                            <div class="card-body">
+                                <div class="flex-wrap d-flex align-items-center justify-content-between">
+                                    <div id="myChart" class="col-md-8 col-sm-8 myChart" style="min-height: 208.7px;">
+                                            
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -230,6 +240,36 @@
 
         fetchWCOV();
     });
+
+    var options = {
+          series: [44, 55],
+          chart: {
+          type: 'donut',
+        },
+        labels: [
+            'Residual',
+            'Biodegradable',
+        ],
+        legend: {
+          formatter: function(val, opts) {
+            return val + " - " + opts.w.globals.series[opts.seriesIndex]
+          }
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+        };
+
+    var chart = new ApexCharts(document.querySelector("#myChart"), options);
+    chart.render();
 </script>
 
 @endsection

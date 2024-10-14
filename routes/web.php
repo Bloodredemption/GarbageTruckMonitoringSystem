@@ -45,6 +45,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/collection-schedule', [CollectionScheduleController::class, 'index'])->name('cs.index');
     Route::get('/collection-schedule/getBrgy', [CollectionScheduleController::class, 'getBrgy'])->name('cs.getBrgy');
     Route::get('/collection-schedule/getDumptruck', [CollectionScheduleController::class, 'getDumptruck'])->name('cs.getDumptruck');
+    Route::get('/collection-schedule/getDriver', [CollectionScheduleController::class, 'getDriver'])->name('cs.getDriver');
     Route::get('/collection-schedule/events', [CollectionScheduleController::class, 'events'])->name('cs.events');
     Route::post('/collection-schedule/store', [CollectionScheduleController::class, 'store'])->name('cs.store');
     Route::get('/collection-schedule/{id}/edit', [CollectionScheduleController::class, 'edit'])->name('cs.edit');

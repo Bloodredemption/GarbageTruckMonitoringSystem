@@ -143,7 +143,7 @@
                                                         <th>Zip Code</th>
                                                         <th>Captain</th>
                                                         <th>Date Created</th>
-                                                        <th style="min-width: 100px">Operation</th>
+                                                        <th style="min-width: 100px">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

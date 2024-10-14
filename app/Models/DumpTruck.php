@@ -12,16 +12,10 @@ class DumpTruck extends Model
     protected $table = 'dump_trucks';
 
     protected $fillable = [
-        'user_id',
         'brand',
         'model',
         'status',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(Users::class, 'user_id');
-    }
 
     public function driver()
     {

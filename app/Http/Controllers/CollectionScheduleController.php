@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barangay;
 use App\Models\CollectionSchedule;
 use App\Models\DumpTruck;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +17,9 @@ class CollectionScheduleController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $collectionSchedules = CollectionSchedule::orderBy('created_at', 'desc')
+            $collectionSchedules = CollectionSchedule::with('dumptruck:id,brand,model')
+                            ->with('barangay:id,name')
+                            ->orderBy('created_at', 'desc')
                             ->get();
         
             return response()->json(['collectionSchedules' => $collectionSchedules]);
@@ -35,14 +38,13 @@ class CollectionScheduleController extends Controller
                 'start' => $schedule->scheduled_date . 'T' . $schedule->scheduled_time, // FullCalendar requires date and time in ISO format
                 'end' => $schedule->scheduled_date . 'T' . $schedule->scheduled_time, // Set the end to the same date/time to avoid spanning multiple days
                 'title' => '' . $schedule->barangay->area . '',
-                'allDay' => false, // Explicitly set allDay to false
+                'allDay' => false,
                 'extendedProps' => [
                     'brgy_id' => $schedule->brgy_id,
                     'dumptruck_id' => $schedule->dumptruck_id,
                     'sched_id' => $schedule->id,
                     'brgy_name' => $schedule->barangay->name,
                     'dumptruck' => $schedule->dumpTruck->brand . ' ' . $schedule->dumpTruck->model,
-                    'driver_name' => $schedule->dumpTruck->driver->fullname,
                 ],
             ];
         });
@@ -105,14 +107,24 @@ class CollectionScheduleController extends Controller
 
     public function getBrgy()
     {
-        $brgy = Barangay::get(['id', 'name', 'area']);
+        $brgy = Barangay::where('isDeleted', '0')
+                        ->get(['id', 'name', 'area']);
         return response()->json(['brgy' => $brgy]);
     }
 
     public function getDumptruck()
     {
-        $dt = DumpTruck::with('user:id,fullname')->get(['id', 'brand', 'model', 'user_id']);
+        $dt = DumpTruck::whereIn('status', ['active', 'inactive'])
+                        ->get(['id', 'brand', 'model']);
         return response()->json(['dt' => $dt]);
+    }
+
+    public function getDriver()
+    {
+        $driver = Users::where('user_type', 'driver')
+                        ->where('status', 'active')
+                        ->get(['id', 'fullname']);
+        return response()->json(['driver' => $driver]);
     }
 
     /**
@@ -131,13 +143,12 @@ class CollectionScheduleController extends Controller
         $request->validate([
             'brgy_id' => 'required|exists:barangays,id',
             'dumptruck_id' => 'required|exists:dump_trucks,id',
+            'user_id' => 'required|exists:users,id',
             'scheduled_date' => 'required|string',
             'scheduled_time' => 'required|string',
         ]);
 
-        $userId = Auth::id();
-
-        CollectionSchedule::create(array_merge($request->all(), ['user_id' => $userId]));
+        CollectionSchedule::create($request->all());
 
         return response()->json(['message' => 'Collection schedule successfully added.']);
     }
@@ -167,6 +178,7 @@ class CollectionScheduleController extends Controller
         $request->validate([
             'brgy_id' => 'required|exists:barangays,id',
             'dumptruck_id' => 'required|exists:dump_trucks,id',
+            'user_id' => 'required|exists:users,id',
             'scheduled_date' => 'required|string',
             'scheduled_time' => 'required|string',
         ]);

@@ -22,8 +22,60 @@
                                 </nav>
                             </div>
                             <div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="iq-header-img" style="background-color: #01A94D;">
+                
+            </div>
+        </div>          
+        <!-- Nav Header Component End -->
+        <!--Nav End-->
+    </div>
+    <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+            
+            <div class="col-md-12 col-lg-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" data-aos="fade-up" data-aos-delay="800">
+                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
+                                <div class="header-title">
+                                    <h4 class="card-title">Calendar View</h4>
+                                </div>
+                                
+                                <div>
+                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                                        <i class="btn-inner">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                        </i>
+                                        <span>Add New</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div id="calendar" class="calendar-s"></div>
+                            </div>
+
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <div class="card" data-aos="fade-up" data-aos-delay="800">
+                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
+                                <div class="header-title">
+                                    <h4 class="card-title">Table View</h4>
+                                </div>
+                                
                                 <div class="dropdown">
-                                    <button class="btn btn-soft-light text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-primary text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-settings">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
@@ -46,44 +98,28 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="iq-header-img" style="background-color: #01A94D;">
-                
-            </div>
-        </div>          
-        <!-- Nav Header Component End -->
-        <!--Nav End-->
-    </div>
-    <div class="conatiner-fluid content-inner mt-n5 py-0">
-        <div class="row">
-            
-            <div class="col-md-12 col-lg-12">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card" data-aos="fade-up" data-aos-delay="800">
-                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
-                                <div class="header-title">
-                                    <h4 class="card-title">Collection Schedule</h4>
-                                </div>
-                                
-                                <div>
-                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
-                                        <i class="btn-inner">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                            </svg>
-                                        </i>
-                                        <span>Add New</span>
-                                    </a>
+
+                            <div class="card-body px-0">
+                                <div class="table-responsive">
+                                    <table id="col-sched-tbl" class="table" role="grid" data-bs-toggle="data-table">
+                                        <thead>
+                                            <tr class="ligth" style="background-color: #01A94D; color: white;">
+                                                <th>No.</th>
+                                                <th>Barangay</th>
+                                                <th>Dump Truck</th>
+                                                <th>Schedule</th>
+                                                <th>Status</th>
+                                                <th>Date Created</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
 
-                            <div class="card-body">
-                                <div id="calendar" class="calendar-s"></div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -105,16 +141,51 @@
                     <form id="scheduleForm" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label for="add_brgy" class="form-label">Location <span style="color: red;">*</span></label>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="add_brgy" class="form-label mb-0">Barangay <span style="color: red;">*</span></label>
+                                <a id="addbrgybtn" class="text-end" style="font-size: 15px" href="{{ route('barangays.index') }}">
+                                    <i class="btn-inner">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                        </svg>
+                                    </i>
+                                    Add
+                                </a>
+                            </div>
                             <select class="form-control" id="add_brgy" name="brgy" required>
-                                <option value="">Select Barangay</option>
+                                <!-- Options will be populated via AJAX -->
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="add_dt" class="form-label">Dump Truck <span style="color: red;">*</span></label>
+                                <a id="adddtbtn" class="text-end" style="font-size: 15px" href="{{ route('dump-trucks.index') }}">
+                                    <i class="btn-inner">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                        </svg>
+                                    </i>
+                                    Add
+                                </a>
+                            </div>
+                            <select class="form-control" id="add_dt" name="dt" required>
                                 <!-- Options will be populated via AJAX -->
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="add_dt" class="form-label">Dump Truck <span style="color: red;">*</span></label>
-                            <select class="form-control" id="add_dt" name="dt" required>
-                                <option value="">Select Dump Truck</option>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="add_driver" class="form-label">Driver <span style="color: red;">*</span></label>
+                                <a id="adddrvbtn" class="text-end" style="font-size: 15px" href="{{ route('users.index') }}">
+                                    <i class="btn-inner">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                        </svg>
+                                    </i>
+                                    Add
+                                </a>
+                            </div>
+                            <select class="form-control" id="add_driver" name="driver" required>
                                 <!-- Options will be populated via AJAX -->
                             </select>
                         </div>
@@ -154,14 +225,18 @@
                         <div class="mb-3">
                             <label for="edit_brgy" class="form-label">Location <span style="color: red;">*</span></label>
                             <select class="form-control" id="edit_brgy" name="brgy" required>
-                                <option value=""></option>
                                 <!-- Options will be populated via AJAX -->
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="edit_dt" class="form-label">Dump Truck <span style="color: red;">*</span></label>
                             <select class="form-control" id="edit_dt" name="dt" required>
-                                <option value=""></option>
+                                <!-- Options will be populated via AJAX -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_driver" class="form-label">Driver <span style="color: red;">*</span></label>
+                            <select class="form-control" id="edit_driver" name="driver" required>
                                 <!-- Options will be populated via AJAX -->
                             </select>
                         </div>
@@ -203,28 +278,32 @@
         
         function fetchBrgy() {
             $.ajax({
-                url: "{{ route('cs.getBrgy') }}", // Your route for fetching drivers
+                url: "{{ route('cs.getBrgy') }}", // Your route for fetching barangays
                 type: "GET",
                 success: function (response) {
-                    let brgySelect1 = $('#add_brgy'); // First driver select
-                    let brgySelect2 = $('#edit_brgy'); // First driver select
-                    // let driverSelect2 = $('#edit_driver'); // Second driver select (new)
+                    let brgySelect1 = $('#add_brgy'); // First barangay select
+                    let brgySelect2 = $('#edit_brgy'); // Second barangay select
+                    let addBrgyBtn = $('#addbrgybtn'); // Add Barangay button
 
                     // Clear the select options for both select elements
                     brgySelect1.empty();
                     brgySelect2.empty();
-                    // driverSelect2.empty();
+
+                    // Check if the response contains barangays
+                    if (!response.brgy || response.brgy.length === 0) {
+                        addBrgyBtn.removeClass('d-none');
+                    } else {
+                        addBrgyBtn.addClass('d-none');
+                    }
 
                     // Add default options for both selects
                     brgySelect1.append('<option></option>');
                     brgySelect2.append('<option></option>');
-                    // driverSelect2.append('<option></option>');
 
-                    // Populate both selects with the drivers
+                    // Populate both selects with the barangays
                     $.each(response.brgy, function (key, brgy) {
-                        brgySelect1.append(`<option value="${brgy.id}">${brgy.name} | ${brgy.area}</option>`);
-                        brgySelect2.append(`<option value="${brgy.id}">${brgy.name} | ${brgy.area}</option>`);
-                        // driverSelect2.append(`<option value="${driver.id}">${driver.fullname}</option>`);
+                        brgySelect1.append(`<option value="${brgy.id}">${brgy.name} - ${brgy.area}</option>`);
+                        brgySelect2.append(`<option value="${brgy.id}">${brgy.name} - ${brgy.area}</option>`);
                     });
                 },
                 error: function (error) {
@@ -243,12 +322,18 @@
                 success: function (response) {
                     let dtSelect1 = $('#add_dt'); // First driver select
                     let dtSelect2 = $('#edit_dt'); // First driver select
-                    // let driverSelect2 = $('#edit_driver'); // Second driver select (new)
+                    let addBtn = $('#adddtbtn'); // Add Barangay button
 
                     // Clear the select options for both select elements
                     dtSelect1.empty();
                     dtSelect2.empty();
                     // driverSelect2.empty();
+
+                    if (!response.dt || response.dt.length === 0) {
+                        addBtn.removeClass('d-none');
+                    } else {
+                        addBtn.addClass('d-none');
+                    }
 
                     // Add default options for both selects
                     dtSelect1.append('<option></option>');
@@ -257,9 +342,8 @@
 
                     // Populate both selects with the drivers
                     $.each(response.dt, function (key, dt) {
-                        dtSelect1.append(`<option value="${dt.id}">${dt.brand} ${dt.model} | ${dt.user.fullname}</option>`);
-                        dtSelect2.append(`<option value="${dt.id}">${dt.brand} ${dt.model} | ${dt.user.fullname}</option>`);
-                        // driverSelect2.append(`<option value="${driver.id}">${driver.fullname}</option>`);
+                        dtSelect1.append(`<option value="${dt.id}">${dt.brand} ${dt.model}</option>`);
+                        dtSelect2.append(`<option value="${dt.id}">${dt.brand} ${dt.model}</option>`);
                     });
                 },
                 error: function (error) {
@@ -270,6 +354,44 @@
 
         // Call the fetch function when the page loads
         fetchDumptruck();
+
+        function fetchDriver() {
+            $.ajax({
+                url: "{{ route('cs.getDriver') }}", // Your route for fetching drivers
+                type: "GET",
+                success: function (response) {
+                    let dtSelect1 = $('#add_driver'); // First driver select
+                    let dtSelect2 = $('#edit_driver'); // First driver select
+                    let addBtn = $('#adddrvbtn'); // Add Barangay button
+
+                    // Clear the select options for both select elements
+                    dtSelect1.empty();
+                    dtSelect2.empty();
+
+                    if (!response.driver || response.driver.length === 0) {
+                        addBtn.removeClass('d-none');
+                    } else {
+                        addBtn.addClass('d-none');
+                    }
+
+                    // Add default options for both selects
+                    dtSelect1.append('<option></option>');
+                    dtSelect2.append('<option></option>');
+
+                    // Populate both selects with the drivers
+                    $.each(response.driver, function (key, driver) {
+                        dtSelect1.append(`<option value="${driver.id}">${driver.fullname}</option>`);
+                        dtSelect2.append(`<option value="${driver.id}">${driver.fullname}</option>`);
+                    });
+                },
+                error: function (error) {
+                    console.log("Error fetching driver: ", error);
+                }
+            });
+        }
+
+        // Call the fetch function when the page loads
+        fetchDriver();
 
         var calendarEl = document.getElementById('calendar');
 
@@ -291,12 +413,7 @@
             },
             navLinks: true, // Clickable day/week names to navigate views
             selectable: true,
-
-            // Restrict selection and clicking to dates starting from today (exclude past dates)
-            validRange: {
-                start: today // This disables all dates before today, including Oct 12 if today is Oct 13
-            },
-
+            selectOverlap: false,
             events: {
                 url: "{{ route('cs.events') }}",
                 method: 'GET',
@@ -305,6 +422,15 @@
                 }
             },
             select: function(info) {
+                var selectedDate = new Date(info.startStr); // Get the selected date
+                var today = new Date(); // Get today's date
+                today.setHours(0, 0, 0, 0); // Clear the time part (set to midnight)
+
+                // Check if the selected date is before today
+                if (selectedDate < today) {
+                    return; // Exit without performing any action
+                }
+
                 // For week and day views, capture both date and time
                 if (info.view.type === 'timeGridWeek' || info.view.type === 'timeGridDay') {
                     const date = info.startStr.split('T')[0]; // Extract date part
@@ -343,13 +469,12 @@
 
                 // Set the tooltip content using the event title or other extended properties
                 var tooltipContent = 'Barangay: ' + info.event.extendedProps.brgy_name + 
-                                    ', Dump Truck: ' + info.event.extendedProps.dumptruck +
-                                    ', Driver: ' + info.event.extendedProps.driver_name;
+                                    ', Dump Truck: ' + info.event.extendedProps.dumptruck;
 
                 // Set tooltip attributes
                 $(info.el).attr('title', tooltipContent);
                 $(info.el).tooltip({
-                    placement: 'top', // Tooltip will appear above the event
+                    placement: 'right', // Tooltip will appear above the event
                     trigger: 'hover', // Show tooltip on hover
                     container: 'body' // Append tooltip to the body to avoid CSS issues
                 });
@@ -368,7 +493,7 @@
                 // Check if the day is before today (past date)
                 if (calendarDate < currentDate) {
                     // Add a tooltip for past dates
-                    $(info.el).attr('title', 'This date is in the past and cannot be selected.');
+                    $(info.el).attr('title', 'This date is cannot be selected. Please select another date.');
                     $(info.el).tooltip({
                         placement: 'top', // Tooltip will appear above the day cell
                         trigger: 'hover', // Show tooltip on hover
@@ -384,12 +509,101 @@
 
         calendar.render();
 
+        function fetchColsched() {
+            $.ajax({
+                url: "{{ route('cs.index') }}", // Your route for fetching barangays
+                type: "GET",
+                success: function (response) {
+                    let rows = '';
+                    let counter = 1;
+                    $.each(response.collectionSchedules, function (key, colsched) {
+                        let tableDate = new Date(colsched.created_at).toLocaleDateString('en-CA');
+
+                        if (colsched.status == 'pending' || 'finished' || 'ongoing') { 
+
+                            let formatteddate = tableDate;
+
+                            rows += `
+                                <tr>
+                                    <td>${counter}</td>
+                                    <td>${colsched.barangay.name}</td>
+                                    <td>${colsched.dumptruck.brand} ${colsched.dumptruck.model}</td>
+                                    <td>${colsched.scheduled_date} ${colsched.scheduled_time}</td>
+                                    <td>${colsched.status}</td>
+                                    <td>${formatteddate}</td>
+                                </tr>`;
+                            counter++;
+                        }
+                    });
+
+                    let dataTable = $('#col-sched-tbl').DataTable();
+                    dataTable.clear(); // Clear the existing table data
+                    dataTable.destroy();
+
+                    $('#col-sched-tbl tbody').html(rows);
+
+                    let table = $('#col-sched-tbl').DataTable({
+                        bSort: false,
+                        fixedHeader: true, // Enable fixed header
+                        retrieve: true, // Retrieve the existing table instead of initializing it again
+                        paging: true, // Enable pagination
+                        searching: true, // Enable search functionality
+                        info: true, // Show the number of entries info
+                        responsive: true, // Ensure responsiveness
+                        buttons: [
+                            { 
+                                extend: 'csv', 
+                                text: 'CSV',
+                                title: 'Collection Schedule List',
+                            },
+                            { 
+                                extend: 'excel', 
+                                text: 'Excel',
+                                title: 'Collection Schedule List',
+                            },
+                            { 
+                                extend: 'pdf', 
+                                text: 'PDF',
+                                title: 'Collection Schedule List',
+                            },
+                            { 
+                                extend: 'print', 
+                                text: 'Print',
+                                title: 'Collection Schedule List',
+                            }
+                        ]
+                    });
+
+                    // Add event listeners for export options in the dropdown
+                    $('#export-csv').on('click', function () {
+                        table.button('.buttons-csv').trigger();
+                    });
+                    $('#export-excel').on('click', function () {
+                        table.button('.buttons-excel').trigger();
+                    });
+                    $('#export-pdf').on('click', function () {
+                        table.button('.buttons-pdf').trigger();
+                    });
+                    $('#export-print').on('click', function () {
+                        table.button('.buttons-print').trigger();
+                    });
+                },
+                error: function (error) {
+                    console.log("Error fetching data: ", error);
+                    alert("Failed to fetch waste conversion. Please try again.");
+                }
+            });
+        }
+
+        fetchColsched();
+
         $('#scheduleForm').on('submit', function (e) {
             e.preventDefault();
 
             let formData = {
                 brgy_id: $('#add_brgy').val(),
                 dumptruck_id: $('#add_dt').val(),
+                user_id: $('#add_driver').val(),
                 scheduled_date: $('#add_date').val(),
                 scheduled_time: $('#add_time').val(),
             };
@@ -439,6 +653,7 @@
             originalValues = {
                 brgy_id: $('#edit_brgy').val(),
                 dumptruck_id: $('#edit_dt').val(),
+                user_id: $('#edit_driver').val(),
                 scheduled_date: $('#edit_date').val(),
                 scheduled_time: $('#edit_time').val(),
             };
@@ -456,6 +671,7 @@
             const currentValues = {
                 brgy_id: $('#edit_brgy').val(),
                 dumptruck_id: $('#edit_dt').val(),
+                user_id: $('#edit_driver').val(),
                 scheduled_date: $('#edit_date').val(),
                 scheduled_time: $('#edit_time').val(),
             };
@@ -477,6 +693,7 @@
             let formData = {
                 brgy_id: $('#edit_brgy').val(),
                 dumptruck_id: $('#edit_dt').val(),
+                user_id: $('#edit_driver').val(),
                 scheduled_date: $('#edit_date').val(),
                 scheduled_time: $('#edit_time').val(),
             };
