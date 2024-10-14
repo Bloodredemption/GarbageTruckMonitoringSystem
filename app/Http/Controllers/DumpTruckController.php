@@ -15,7 +15,7 @@ class DumpTruckController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $dumpTrucks = DumpTruck::with('user:id,fullname')
+            $dumpTrucks = DumpTruck::whereIn('status', ['active', 'inactive'])
                             ->orderBy('created_at', 'desc')
                             ->get();
         
@@ -25,10 +25,13 @@ class DumpTruckController extends Controller
         return view('admin.dump-trucks.index');
     }
 
-    public function getDrivers()
+    public function getArchive()
     {
-        $drivers = Users::where('user_type', 'driver')->get(['id', 'fullname']);
-        return response()->json(['drivers' => $drivers]);
+        $adumpTrucks = DumpTruck::where('status', 'archive')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        return response()->json(['adumpTrucks' => $adumpTrucks]);
     }
 
     /**
@@ -48,7 +51,6 @@ class DumpTruckController extends Controller
             'brand' => 'required|string',
             'model' => 'required|string',
             'status' => 'required|string',
-            'user_id' => 'required|exists:users,id',
         ]);
 
         DumpTruck::create($request->all());
@@ -82,7 +84,6 @@ class DumpTruckController extends Controller
             'brand' => 'required|string',
             'model' => 'required|string',
             'status' => 'required|string',
-            'user_id' => 'required|exists:users,id',
         ]);
 
         $dumpTruck = DumpTruck::findOrFail($id);
@@ -101,5 +102,23 @@ class DumpTruckController extends Controller
         $dumpTruck->save();
 
         return response()->json(['message' => 'Dump truck successfully deleted.']);
+    }
+
+    public function archive(string $id)
+    {
+        $dumpTruck = DumpTruck::findOrFail($id);
+        $dumpTruck->status = 'archive';
+        $dumpTruck->save();
+
+        return response()->json(['message' => 'Dump truck archived successfully.']);
+    }
+
+    public function restore(string $id)
+    {
+        $dumpTruck = DumpTruck::findOrFail($id);
+        $dumpTruck->status = 'active';
+        $dumpTruck->save();
+
+        return response()->json(['message' => 'Dump truck restored successfully.']);
     }
 }

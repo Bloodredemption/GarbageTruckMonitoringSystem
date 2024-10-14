@@ -14,13 +14,37 @@
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
                                 <h1><strong>Waste Conversion</strong></h1>
-                                <p>Contains waste composition information.</p>
+                                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Dashboard</a></li>
+                                        <li class="breadcrumb-item active text-white" aria-current="page">Waste Conversion</li>
+                                    </ol>
+                                </nav>
                             </div>
                             <div>
-                                <a href="" class="btn btn-link btn-soft-light">
-                                    <img src="data:image/svg+xml,%3Csvg width='20' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Crect width='30' height='30' fill='url(%23pattern0_135_433)'/%3E%3Cdefs%3E%3Cpattern id='pattern0_135_433' patternContentUnits='objectBoundingBox' width='1' height='1'%3E%3Cuse xlink:href='%23image0_135_433' transform='scale(0.0333333)'/%3E%3C/pattern%3E%3Cimage id='image0_135_433' width='30' height='30' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAaklEQVR4nO3UUQqAIAyA4R0v6djRRax7/FHPC8JNabXvVeWHoYqk3wJW7JaWsIs44e8DZmCnnw0oWvhc6K1q4SEkw7xt1NL+SjJ8yVHL3c/lfLmqtrFoccdwBabHB63hcQfDh63ihJM4OwBPnU7F1RVbMAAAAABJRU5ErkJggg=='/%3E%3C/defs%3E%3C/svg%3E%0A" alt="img">
-                                    Print
-                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-soft-light text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-settings">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                            <path d="M12 10.5v1.5" />
+                                            <path d="M12 16v1.5" />
+                                            <path d="M15.031 12.25l-1.299 .75" />
+                                            <path d="M10.268 15l-1.3 .75" />
+                                            <path d="M15 15.803l-1.285 -.773" />
+                                            <path d="M10.285 12.97l-1.285 -.773" />
+                                            <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                        </svg>
+                                        Export Options
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li><a class="dropdown-item" href="#" id="export-csv">CSV</a></li>
+                                        <li><a class="dropdown-item" href="#" id="export-excel">Excel</a></li>
+                                        <li><a class="dropdown-item" href="#" id="export-pdf">PDF</a></li>
+                                        <li><a class="dropdown-item" href="#" id="export-print">Print</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -64,6 +88,23 @@
                                             
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="card" data-aos="fade-up" data-aos-delay="800">
+                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
+                                <div class="header-title">
+                                    <h4 class="card-title">Statistics</h4>
+                                    <p class="mb-0">Sub Title Here</p>          
+                                </div>
+                                
+                            </div>
+                            <div class="card-body px-0">
+                                <div class="table-responsive">
+                                    
                                 </div>
                             </div>
                         </div>
@@ -134,12 +175,50 @@
 
                     $('#wcov-tbl tbody').html(rows);
 
-                    $('#wcov-tbl').DataTable({
+                    let table = $('#wcov-tbl').DataTable({
+                        bSort: false,
+                        fixedHeader: true, // Enable fixed header
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
                         searching: true, // Enable search functionality
                         info: true, // Show the number of entries info
                         responsive: true, // Ensure responsiveness
+                        buttons: [
+                            { 
+                                extend: 'csv', 
+                                text: 'CSV',
+                                title: 'Waste Conversion List',
+                            },
+                            { 
+                                extend: 'excel', 
+                                text: 'Excel',
+                                title: 'Waste Conversion List',
+                            },
+                            { 
+                                extend: 'pdf', 
+                                text: 'PDF',
+                                title: 'Waste Conversion List',
+                            },
+                            { 
+                                extend: 'print', 
+                                text: 'Print',
+                                title: 'Waste Conversion List',
+                            }
+                        ]
+                    });
+
+                    // Add event listeners for export options in the dropdown
+                    $('#export-csv').on('click', function () {
+                        table.button('.buttons-csv').trigger();
+                    });
+                    $('#export-excel').on('click', function () {
+                        table.button('.buttons-excel').trigger();
+                    });
+                    $('#export-pdf').on('click', function () {
+                        table.button('.buttons-pdf').trigger();
+                    });
+                    $('#export-print').on('click', function () {
+                        table.button('.buttons-print').trigger();
                     });
                 },
                 error: function (error) {

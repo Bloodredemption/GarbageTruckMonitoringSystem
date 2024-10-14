@@ -16,6 +16,7 @@ class NotificationController extends Controller
     {
         if (request()->ajax()) {
             $notifications = Notification::with('user:id,fullname')
+                                ->whereIn('status', ['sent', 'read'])
                                 ->orderBy('created_at', 'desc')
                                 ->get();
             return response()->json(['notifications' => $notifications]);
@@ -26,7 +27,8 @@ class NotificationController extends Controller
 
     public function getArchive()
     {
-        $anotifs = Notification::where('status', 'archive')
+        $anotifs = Notification::with('user:id,fullname')
+            ->where('status', 'archive')
             ->orderBy('created_at', 'desc')
             ->get();
     

@@ -22,7 +22,7 @@
                                 </nav>
                             </div>
                             <div>
-                               <div class="dropdown">
+                                <div class="dropdown">
                                     <button class="btn btn-soft-light text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-settings">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -79,7 +79,6 @@
                                             </button>
                                         </li>
                                     </ul>
-                                    
                                 </div>
                                 
                                 <div>
@@ -405,7 +404,10 @@
             // Reset all select elements and inputs
             $('#role-filter').val('');
             $('#status-filter').val('');
-            $('#created-date').val('');
+            let calendarInstance = document.querySelector('#created-date')._flatpickr;
+            if (calendarInstance) {
+                calendarInstance.clear();  // Clear the Flatpickr instance
+            }
             
             // Fetch users again to update the table without filters
             fetchUsers();
@@ -417,9 +419,8 @@
             let role = $('#role-filter').val();
             let status = $('#status-filter').val();
             let created_date = $('#created-date').val();
-            let date = new Date(created_date);
 
-            let shortDateFormat = date.toLocaleDateString('en-US');
+            let calendarDate = new Date(created_date).toLocaleDateString('en-CA');
 
             $.ajax({
                 url: "{{ route('users.index') }}", // Route for fetching users
@@ -427,7 +428,7 @@
                 data: {
                     role: role,              // Pass the role filter
                     status: status,          // Pass the status filter
-                    created_date: shortDateFormat // Pass the created date filter
+                    created_date: calendarDate // Pass the created date filter
                 },
                 success: function (response) {
                     let rows = '';
@@ -436,12 +437,13 @@
                     // Loop through the users and create table rows dynamically
                     $.each(response.users, function (key, user) {
                         // Check the filters before adding the rows
+                        let tableDate = new Date(user.created_at).toLocaleDateString('en-CA');
+                        
                         if ((role === '' || user.user_type === role) &&
                             (status === '' || user.status === status) &&
-                            (created_date === '' || new Date(user.created_at).toLocaleDateString() === created_date)) {
+                            (created_date === '' || tableDate === created_date)) {
 
-                            const created_at = new Date(user.created_at);
-                            const formatteddate = created_at.toLocaleDateString('en-US');
+                            let formatteddate = tableDate;
 
                             rows += `
                                 <tr>

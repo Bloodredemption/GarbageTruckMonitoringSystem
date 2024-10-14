@@ -14,7 +14,7 @@
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
                                 <h1><strong>Barangay Records</strong></h1>
-                                <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+                                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Dashboard</a></li>
                                         <li class="breadcrumb-item active text-white" aria-current="page">Barangay Records</li>
@@ -22,10 +22,29 @@
                                 </nav>
                             </div>
                             <div>
-                                <a href="" class="btn btn-link btn-soft-light">
-                                    <img src="data:image/svg+xml,%3Csvg width='20' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Crect width='30' height='30' fill='url(%23pattern0_135_433)'/%3E%3Cdefs%3E%3Cpattern id='pattern0_135_433' patternContentUnits='objectBoundingBox' width='1' height='1'%3E%3Cuse xlink:href='%23image0_135_433' transform='scale(0.0333333)'/%3E%3C/pattern%3E%3Cimage id='image0_135_433' width='30' height='30' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAaklEQVR4nO3UUQqAIAyA4R0v6djRRax7/FHPC8JNabXvVeWHoYqk3wJW7JaWsIs44e8DZmCnnw0oWvhc6K1q4SEkw7xt1NL+SjJ8yVHL3c/lfLmqtrFoccdwBabHB63hcQfDh63ihJM4OwBPnU7F1RVbMAAAAABJRU5ErkJggg=='/%3E%3C/defs%3E%3C/svg%3E%0A" alt="img">
-                                    Print
-                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-soft-light text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-settings">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                            <path d="M12 10.5v1.5" />
+                                            <path d="M12 16v1.5" />
+                                            <path d="M15.031 12.25l-1.299 .75" />
+                                            <path d="M10.268 15l-1.3 .75" />
+                                            <path d="M15 15.803l-1.285 -.773" />
+                                            <path d="M10.285 12.97l-1.285 -.773" />
+                                            <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                        </svg>
+                                        Export Options
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li><a class="dropdown-item" href="#" id="export-csv">CSV</a></li>
+                                        <li><a class="dropdown-item" href="#" id="export-excel">Excel</a></li>
+                                        <li><a class="dropdown-item" href="#" id="export-pdf">PDF</a></li>
+                                        <li><a class="dropdown-item" href="#" id="export-print">Print</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -47,7 +66,7 @@
                         <div class="card" data-aos="fade-up" data-aos-delay="800">
                             <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
                                 <div class="header-title">
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <ul class="nav custom-tabs" id="myTab" role="tablist">
                                         <li class="nav-item" role="presentation">
                                             <button class="nav-link active" id="table-view-tab" data-bs-toggle="tab" data-bs-target="#table-view" type="button" role="tab" aria-controls="table-view" aria-selected="true">
                                                 Barangay List
@@ -62,24 +81,58 @@
                                 </div>
                                 
                                 <div>
+                                    <a href="#" class=" text-center btn btn-outline-secondary btn-icon mt-lg-0 mt-md-0 mt-3 " data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        <i class="btn-inner">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-adjustments-horizontal"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 6l8 0" /><path d="M16 6l4 0" /><path d="M8 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 12l2 0" /><path d="M10 12l10 0" /><path d="M17 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 18l11 0" /><path d="M19 18l1 0" /></svg>
+                                        </i>
+                                        <span>Filter</span>
+                                    </a>
                                     <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#addBarangayModal">
                                         <i class="btn-inner">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                             </svg>
                                         </i>
-                                        <span>Add New</span>
+                                        <span>Create</span>
                                     </a>
                                 </div>
                             </div>
-                            <div class="card-body px-0">
+                            <div class="card-body px-0" style="padding: 0; padding-bottom: 1.5rem;">
                                 <!-- Bootstrap Tabs -->
-                                
                             
                                 <!-- Tab Content -->
                                 <div class="tab-content" id="myTabContent">
                                     <!-- Table View Tab Pane -->
                                     <div class="tab-pane fade show active" id="table-view" role="tabpanel" aria-labelledby="table-view-tab">
+                                        <div class="pl-3 pr-3" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 1rem;">
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="accordion-item">
+                                                    
+                                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <div class="text-end">
+                                                                <a href="#" class="text-center btn-icon mt-lg-0 mt-md-0 mt-5" id="clear-filters">
+                                                                    <i class="btn-inner">
+                                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+                                                                    </i>
+                                                                    <span>Clear Filter</span>
+                                                                </a>
+                                                            </div>
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-md-12 mb-3">
+                                                                    <label for="date" class="form-label">Date Created</label>
+                                                                    <input type="text" id="created-date" name="start" class="form-control flatpickr_humandate flatpickr-input active" placeholder="Select Date" readonly>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="table-responsive mt-3">
                                             <table id="user-list-table" class="table" role="grid" data-bs-toggle="data-table">
                                                 <thead>
@@ -278,26 +331,41 @@
 
 <script>
     $(document).ready(function () {
+        $('#clear-filters').on('click', function(e) {
+            e.preventDefault(); // Prevent the default anchor click behavior
+            
+            // Reset all select elements and inputs
+            let calendarInstance = document.querySelector('#created-date')._flatpickr;
+            if (calendarInstance) {
+                calendarInstance.clear();  // Clear the Flatpickr instance
+            }
+            
+            // Fetch users again to update the table without filters
+            fetchBarangays();
+        });
+
         // Fetch barangays and display in the table
         function fetchBarangays() {
+
+            let created_date = $('#created-date').val();
+            let calendarDate = new Date(created_date).toLocaleDateString('en-CA');
+
             $.ajax({
                 url: "{{ route('barangays.index') }}", // Your route for fetching barangays
                 type: "GET",
+                data: {
+                    created_date: calendarDate // Pass the created date filter
+                },
                 success: function (response) {
                     let rows = '';
                     let counter = 1;
                     $.each(response.barangays, function (key, barangay) {
-                        if (barangay.isDeleted == '0') { // Skip users with 'deleted' status
-                            // Format the created_at date
-                            const createdAt = new Date(barangay.created_at);
-                            const formattedCreatedAt = createdAt.toLocaleString('en-US', {
-                                month: 'long', // 'January', 'February', etc.
-                                day: '2-digit', // '01', '02', etc.
-                                year: 'numeric', // '2024'
-                                hour: '2-digit', // '01', '02', etc.
-                                minute: '2-digit', // '00', '01', etc.
-                                hour12: true // 'AM'/'PM'
-                            });
+
+                        let tableDate = new Date(barangay.created_at).toLocaleDateString('en-CA');
+
+                        if ((created_date === '' || tableDate === created_date)) { // Skip users with 'deleted' status
+                            
+                            let formatteddate = tableDate;
 
                             rows += `
                                 <tr>
@@ -306,7 +374,7 @@
                                     <td>${barangay.area}</td>
                                     <td>${barangay.zipcode}</td>
                                     <td>${barangay.captain}</td>
-                                    <td>${formattedCreatedAt}</td>
+                                    <td>${formatteddate}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
                                             <!-- Edit Button with Tooltip -->
@@ -315,6 +383,7 @@
                                                     <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
                                                     <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
                                                 </svg>
+                                                Edit
                                             </a>
 
                                             <!-- Archive Button with Tooltip -->
@@ -325,6 +394,7 @@
                                                     <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"/>
                                                     <path d="M10 12l4 0"/>
                                                 </svg>
+                                                Archive
                                             </a>
                                         </div>
                                     </td>
@@ -341,12 +411,62 @@
 
                     $('#user-list-table tbody').html(rows);
 
-                    $('#user-list-table').DataTable({
+                    let table = $('#user-list-table').DataTable({
+                        bSort: false,
+                        fixedHeader: true, // Enable fixed header
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
                         searching: true, // Enable search functionality
                         info: true, // Show the number of entries info
                         responsive: true, // Ensure responsiveness
+                        buttons: [
+                            { 
+                                extend: 'csv', 
+                                text: 'CSV',
+                                title: 'Barangay List',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            { 
+                                extend: 'excel', 
+                                text: 'Excel',
+                                title: 'Barangay List',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            { 
+                                extend: 'pdf', 
+                                text: 'PDF',
+                                title: 'Barangay List',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            { 
+                                extend: 'print', 
+                                text: 'Print',
+                                title: 'Barangay List',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            }
+                        ]
+                    });
+
+                    // Add event listeners for export options in the dropdown
+                    $('#export-csv').on('click', function () {
+                        table.button('.buttons-csv').trigger();
+                    });
+                    $('#export-excel').on('click', function () {
+                        table.button('.buttons-excel').trigger();
+                    });
+                    $('#export-pdf').on('click', function () {
+                        table.button('.buttons-pdf').trigger();
+                    });
+                    $('#export-print').on('click', function () {
+                        table.button('.buttons-print').trigger();
                     });
                 },
                 error: function (error) {
@@ -355,6 +475,10 @@
                 }
             });
         }
+
+        $('#created-date').on('change', function () {
+            fetchBarangays(); // Fetch data whenever a filter changes
+        });
 
         fetchBarangays();
 
@@ -366,17 +490,11 @@
                     let rows = '';
                     let counter = 1;
                     $.each(response.abarangays, function (key, abarangay) {
+                        let tableDate = new Date(abarangay.updated_at).toLocaleDateString('en-CA');
+
                         if (abarangay.isDeleted == '2') { // Skip users with 'deleted' status
                             // Format the created_at date
-                            const updatedAt = new Date(abarangay.updated_at);
-                            const formattedupdatedAt = updatedAt.toLocaleString('en-US', {
-                                month: 'long', // 'January', 'February', etc.
-                                day: '2-digit', // '01', '02', etc.
-                                year: 'numeric', // '2024'
-                                hour: '2-digit', // '01', '02', etc.
-                                minute: '2-digit', // '00', '01', etc.
-                                hour12: true // 'AM'/'PM'
-                            });
+                            let formatteddate = tableDate;
 
                             rows += `
                                 <tr>
@@ -385,14 +503,16 @@
                                     <td>${abarangay.area}</td>
                                     <td>${abarangay.zipcode}</td>
                                     <td>${abarangay.captain}</td>
-                                    <td>${formattedupdatedAt}</td>
+                                    <td>${formatteddate}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
                                             <a class="btn btn-sm btn-icon btn-secondary restore-barangay-btn" data-id="${abarangay.id}">
                                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+                                                Restore
                                             </a>
                                             <a class="btn btn-sm btn-icon btn-danger delete-barangay-btn" data-id="${abarangay.id}">
                                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                                Delete
                                             </a>
                                         </div>
                                     </td>

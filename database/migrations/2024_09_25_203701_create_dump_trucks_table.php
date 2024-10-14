@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('dump_trucks', function (Blueprint $table) {
             $table->id();
-            $table->Integer('user_id');
             $table->String('brand');
             $table->String('model');
             $table->String('status');

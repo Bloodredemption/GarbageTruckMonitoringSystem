@@ -121,25 +121,16 @@
                                                             </div>
                                                             
                                                             <div class="row">
-                                                                <div class="col-md-4 mb-3">
+                                                                <div class="col-md-6 mb-3">
                                                                     <label for="date" class="form-label">Date Created</label>
                                                                     <input type="text" id="created-date" name="start" class="form-control flatpickr_humandate flatpickr-input active" placeholder="Select Date" readonly>
                                                                 </div>
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label for="role" class="form-label">Role</label>
-                                                                    <select class="form-control" id="role-filter" name="role">
-                                                                        <option value="">Select Role</option>
-                                                                        <option value="admin">Admin</option>
-                                                                        <option value="driver">Driver</option>
-                                                                        <option value="landfill">Landfill</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-4 mb-3">
+                                                                <div class="col-md-6 mb-3">
                                                                     <label for="status" class="form-label">Status</label>
                                                                     <select class="form-control" id="status-filter" name="status">
                                                                         <option value="">Select Status</option>
-                                                                        <option value="active">Active</option>
-                                                                        <option value="inactive">Inactive</option>
+                                                                        <option value="sent">Sent</option>
+                                                                        <option value="read">Read</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -171,39 +162,6 @@
                             
                                     <!-- Archive Tab Pane -->
                                     <div class="tab-pane fade" id="archive" role="tabpanel" aria-labelledby="archive-tab">
-                                        <div class="p-3">
-                                            <div class="accordion" id="accordionExample">
-                                                <div class="accordion-item">
-                                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                                        <div class="accordion-body">
-                                                            <div class="row">
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label for="date" class="form-label">Date Archive </label>
-                                                                    <input type="text" name="start" class="form-control flatpickr_humandate flatpickr-input active" readonly>
-                                                                </div>
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label for="role" class="form-label">Role </label>
-                                                                    <select class="form-control" id="role" name="role" >
-                                                                        <option value=""></option>
-                                                                        <option value="admin">Admin</option>
-                                                                        <option value="driver">Driver</option>
-                                                                        <option value="landfill">Landfill</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label for="role" class="form-label">Status </label>
-                                                                    <select class="form-control" id="role" name="role" >
-                                                                        <option value=""></option>
-                                                                        <option value="active">Active</option>
-                                                                        <option value="inactive">Inactive</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         
                                         <div class="table-responsive mt-3">
                                             <table id="anotification-tbl" class="table" role="grid">
@@ -213,7 +171,7 @@
                                                         <th>Message</th>
                                                         <th>Recipient</th>
                                                         <th>Status</th>
-                                                        <th>Date Sent</th>
+                                                        <th>Date Archive</th>
                                                         <th style="min-width: 100px">Action</th>
                                                     </tr>
                                                 </thead>
@@ -226,11 +184,6 @@
                                 </div>
                             </div>
 
-                            <div class="card-body px-0">
-                                <div class="table-responsive">
-                                    
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -309,6 +262,21 @@
 
 <script>
     $(document).ready(function () {
+        $('#clear-filters').on('click', function(e) {
+            e.preventDefault(); // Prevent the default anchor click behavior
+            
+            // Reset all select elements and inputs
+            $('#status-filter').val('');
+
+            let calendarInstance = document.querySelector('#created-date')._flatpickr;
+            if (calendarInstance) {
+                calendarInstance.clear();  // Clear the Flatpickr instance
+            }
+            
+            // Fetch users again to update the table without filters
+            fetchNotifications();
+        });
+
         function fetchDrivers() {
             $.ajax({
                 url: "{{ route('notifications.getDrivers') }}", // Your route for fetching drivers
@@ -342,14 +310,32 @@
         
         // Fetch barangays and display in the table
         function fetchNotifications() {
+            let status = $('#status-filter').val();
+            let created_date = $('#created-date').val();  // Get the flatpickr input value
+
+            // Convert to a common format (use 'en-CA' for YYYY-MM-DD or 'en-US' for MM/DD/YYYY)
+            let calendarDate = new Date(created_date).toLocaleDateString('en-CA');
+
             $.ajax({
                 url: "{{ route('notifications.index') }}", // Your route for fetching barangays
                 type: "GET",
+                data: {
+                    status: status,          // Pass the status filter
+                    created_date: calendarDate // Pass the created date filter
+                },
+                
                 success: function (response) {
                     let rows = '';
                     let counter = 1;
+
                     $.each(response.notifications, function (key, notification) {
-                        if (notification.status !== 'deleted') {
+                        // Convert notification.created_at to the same format
+                        let tableDate = new Date(notification.created_at).toLocaleDateString('en-CA');
+
+                        if ((status === '' || notification.status === status) &&
+                            (created_date === '' || tableDate === created_date)) {
+
+                            // Process fullname and other fields as before
                             let fullname = notification.user.fullname.trim().split(" ");
                             let firstname = "";
                             let middleInitial = "";
@@ -357,19 +343,15 @@
 
                             for (let i = 0; i < fullname.length; i++) {
                                 if (fullname[i].length === 2 && fullname[i][1] === '.') {
-                                    // This part is the middle initial (1 letter + '.')
-                                    middleInitial = fullname[i][0];
+                                    middleInitial = fullname[i][0]; // This part is the middle initial (1 letter + '.')
                                 } else if (i === fullname.length - 1) {
-                                    // Last part is the last name
-                                    lastname = fullname[i];
+                                    lastname = fullname[i]; // Last part is the last name
                                 } else {
-                                    // Other parts are the first name
-                                    firstname += fullname[i] + " ";
+                                    firstname += fullname[i] + " "; // Other parts are the first name
                                 }
                             }
 
-                            const created_at = new Date(notification.created_at);
-                            const formatteddate = created_at.toLocaleDateString('en-US');
+                            let formatteddate = tableDate;
 
                             rows += `
                                 <tr>
@@ -414,12 +396,62 @@
 
                     $('#notification-tbl tbody').html(rows);
 
-                    $('#notification-tbl').DataTable({
+                    let table = $('#notification-tbl').DataTable({
+                        bSort: false,
+                        fixedHeader: true, // Enable fixed header
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
                         searching: true, // Enable search functionality
                         info: true, // Show the number of entries info
                         responsive: true, // Ensure responsiveness
+                        buttons: [
+                            { 
+                                extend: 'csv', 
+                                text: 'CSV',
+                                title: 'Notification List',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            { 
+                                extend: 'excel', 
+                                text: 'Excel',
+                                title: 'Notification List',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            { 
+                                extend: 'pdf', 
+                                text: 'PDF',
+                                title: 'Notification List',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+                            { 
+                                extend: 'print', 
+                                text: 'Print',
+                                title: 'Notification List',
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            }
+                        ]
+                    });
+
+                    // Add event listeners for export options in the dropdown
+                    $('#export-csv').on('click', function () {
+                        table.button('.buttons-csv').trigger();
+                    });
+                    $('#export-excel').on('click', function () {
+                        table.button('.buttons-excel').trigger();
+                    });
+                    $('#export-pdf').on('click', function () {
+                        table.button('.buttons-pdf').trigger();
+                    });
+                    $('#export-print').on('click', function () {
+                        table.button('.buttons-print').trigger();
                     });
                 },
                 error: function (error) {
@@ -428,7 +460,11 @@
             });
         }
 
-        fetchANotifications();
+        $('#status-filter, #created-date').on('change', function () {
+            fetchNotifications(); // Fetch data whenever a filter changes
+        });
+
+        fetchNotifications();
 
         function fetchANotifications() {
             $.ajax({
@@ -437,9 +473,9 @@
                 success: function (response) {
                     let rows = '';
                     let counter = 1;
-                    $.each(response.notifications, function (key, notification) {
-                        if (notification.status !== 'deleted') {
-                            let fullname = notification.user.fullname.trim().split(" ");
+                    $.each(response.anotifs, function (key, anotif) {
+                        if (anotif.status == 'archive' || 'deleted') {
+                            let fullname = anotif.user.fullname.trim().split(" ");
                             let firstname = "";
                             let middleInitial = "";
                             let lastname = "";
@@ -457,28 +493,26 @@
                                 }
                             }
 
-                            const created_at = new Date(notification.created_at);
+                            const created_at = new Date(anotif.updated_at);
                             const formatteddate = created_at.toLocaleDateString('en-US');
 
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
-                                    <td>${notification.notification_msg}</td>
+                                    <td>${anotif.notification_msg}</td>
                                     <td>${firstname} ${lastname}</td>
                                     <td>
-                                        ${notification.status == 'pending' ? '<span class="badge bg-warning">Pending</span>' : 
-                                        notification.status == 'sent' ? '<span class="badge bg-primary">Sent</span>' : 
-                                        notification.status == 'read' ? '<span class="badge bg-success">Read</span>' : 
-                                        '<span class="badge bg-secondary">Unknown</span>'}
+                                        ${anotif.status == 'archive' ? '<span class="badge bg-secondary">Achive</span>' : 
+                                        '<span class="badge bg-danger">Unknown</span>'}
                                     </td>
                                     <td>${formatteddate}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
-                                            <a class="btn btn-sm btn-icon btn-secondary restore-notif-btn" data-id="${ausers.id}">
+                                            <a class="btn btn-sm btn-icon btn-secondary restore-notif-btn" data-id="${anotif.id}">
                                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
                                                 Restore
                                             </a>
-                                            <a class="btn btn-sm btn-icon btn-danger delete-notif-btn" data-id="${ausers.id}">
+                                            <a class="btn btn-sm btn-icon btn-danger delete-notif-btn" data-id="${anotif.id}">
                                                 <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                                 Delete
                                             </a>
@@ -496,6 +530,7 @@
                     $('#anotification-tbl tbody').html(rows);
 
                     $('#anotification-tbl').DataTable({
+                        bSort: false,
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
                         searching: true, // Enable search functionality
@@ -674,7 +709,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function (response) {
-                            fetchNotifications();
+                            fetchANotifications();
 
                             Swal.fire({
                                 icon: 'success',

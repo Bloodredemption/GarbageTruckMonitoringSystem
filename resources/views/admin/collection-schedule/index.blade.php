@@ -14,13 +14,37 @@
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
                                 <h1><strong>Collection Schedule</strong></h1>
-                                <p>Contains collection schedule.</p>
+                                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Dashboard</a></li>
+                                        <li class="breadcrumb-item active text-white" aria-current="page">Collection Schedule</li>
+                                    </ol>
+                                </nav>
                             </div>
                             <div>
-                                <a href="" class="btn btn-link btn-soft-light">
-                                    <img src="data:image/svg+xml,%3Csvg width='20' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Crect width='30' height='30' fill='url(%23pattern0_135_433)'/%3E%3Cdefs%3E%3Cpattern id='pattern0_135_433' patternContentUnits='objectBoundingBox' width='1' height='1'%3E%3Cuse xlink:href='%23image0_135_433' transform='scale(0.0333333)'/%3E%3C/pattern%3E%3Cimage id='image0_135_433' width='30' height='30' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAaklEQVR4nO3UUQqAIAyA4R0v6djRRax7/FHPC8JNabXvVeWHoYqk3wJW7JaWsIs44e8DZmCnnw0oWvhc6K1q4SEkw7xt1NL+SjJ8yVHL3c/lfLmqtrFoccdwBabHB63hcQfDh63ihJM4OwBPnU7F1RVbMAAAAABJRU5ErkJggg=='/%3E%3C/defs%3E%3C/svg%3E%0A" alt="img">
-                                    Print
-                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-soft-light text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-settings">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                            <path d="M12 10.5v1.5" />
+                                            <path d="M12 16v1.5" />
+                                            <path d="M15.031 12.25l-1.299 .75" />
+                                            <path d="M10.268 15l-1.3 .75" />
+                                            <path d="M15 15.803l-1.285 -.773" />
+                                            <path d="M10.285 12.97l-1.285 -.773" />
+                                            <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                        </svg>
+                                        Export Options
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li><a class="dropdown-item" href="#" id="export-csv">CSV</a></li>
+                                        <li><a class="dropdown-item" href="#" id="export-excel">Excel</a></li>
+                                        <li><a class="dropdown-item" href="#" id="export-pdf">PDF</a></li>
+                                        <li><a class="dropdown-item" href="#" id="export-print">Print</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -247,8 +271,10 @@
         // Call the fetch function when the page loads
         fetchDumptruck();
 
-        // Get the calendar element using jQuery
         var calendarEl = document.getElementById('calendar');
+
+        // Get today's date in YYYY-MM-DD format
+        var today = new Date().toISOString().split('T')[0];
 
         // Initialize the FullCalendar with AJAX
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -265,6 +291,12 @@
             },
             navLinks: true, // Clickable day/week names to navigate views
             selectable: true,
+
+            // Restrict selection and clicking to dates starting from today (exclude past dates)
+            validRange: {
+                start: today // This disables all dates before today, including Oct 12 if today is Oct 13
+            },
+
             events: {
                 url: "{{ route('cs.events') }}",
                 method: 'GET',
@@ -275,11 +307,8 @@
             select: function(info) {
                 // For week and day views, capture both date and time
                 if (info.view.type === 'timeGridWeek' || info.view.type === 'timeGridDay') {
-                    // Extract date and time from info.start
                     const date = info.startStr.split('T')[0]; // Extract date part
                     const time = info.startStr.split('T')[1].substring(0, 5); // Extract time part (HH:MM)
-
-                    // Set the date and time in the modal input fields using jQuery
                     $('#add_date').val(date);
                     $('#add_time').val(time);
                 } else {
@@ -328,8 +357,29 @@
             dayCellDidMount: function(info) {
                 // Add pointer style when hovering over calendar days
                 info.el.style.cursor = 'pointer';
-            }
 
+                // Create a new date object without time for comparison
+                var calendarDate = new Date(info.date);
+                calendarDate.setHours(0, 0, 0, 0); // Clear the time part (set to midnight)
+
+                var currentDate = new Date();
+                currentDate.setHours(0, 0, 0, 0); // Clear the time part (set to midnight)
+
+                // Check if the day is before today (past date)
+                if (calendarDate < currentDate) {
+                    // Add a tooltip for past dates
+                    $(info.el).attr('title', 'This date is in the past and cannot be selected.');
+                    $(info.el).tooltip({
+                        placement: 'top', // Tooltip will appear above the day cell
+                        trigger: 'hover', // Show tooltip on hover
+                        container: 'body' // Append tooltip to the body
+                    });
+
+                    // Optionally, add a visual indication (e.g., grayed-out past dates)
+                    info.el.style.backgroundColor = '#f0f0f0'; // Light gray background
+                    info.el.style.color = '#999999'; // Gray text for past dates
+                }
+            }
         });
 
         calendar.render();

@@ -8,6 +8,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DumpTruckController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\WasteCollectionController;
 use App\Http\Controllers\WasteCompositionController;
 use App\Http\Controllers\WasteConversionController;
@@ -61,13 +62,20 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/waste-conversion', [WasteConversionController::class, 'admin_index'])->name('awcov.index');
 });
 
+// Reports
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+});
+
 // Dump Trucks
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dump-trucks', [DumpTruckController::class, 'index'])->name('dump-trucks.index');
-    Route::get('/dump-trucks/getDrivers', [DumpTruckController::class, 'getDrivers'])->name('drivers.index');
+    Route::get('/dump-trucks/getArchive', [DumpTruckController::class, 'getArchive'])->name('dump-trucks.getArchive');
     Route::post('/dump-trucks/store', [DumpTruckController::class, 'store'])->name('dump-trucks.store');
     Route::get('/dump-truck/{id}/edit', [DumpTruckController::class, 'edit'])->name('dump-truck.edit');
     Route::put('/dump-truck/{id}/update', [DumpTruckController::class, 'update'])->name('dump-truck.update');
+    Route::put('/dump-truck/{id}/archive', [DumpTruckController::class, 'archive'])->name('dump-truck.archive');
+    Route::put('/dump-truck/{id}/restore', [DumpTruckController::class, 'restore'])->name('dump-truck.restore');
     Route::delete('/dump-truck/{id}/delete', [DumpTruckController::class, 'destroy'])->name('dump-truck.delete');
 });
 

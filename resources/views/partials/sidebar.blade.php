@@ -304,6 +304,32 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->is('admin/reports') ? 'active' : '' }}"  href="{{ route('reports.index') }}">
+                            <i class="icon">
+                                <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    @if(request()->is('admin/reports'))
+                                        <rect width="30" height="30" fill="url(#pattern0_367_813)"/>
+                                        <defs>
+                                            <pattern id="pattern0_367_813" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                                <use xlink:href="#image0_367_813" transform="scale(0.0333333)"/>
+                                            </pattern>
+                                            <image id="image0_367_813" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAwUlEQVR4nO3WSwrCMBSF4Swos3aYBShuw4EV3HTtJDvoRH8HBg3FvHpTQcmBQuA2+cohgyrVopQCDsBEfmZgEJcHXCnL3T1nKVyaI3Bz+OVrsHrukeOsgKvgrITFOALY7T95F27YDAZMBJ+3hIsaCabB0oS7/YGqLdABvVuH5qYmbAHtvaMX+GvuPqwKbL1D9WJtP8xtDdhmQEFUAnepamOoBDaJy9RH5iJYnAa3qiW/t7GM75MTAfaV8BHYZcN/nQc5VjlIyycjUAAAAABJRU5ErkJggg=="/>
+                                        </defs>
+                                    @else
+                                        <rect width="30" height="30" fill="url(#pattern0_367_815)"/>
+                                        <defs>
+                                            <pattern id="pattern0_367_815" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                                <use xlink:href="#image0_367_815" transform="scale(0.0333333)"/>
+                                            </pattern>
+                                            <image id="image0_367_815" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA80lEQVR4nO3TXQqCQBAH8DlQb/boAYqu0UMF3cMdfXDGM8zUubKXbtBLGSsIIvm9BZkLiwMj+1v+jgDzAoCQdWNYrsiaddmG5Y4k+9HhIWvaFc1hkme+WQ5j4awnvEXWh8WR9Pg1GADACY4DYCc4DoRH4zgCzvFEd8XA9Zp27AkHsfi1OMv9Y3DfRGrXDOPfRm1IbxGJZxJd2rqub6fcGWxIb2F8XhTv2LqMl/v2Yk5gUzrUPsu17VX71TQGwe8ObbuIk28ckXht0Tahg+EgFr9pmPJeTf/3fyecYZ5Q1Kkr1JBcOsMhn9YucIsi6aozPOn1AuAa8rg2SY4DAAAAAElFTkSuQmCC"/>
+                                        </defs>
+                                    @endif
+                                </svg>
+                            </i>
+                            <span class="item-name">Reports</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->is('admin/users') ? 'active' : '' }}"  href="{{ route('users.index') }}">
                             <i class="icon">
                                 <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

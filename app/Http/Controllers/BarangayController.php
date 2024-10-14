@@ -14,7 +14,8 @@ class BarangayController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $barangays = Barangay::orderBy('created_at', 'desc')->get();
+            $barangays = Barangay::where('isDeleted', 0)
+                ->orderBy('created_at', 'desc')->get();
             return response()->json(['barangays' => $barangays]);
         }
 
