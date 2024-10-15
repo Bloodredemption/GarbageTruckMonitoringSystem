@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Users;
+use Carbon\Carbon;
 
 class UsersSeeder extends Seeder
 {
@@ -22,6 +22,8 @@ class UsersSeeder extends Seeder
             'contact_num' => 639876543210,
             'user_type' => 'admin',
             'status' => 'active',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
 
         DB::table('users')->insert([
@@ -31,6 +33,8 @@ class UsersSeeder extends Seeder
             'contact_num' => 639876543210,
             'user_type' => 'driver',
             'status' => 'active',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
 
         DB::table('users')->insert([
@@ -40,6 +44,8 @@ class UsersSeeder extends Seeder
             'contact_num' => 639876543210,
             'user_type' => 'landfill',
             'status' => 'active',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
     }
 }

@@ -29,4 +29,9 @@ class CollectionSchedule extends Model
         return $this->belongsTo(Dumptruck::class, 'dumptruck_id');
     }
 
+    public function driver()
+    {
+        return $this->belongsTo(Users::class, 'user_id');
+    }
+
 }

@@ -80,13 +80,35 @@
                                                 <th>No.</th>
                                                 <th>Waste Type</th>
                                                 <th>Conversion Method</th>
+                                                <th>Metrics</th>
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
                                                 <th style="min-width: 100px">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Rows will be dynamically added here -->
+                                            @forelse ($wasteConversions as $wc)
+                                            <tr>
+                                                <th scope="row">{{ $loop->iteration }}</th>
+                                                <td>{{ $wc->waste_type }}</td>
+                                                <td>{{ $wc->conversion_method }}</td>
+                                                <td>{{ $wc->metrics }}</td>
+                                                <td>{{ $wc->start_date }}</td>
+                                                <td>{{ $wc->end_date }}</td>
+                                                <td>
+                                                    <div class="flex align-items-center list-user-action">
+                                                        <a class="btn btn-sm btn-icon btn-warning edit-wcov-btn" data-id="{{ $wc->id }}">Edit</a>
+                                                        <a class="btn btn-sm btn-icon btn-danger delete-wcov-btn" data-id="{{ $wc->id }}">Delete</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                                <td colspan="6">
+                                                    <span class="text-danger">
+                                                        <strong>No Product Found!</strong>
+                                                    </span>
+                                                </td>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>
@@ -116,6 +138,8 @@
                     <label for="add_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
                     <select class="form-control" id="add_wt" name="wt" required>
                         <option></option>
+                        <option value="Biodegradable">Biodegradable</option>
+                        <option value="Residual">Residual</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -166,11 +190,20 @@
                     <label for="edit_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
                     <select class="form-control" id="edit_wt" name="wt" required>
                         <option></option>
+                        <option value="Biodegradable">Biodegradable</option>
+                        <option value="Residual">Residual</option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="edit_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
                     <input type="text" class="form-control" id="edit_cm" name="cm" required>
+                </div>
+                <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
+                <div class="input-group mb-3">
+                    <input type="number" class="form-control" id="edit_metrics" name="metrics" required aria-label="" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="editbasic-addon2">kg/s</span>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <div class="form-group">
@@ -198,6 +231,38 @@
 
 <script>
     $(document).ready(function () {
+        $('#wcov-tbl').DataTable({
+            bSort: true,
+            fixedHeader: true, // Enable fixed header
+            retrieve: true, // Retrieve the existing table instead of initializing it again
+            paging: true, // Enable pagination
+            searching: true, // Enable search functionality
+            info: true, // Show the number of entries info
+            responsive: true, // Ensure responsiveness
+            buttons: [
+                { 
+                    extend: 'csv', 
+                    text: 'CSV',
+                    title: 'Waste Conversion List',
+                },
+                { 
+                    extend: 'excel', 
+                    text: 'Excel',
+                    title: 'Waste Conversion List',
+                },
+                { 
+                    extend: 'pdf', 
+                    text: 'PDF',
+                    title: 'Waste Conversion List',
+                },
+                { 
+                    extend: 'print', 
+                    text: 'Print',
+                    title: 'Waste Conversion List',
+                }
+            ]
+        });
+        
         function updateMetricsLabel(selectId, labelId, addonId) {
             const wasteTypeSelect = document.getElementById(selectId);
             const metricsLabel = document.getElementById(labelId);
@@ -218,39 +283,26 @@
         }
 
         updateMetricsLabel('add_wt', 'add_metrics_label','basic-addon2');
+        updateMetricsLabel('edit_wt', 'edit_metrics_label', 'editbasic-addon2');
 
-        // Fetch barangays and display in the table
-        function fetchWasteT() {
-            $.ajax({
-                url: "{{ route('wcov.wasteType') }}", // Your route for fetching drivers
-                type: "GET",
-                success: function (response) {
-                    let driverSelect1 = $('#add_wt'); // First driver select
-                    let driverSelect2 = $('#edit_wt'); // Second driver select (new)
+        function updateMetricsLabelEdit(selectId, labelId, addonId) {
+            const wasteTypeSelect = document.getElementById(selectId);
+            const metricsLabel = document.getElementById(labelId);
+            const addonText = document.getElementById(addonId); // Get the element for unit (kg. or sack)
 
-                    // Clear the select options for both select elements
-                    driverSelect1.empty();
-                    driverSelect2.empty();
-
-                    // Add default options for both selects
-                    driverSelect1.append('<option></option>');
-                    driverSelect2.append('<option></option>');
-
-                    // Populate both selects with the drivers
-                    $.each(response.wastetype, function (key, wastetype) {
-                        driverSelect1.append(`<option value="${wastetype.waste_type}">${wastetype.waste_type}</option>`);
-                        driverSelect2.append(`<option value="${wastetype.id}">${wastetype.waste_type}</option>`);
-                    });
-                },
-                error: function (error) {
-                    console.log("Error fetching waste type: ", error);
-                }
-            });
+            // Use wasteTypeSelect.value instead of this.value
+            if (wasteTypeSelect.value === 'Biodegradable') {
+                metricsLabel.innerHTML = 'Weight (kilogram/s) <span style="color: red;">*</span>';
+                addonText.innerHTML = 'kg/s'; // Set the unit to kg.
+            } else if (wasteTypeSelect.value === 'Residual') {
+                metricsLabel.innerHTML = 'Number of Sack/s <span style="color: red;">*</span>';
+                addonText.innerHTML = 'sack/s'; // Set the unit to sack
+            } else {
+                metricsLabel.innerHTML = 'Weight <span style="color: red;">*</span>';
+                addonText.innerHTML = 'kg/s'; // Default unit is kg.
+            }
         }
-
-        // Call the fetch function when the page loads
-        fetchWasteT();
-
+        
         function fetchWCOV() {
             $.ajax({
                 url: "{{ route('wcov.index') }}", // Your route for fetching barangays
@@ -264,8 +316,9 @@
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
-                                    <td>${wasteConversions.waste_comp.waste_type}</td>
+                                    <td>${wasteConversions.waste_type}</td>
                                     <td>${wasteConversions.conversion_method}</td>
+                                    <td>${wasteConversions.metrics}</td>
                                     <td>${wasteConversions.start_date}</td>
                                     <td>${wasteConversions.end_date}</td>
                                     <td>
@@ -338,7 +391,7 @@
             });
         }
 
-        fetchWCOV();
+        // fetchWCOV();
 
         // Add Waste Conversion
         $('#addWCOVForm').on('submit', function (e) {
@@ -346,8 +399,9 @@
 
             let formData = {
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
-                waste_comp_id: $('#add_wt').val(),
+                waste_type: $('#add_wt').val(),
                 conversion_method: $('#add_cm').val(),
+                metrics: $('#add_metrics').val(),
                 start_date: $('#add_sd').val(),
                 end_date: $('#add_ed').val(),
             };
@@ -397,11 +451,13 @@
                 type: "GET",
                 success: function (response) {
                     let wcov = response.wasteConversion;
-                    $('#edit_wt').val(wcov.waste_comp_id);
+                    $('#edit_wt').val(wcov.waste_type);
                     $('#edit_cm').val(wcov.conversion_method);
+                    $('#edit_metrics').val(wcov.metrics.match(/\d+/)[0]);
                     $('#edit_sd').val(wcov.start_date);
                     $('#edit_ed').val(wcov.end_date);
                     $('#edit_wcov_id').val(wcov.id);
+                    updateMetricsLabelEdit('edit_wt', 'edit_metrics_label', 'editbasic-addon2');
 
                     $('#offcanvasEditWCOV').offcanvas('show');
                 },
@@ -416,8 +472,9 @@
 
         function storeOriginalValues() {
             originalValues = {
-                waste_comp_id: $('#edit_wt').val(),
+                waste_type: $('#edit_wt').val(),
                 conversion_method: $('#edit_cm').val(),
+                metrics: $('#edit_metrics').val(),
                 start_date: $('#edit_sd').val(),
                 end_date: $('#edit_ed').val(),
             };
@@ -434,8 +491,9 @@
 
             // Check for changes
             const currentValues = {
-                waste_comp_id: $('#edit_wt').val(),
+                waste_type: $('#edit_wt').val(),
                 conversion_method: $('#edit_cm').val(),
+                metrics: $('#edit_metrics').val(),
                 start_date: $('#edit_sd').val(),
                 end_date: $('#edit_ed').val(),
             };
@@ -456,8 +514,9 @@
 
             let formData = {
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
-                waste_comp_id: $('#edit_wt').val(),
+                waste_type: $('#edit_wt').val(),
                 conversion_method: $('#edit_cm').val(),
+                metrics: $('#edit_metrics').val(),
                 start_date: $('#edit_sd').val(),
                 end_date: $('#edit_ed').val(),
             };

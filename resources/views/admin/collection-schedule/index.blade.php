@@ -107,9 +107,9 @@
                                                 <th>No.</th>
                                                 <th>Barangay</th>
                                                 <th>Dump Truck</th>
+                                                <th>Driver</th>
                                                 <th>Schedule</th>
                                                 <th>Status</th>
-                                                <th>Date Created</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -517,20 +517,17 @@
                     let rows = '';
                     let counter = 1;
                     $.each(response.collectionSchedules, function (key, colsched) {
-                        let tableDate = new Date(colsched.created_at).toLocaleDateString('en-CA');
 
                         if (colsched.status == 'pending' || 'finished' || 'ongoing') { 
-
-                            let formatteddate = tableDate;
 
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
                                     <td>${colsched.barangay.name}</td>
                                     <td>${colsched.dumptruck.brand} ${colsched.dumptruck.model}</td>
+                                    <td>${colsched.driver.fullname}</td>
                                     <td>${colsched.scheduled_date} ${colsched.scheduled_time}</td>
                                     <td>${colsched.status}</td>
-                                    <td>${formatteddate}</td>
                                 </tr>`;
                             counter++;
                         }

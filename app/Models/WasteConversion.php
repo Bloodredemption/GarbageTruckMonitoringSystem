@@ -13,8 +13,9 @@ class WasteConversion extends Model
 
     protected $fillable = [
         'user_id',
-        'waste_comp_id',
+        'waste_type',
         'conversion_method',
+        'metrics',
         'start_date',
         'end_date',
     ];
@@ -24,8 +25,4 @@ class WasteConversion extends Model
         return $this->belongsTo(Users::class, 'user_id');
     }
 
-    public function waste_comp()
-    {
-        return $this->belongsTo(WasteComposition::class, 'waste_comp_id');
-    }
 }

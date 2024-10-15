@@ -17,7 +17,8 @@ class CollectionScheduleController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $collectionSchedules = CollectionSchedule::with('dumptruck:id,brand,model')
+            $collectionSchedules = CollectionSchedule::with('driver:id,fullname')
+                            ->with('dumptruck:id,brand,model')
                             ->with('barangay:id,name')
                             ->orderBy('created_at', 'desc')
                             ->get();

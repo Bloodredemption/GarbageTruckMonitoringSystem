@@ -78,13 +78,28 @@
                                                 <th>No.</th>
                                                 <th>Waste Type</th>
                                                 <th>Conversion Method</th>
+                                                <th>Metrics</th>
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
-                                                <th>Date Created</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            
+                                            @forelse ($wasteConversions as $wc)
+                                            <tr>
+                                                <th scope="row">{{ $loop->iteration }}</th>
+                                                <td>{{ $wc->waste_type }}</td>
+                                                <td>{{ $wc->conversion_method }}</td>
+                                                <td>{{ $wc->metrics }}</td>
+                                                <td>{{ $wc->start_date }}</td>
+                                                <td>{{ $wc->end_date }}</td>
+                                            </tr>
+                                            @empty
+                                                <td colspan="6">
+                                                    <span class="text-danger">
+                                                        <strong>No Data Found!</strong>
+                                                    </span>
+                                                </td>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>
@@ -131,6 +146,37 @@
 
 <script>
     $(document).ready(function () {
+        $('#wcov-tbl').DataTable({
+            fixedHeader: true, // Enable fixed header
+            retrieve: true, // Retrieve the existing table instead of initializing it again
+            paging: true, // Enable pagination
+            searching: true, // Enable search functionality
+            info: true, // Show the number of entries info
+            responsive: true, // Ensure responsiveness
+            buttons: [
+                { 
+                    extend: 'csv', 
+                    text: 'CSV',
+                    title: 'Waste Conversion List',
+                },
+                { 
+                    extend: 'excel', 
+                    text: 'Excel',
+                    title: 'Waste Conversion List',
+                },
+                { 
+                    extend: 'pdf', 
+                    text: 'PDF',
+                    title: 'Waste Conversion List',
+                },
+                { 
+                    extend: 'print', 
+                    text: 'Print',
+                    title: 'Waste Conversion List',
+                }
+            ]
+        });
+
         function fetchWCOV() {
             $.ajax({
                 url: "{{ route('awcov.index') }}", // Your route for fetching barangays
@@ -143,7 +189,6 @@
 
                             let collectionDate = new Date(wasteConversions.start_date);
                             let collectionDate2 = new Date(wasteConversions.end_date);
-                            let collectionDate3 = new Date(wasteConversions.created_at);
 
                             // Format the date to a more readable format
                             let options = {
@@ -164,16 +209,15 @@
                             // Convert the date to the desired format
                             let formattedDate = collectionDate.toLocaleString('en-US', options2);
                             let formattedDate2 = collectionDate2.toLocaleString('en-US', options2);
-                            let formattedDate3 = collectionDate3.toLocaleString('en-US', options);
 
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
-                                    <td>${wasteConversions.waste_comp.waste_type}</td>
+                                    <td>${wasteConversions.waste_type}</td>
                                     <td>${wasteConversions.conversion_method}</td>
+                                    <td>${wasteConversions.metrics}</td>
                                     <td>${formattedDate}</td>
                                     <td>${formattedDate2}</td>
-                                    <td>${formattedDate3}</td>
                                 </tr>`;
                             counter++;
                         }
@@ -186,7 +230,6 @@
                     $('#wcov-tbl tbody').html(rows);
 
                     let table = $('#wcov-tbl').DataTable({
-                        bSort: false,
                         fixedHeader: true, // Enable fixed header
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
@@ -238,7 +281,6 @@
             });
         }
 
-        fetchWCOV();
     });
 
     var options = {

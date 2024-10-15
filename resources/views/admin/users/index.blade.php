@@ -657,7 +657,7 @@
                     }).then(() => {
                         $('#addUserForm')[0].reset();
 
-                        $('#editUserModal').modal('hide');
+                        $('#addUserModal').modal('hide');
 
                     });
                 },

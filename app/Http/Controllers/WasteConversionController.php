@@ -15,27 +15,32 @@ class WasteConversionController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $wasteConversions = WasteConversion::with('waste_comp:id,waste_type')
-                            ->orderBy('created_at', 'desc')
+            $wasteConversions = WasteConversion::orderBy('created_at', 'desc')
                             ->get();
         
             return response()->json(['wasteConversions' => $wasteConversions]);
         }
 
-        return view('landfill.waste-conversions.index');
+        $wasteConversions = WasteConversion::orderBy('created_at', 'desc')
+                            ->get();
+
+        return view('landfill.waste-conversions.index', compact('wasteConversions'));
     }
 
     public function admin_index()
     {
         if (request()->ajax()) {
-            $wasteConversions = WasteConversion::with('waste_comp:id,waste_type')
-                            ->orderBy('created_at', 'desc')
-                            ->get();
-        
+            $wasteConversions = WasteConversion::orderBy('created_at', 'desc')
+                ->get();
+            
             return response()->json(['wasteConversions' => $wasteConversions]);
         }
 
-        return view('admin.waste-conversion.index');
+        $wasteConversions = WasteConversion::orderBy('created_at', 'desc')
+        ->get();
+
+        // Pass data to the view
+        return view('admin.waste-conversion.index', compact('wasteConversions'));
     }
 
     public function wasteType()
@@ -58,15 +63,29 @@ class WasteConversionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'waste_comp_id' => 'required|exists:waste_compositions,id',
+            'waste_type' => 'required|string',
             'conversion_method' => 'required|string',
+            'metrics' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
 
         $userId = Auth::id();
 
-        WasteConversion::create(array_merge($request->all(), ['user_id' => $userId]));
+        $metricsWithUnit = $request->input('metrics');
+        
+        if ($request->input('waste_type') === 'Biodegradable') {
+            $metricsWithUnit .= ' sack'; // Append 'sack' for Biodegradable
+        } elseif ($request->input('waste_type') === 'Residual') {
+            $metricsWithUnit .= ' kg'; // Append 'kg' for Residual
+        }
+
+        // Merge the metrics field with the other request data
+        WasteConversion::create(array_merge(
+            $request->except('metrics'), // Exclude original metrics field
+            ['metrics' => $metricsWithUnit], // Add modified metrics with appropriate unit
+            ['user_id' => $userId] // Add user ID
+        ));
 
         return response()->json(['message' => 'Waste conversion successfully added.']);
     }
@@ -94,14 +113,29 @@ class WasteConversionController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'waste_comp_id' => 'required|exists:waste_compositions,id',
+            'waste_type' => 'required|string',
             'conversion_method' => 'required|string',
+            'metrics' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
 
         $wasteConversion = WasteConversion::findOrFail($id);
-        $wasteConversion->update($request->all());
+
+        // Check waste_type and assign the appropriate unit
+        $metricsWithUnit = $request->input('metrics');
+
+        if ($request->input('waste_type') === 'Biodegradable') {
+            $metricsWithUnit .= ' sack'; // Append 'sack' for Biodegradable
+        } elseif ($request->input('waste_type') === 'Residual') {
+            $metricsWithUnit .= ' kg'; // Append 'kg' for Residual
+        }
+
+        // Update the record, merging the modified metrics
+        $wasteConversion->update(array_merge(
+            $request->except('metrics'), // Exclude original metrics field
+            ['metrics' => $metricsWithUnit] // Add modified metrics with appropriate unit
+        ));
 
         return response()->json(['message' => 'Waste conversion successfully updated.']);
     }
