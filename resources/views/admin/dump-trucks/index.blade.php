@@ -151,7 +151,41 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <!-- Rows will be dynamically added here -->
+                                                    @foreach ($dumpTrucks as $dt)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $dt->brand }}</td>
+                                                        <td>{{ $dt->model }}</td>
+                                                        <td>
+                                                            @if ($dt->status === 'active')
+                                                                <span class="badge bg-primary">active</span>
+                                                            @else
+                                                                <span class="badge bg-danger">inactive</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ \Carbon\Carbon::parse($dt->created_at)->format('Y-m-d') }}</td>
+                                                        <td>
+                                                            <div class="flex align-items-center list-user-action">
+                                                                <a class="btn btn-sm btn-icon btn-warning edit-dt-btn" data-id="{{ $dt->id }}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
+                                                                        <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
+                                                                        <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
+                                                                    </svg>
+                                                                    Edit
+                                                                </a>
+                                                                <a class="btn btn-sm btn-icon btn-secondary archive-dt-btn" data-id="{{ $dt->id }}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-archive">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                        <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/>
+                                                                        <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"/>
+                                                                        <path d="M10 12l4 0"/>
+                                                                    </svg>
+                                                                    Archive
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -218,7 +252,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="addDTForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="addDTForm" class="btn btn-primary" id="saveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="saveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
             </div>
         </div>
@@ -258,8 +297,24 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="editDTForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="editDTForm" class="btn btn-primary" id="editsaveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="editsaveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="userSuccessToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div id="toastMessage" class="toast-body">
+                    <!-- Success message will be dynamically inserted here -->
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
@@ -271,6 +326,64 @@
 
 <script>
     $(document).ready(function () {
+        $('#dump-trucks-tbl').DataTable({
+            bSort: false,
+            fixedHeader: true, // Enable fixed header
+            retrieve: true, // Retrieve the existing table instead of initializing it again
+            paging: true, // Enable pagination
+            searching: true, // Enable search functionality
+            info: true, // Show the number of entries info
+            responsive: true, // Ensure responsiveness
+            buttons: [
+                { 
+                    extend: 'csv', 
+                    text: 'CSV',
+                    title: 'Dump Trucks List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'excel', 
+                    text: 'Excel',
+                    title: 'Dump Trucks List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'pdf', 
+                    text: 'PDF',
+                    title: 'Dump Trucks List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'print', 
+                    text: 'Print',
+                    title: 'Dump Trucks List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                }
+            ]
+        });
+
+        // Add event listeners for export options in the dropdown
+        $('#export-csv').on('click', function () {
+            table.button('.buttons-csv').trigger();
+        });
+        $('#export-excel').on('click', function () {
+            table.button('.buttons-excel').trigger();
+        });
+        $('#export-pdf').on('click', function () {
+            table.button('.buttons-pdf').trigger();
+        });
+        $('#export-print').on('click', function () {
+            table.button('.buttons-print').trigger();
+        });
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -422,7 +535,7 @@
             fetchDumpTrucks(); // Fetch data whenever a filter changes
         });
 
-        fetchDumpTrucks();
+        // fetchDumpTrucks();
 
         function fetchADumpTrucks() {
             $.ajax({
@@ -488,6 +601,9 @@
         $('#addDTForm').on('submit', function (e) {
             e.preventDefault();
 
+            $('#saveChangesBtn').attr('disabled', true); 
+            $('#saveChangesSpinner').removeClass('d-none');
+
             let formData = {
                 brand: $('#add_brand').val(),
                 model: $('#add_model').val(),
@@ -501,17 +617,15 @@
                 success: function (response) {
                     fetchDumpTrucks();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Dump Truck Added!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        $('#addDTForm')[0].reset();
-                        
-                        $('#addDTModal').modal('hide');
-                    });
+                    $('#toastMessage').text(response.message);
+
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show(); // Show the toast
+                    
+                    $('#addDTForm')[0].reset();
+                    $('#addDTModal').modal('hide');
+
                 },
                 error: function (error) {
                     let errors = error.responseJSON.errors;
@@ -526,6 +640,11 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: "#01A94D"
                     });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#saveChangesBtn').attr('disabled', false);
+                    $('#saveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });
@@ -600,6 +719,9 @@
                 status: $('#edit_status').val(),
             };
 
+            $('#editsaveChangesBtn').attr('disabled', true); 
+            $('#editsaveChangesSpinner').removeClass('d-none');
+
             $.ajax({
                 url: `/admin/dump-truck/${id}/update`,
                 type: "PUT",
@@ -607,15 +729,16 @@
                 success: function (response) {
                     fetchDumpTrucks();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Dump Truck Updated!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        $('#editDTModal').modal('hide');
-                    });
+                    // Set the dynamic message in the toast body
+                    $('#toastMessage').text(response.message);
+
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
+
+                    $('#editDTForm')[0].reset(); // Reset form
+                    $('#editDTModal').modal('hide');
+
                 },
                 error: function (error) {
                     console.log("Error updating dump truck: ", error);
@@ -626,6 +749,11 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#d33'
                     });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#editsaveChangesBtn').attr('disabled', false);
+                    $('#editsaveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });
@@ -652,6 +780,7 @@
                         },
                         success: function (response) {
                             fetchDumpTrucks();
+                            fetchADumpTrucks();
 
                             Swal.fire({
                                 icon: 'success',
@@ -696,15 +825,12 @@
                             fetchDumpTrucks();
                             fetchADumpTrucks();
                             
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Dump Truck Archived!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // fetchUsers();
-                            });
+                            $('#toastMessage').text(response.message);
+
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
+                            
                         },
                         error: function (error) {
                             console.log("Error archiving dump truck: ", error);
@@ -748,15 +874,11 @@
                             fetchDumpTrucks();
                             fetchADumpTrucks();
                             
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Dump Truck Restored!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // fetchUsers();
-                            });
+                            $('#toastMessage').text(response.message);
+
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
                         },
                         error: function (error) {
                             console.log("Error restoring Dump Truck: ", error);

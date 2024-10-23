@@ -81,12 +81,20 @@
                                                 <th>Collection Date</th>
                                                 <th>Metrics</th>
                                                 <th>Location</th>
-                                                <th>Date Created</th>
                                                 <th>Added by</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Rows will be dynamically added here -->
+                                            @foreach ($wasteCompositions as $wc)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $wc->waste_type }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($wc->collection_date)->format('F d, Y h:i A') }}</td>
+                                                <td>{{ $wc->metrics }} kg/s</td>
+                                                <td>{{ $wc->brgy->name }}</td>
+                                                <td>{{ $wc->user->fullname }} | {{ $wc->user->user_type }}</td>
+                                            </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -94,33 +102,54 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 col-xl-6">
+                    
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
                         <div class="card aos-init aos-animate" data-aos="fade-up" data-aos-delay="900">
                             <div class="flex-wrap card-header d-flex justify-content-between">
                                 <div class="header-title">
-                                    <h4 class="card-title">Waste Collected</h4>            
+                                    <h4 class="card-title">Waste Collected Count</h4>            
                                 </div>   
-                                <div class="dropdown">
-                                    <a href="#" class="text-gray dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    This Day
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1" style="">
-                                        <li><a class="dropdown-item" href="#">This Day</a></li>
-                                        <li><a class="dropdown-item" href="#">This Week</a></li>
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                    </ul>
+                                <div class="form-group">
+                                    <select class="form-select text-gray" id="timeframeSelect" aria-label="Select Timeframe">
+                                        <option value="day">Daily</option>
+                                        <option value="week">Weekly</option>
+                                        <option value="month">Monthly</option>
+                                        <option value="year">Yearly</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="flex-wrap d-flex align-items-center justify-content-between">
-                                    <div id="myChart" class="col-md-8 col-sm-8 myChart" style="min-height: 208.7px;">
+                                    <div id="myChart" class="col-md-9 col-sm-9 myChart" style="min-height: 208.7px;">
                                             
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-6">
+                        <div class="card aos-init aos-animate" data-aos="fade-up" data-aos-delay="900">
+                            <div class="flex-wrap card-header d-flex justify-content-between">
+                                <div class="header-title">
+                                    <h4 class="card-title">Waste Generation Histogram</h4>            
+                                </div>   
+                                
+                            </div>
+                            <div class="card-body">
+                                <div class="flex-wrap d-flex align-items-center justify-content-between">
+                                    <div id="otherChart" class="col-md-12 col-sm-12" style="min-height: 208.7px;">
+                                            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -132,7 +161,61 @@
 </main>
 
 <script>
+    document.querySelector('#timeframeSelect').addEventListener('change', function() {
+        const selectedTimeframe = this.value; // Get selected value
+        updateChart(selectedTimeframe); // Call your updateChart function with the selected timeframe
+    });
+
+    // Initial chart load for 'This Day'
+    updateChart('day');
+
     $(document).ready(function () {
+        $('#wc-tbl').DataTable({
+            bSort: true,
+            fixedHeader: true, // Enable fixed header
+            retrieve: true, // Retrieve the existing table instead of initializing it again
+            paging: true, // Enable pagination
+            searching: true, // Enable search functionality
+            info: true, // Show the number of entries info
+            responsive: true, // Ensure responsiveness
+            buttons: [
+                { 
+                    extend: 'csv', 
+                    text: 'CSV',
+                    title: 'Waste Composition List',
+                },
+                { 
+                    extend: 'excel', 
+                    text: 'Excel',
+                    title: 'Waste Composition List',
+                },
+                { 
+                    extend: 'pdf', 
+                    text: 'PDF',
+                    title: 'Waste Composition List',
+                },
+                { 
+                    extend: 'print', 
+                    text: 'Print',
+                    title: 'Waste Composition List',
+                }
+            ]
+        });
+
+        // Add event listeners for export options in the dropdown
+        $('#export-csv').on('click', function () {
+            table.button('.buttons-csv').trigger();
+        });
+        $('#export-excel').on('click', function () {
+            table.button('.buttons-excel').trigger();
+        });
+        $('#export-pdf').on('click', function () {
+            table.button('.buttons-pdf').trigger();
+        });
+        $('#export-print').on('click', function () {
+            table.button('.buttons-print').trigger();
+        });
+        
         function fetchWC() {
             $.ajax({
                 url: "{{ route('awc.index') }}", // Your route for fetching barangays
@@ -165,7 +248,7 @@
                                     <td>${counter}</td>
                                     <td>${wasteComposition.waste_type}</td>
                                     <td>${formattedDate}</td>
-                                    <td>${wasteComposition.metrics}</td>
+                                    <td>${wasteComposition.metrics} kg/s</td>
                                     <td>${wasteComposition.brgy.name}</td>
                                     <td>${formattedDate2}</td>
                                     <td>${wasteComposition.user.user_type}</td>
@@ -181,7 +264,7 @@
                     $('#wc-tbl tbody').html(rows);
 
                     let table = $('#wc-tbl').DataTable({
-                        bSort: false,
+                        bSort: true,
                         fixedHeader: true, // Enable fixed header
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
@@ -232,39 +315,121 @@
                 }
             });
         }
-
-        fetchWC();
     });
 
-    var options = {
-          series: [44, 55],
-          chart: {
-          type: 'donut',
-        },
-        labels: [
-            'Residual',
-            'Biodegradable',
-        ],
-        legend: {
-          formatter: function(val, opts) {
-            return val + " - " + opts.w.globals.series[opts.seriesIndex]
-          }
-        },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }]
-        };
+    // Function to fetch and update chart based on timeframe
+    // Initialize a chart variable to keep track of the chart instance
+    let chart;
 
-    var chart = new ApexCharts(document.querySelector("#myChart"), options);
-    chart.render();
+    function updateChart(timeframe) {
+        fetch(`/admin/waste-composition/chartsData?timeframe=${timeframe}`)
+            .then(response => response.json())
+            .then(data => {
+                // Chart options with the new data
+                var options = {
+                    series: [data.residual, data.biodegradable],
+                    chart: {
+                        type: 'donut',
+                        
+                    },
+                    labels: ['Residual', 'Biodegradable'],
+                    legend: {
+                        formatter: function(val, opts) {
+                            return val + " - " + opts.w.globals.series[opts.seriesIndex];
+                        }
+                    },
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }]
+                };
+
+                // Clear previous chart instance
+                if (chart) {
+                    chart.destroy();  // Destroy the existing chart before creating a new one
+                }
+
+                // Render the donut chart with updated data
+                chart = new ApexCharts(document.querySelector("#myChart"), options);
+                chart.render();
+            })
+            .catch(error => console.error('Error fetching waste composition data:', error));
+    }
+
+    function updateBarChart() {
+        fetch('/admin/waste-composition/barData')
+            .then(response => response.json())
+            .then(data => {
+                // Prepare the options for the bar chart
+                var options2 = {
+                    series: [{
+                        name: 'Residual (sacks)', // Labeling the series
+                        data: data.residual // Data from the controller
+                    }, {
+                        name: 'Biodegradable (kg)', // Labeling the series
+                        data: data.biodegradable // Data from the controller
+                    }],
+                    chart: {
+                        type: 'bar',
+                        height: 350
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: false,
+                            columnWidth: '55%',
+                            endingShape: 'rounded'
+                        },
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        show: true,
+                        width: 2,
+                        colors: ['transparent']
+                    },
+                    xaxis: {
+                        categories: data.months, // Dynamically set the months
+                    },
+                    yaxis: {
+                        title: {
+                            text: 'Metrics'
+                        }
+                    },
+                    fill: {
+                        opacity: 1
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function(val, { seriesIndex }) {
+                                // Dynamic label based on the series
+                                return seriesIndex === 0 ? val + " sacks" : val + " kg";
+                            }
+                        }
+                    }
+                };
+
+                // Destroy the previous chart instance if necessary
+                if (window.chart2) {
+                    window.chart2.destroy();
+                }
+
+                // Render the new chart
+                window.chart2 = new ApexCharts(document.querySelector("#otherChart"), options2);
+                window.chart2.render();
+            })
+            .catch(error => console.error('Error fetching bar chart data:', error));
+    }
+
+    // Call the function to load the chart on page load
+    updateBarChart();
 
 </script>
 @endsection

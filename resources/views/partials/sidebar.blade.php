@@ -553,7 +553,7 @@
                         </a>
                     </li>
                     <li class="nav-item mb-5">
-                        <a class="nav-link {{ request()->is('driver/collection-schedule') ? 'active' : '' }}" href="{{ route('d.collection-schedule') }}">
+                        <a class="nav-link {{ request()->is('driver/collection-schedule') ? 'active' : '' }}" href="{{ route('dcs.index') }}">
                             <i class="icon">
                                 <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     @if(request()->is('driver/collection-schedule'))

@@ -22,7 +22,12 @@ class NotificationController extends Controller
             return response()->json(['notifications' => $notifications]);
         }
 
-        return view('admin.notifications.index');
+        $notifications = Notification::with('user:id,fullname')
+                                ->whereIn('status', ['sent', 'read'])
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+
+        return view('admin.notifications.index', compact('notifications'));
     }
 
     public function getArchive()

@@ -8,6 +8,7 @@ use App\Models\DumpTruck;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class CollectionScheduleController extends Controller
 {
@@ -26,7 +27,13 @@ class CollectionScheduleController extends Controller
             return response()->json(['collectionSchedules' => $collectionSchedules]);
         }
 
-        return view('admin.collection-schedule.index');
+        $collectionSchedules = CollectionSchedule::with('driver:id,fullname')
+                            ->with('dumptruck:id,brand,model')
+                            ->with('barangay:id,name')
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+
+        return view('admin.collection-schedule.index', compact('collectionSchedules'));
     }
 
     public function events()
@@ -45,6 +52,7 @@ class CollectionScheduleController extends Controller
                     'dumptruck_id' => $schedule->dumptruck_id,
                     'sched_id' => $schedule->id,
                     'brgy_name' => $schedule->barangay->name,
+                    'driver_id' => $schedule->user_id,
                     'dumptruck' => $schedule->dumpTruck->brand . ' ' . $schedule->dumpTruck->model,
                 ],
             ];
@@ -200,5 +208,15 @@ class CollectionScheduleController extends Controller
         $collectionSchedule->save();
 
         return response()->json(['message' => 'Collection schedule successfully deleted.']);
+    }
+
+    public function driver_index() {
+        $currentDate = Carbon::today()->toDateString();
+
+        $schedules = CollectionSchedule::with('barangay:id,name')
+                    ->whereDate('scheduled_date', $currentDate)
+                    ->get();
+
+        return view('driver.collection-schedule.index', compact('schedules'));
     }
 }

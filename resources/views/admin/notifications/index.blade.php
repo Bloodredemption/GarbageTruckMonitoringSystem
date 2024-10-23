@@ -154,7 +154,45 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {{-- Data will be displayed Here --}}
+                                                    @foreach ($notifications as $notif)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $notif->notification_msg }}</td>
+                                                        <td>{{ $notif->user->fullname }}</td>
+                                                        <td>
+                                                            @if ($notif->status == 'pending')
+                                                                <span class="badge bg-warning">Pending</span>
+                                                            @elseif ($notif->status == 'sent')
+                                                                <span class="badge bg-primary">Sent</span>
+                                                            @elseif ($notif->status == 'read')
+                                                                <span class="badge bg-success">Read</span>
+                                                            @else
+                                                                <span class="badge bg-secondary">Unknown</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $notif->created_at->format('Y-m-d') }}</td>
+                                                        <td>
+                                                            <div class="flex align-items-center list-user-action">
+                                                                <a class="btn btn-sm btn-icon btn-warning edit-notif-btn" data-id="{{ $notif->id }}" title="Edit Notification">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
+                                                                        <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
+                                                                        <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
+                                                                    </svg>
+                                                                    Edit
+                                                                </a>
+                                                                <a class="btn btn-sm btn-icon btn-secondary archive-notif-btn" data-id="{{ $notif->id }}" title="Archive Notification">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-archive">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                        <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/>
+                                                                        <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"/>
+                                                                        <path d="M10 12l4 0"/>
+                                                                    </svg>
+                                                                    Archive
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -216,7 +254,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="addNotifForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="addNotifForm" class="btn btn-primary" id="saveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="saveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
             </div>
         </div>
@@ -249,12 +292,28 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="editNotifForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="editNotifForm" class="btn btn-primary" id="editsaveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="editsaveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="userSuccessToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div id="toastMessage" class="toast-body">
+                    <!-- Success message will be dynamically inserted here -->
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Footer Section Start -->
     @include('partials.footer')
     <!-- Footer Section End -->    
@@ -262,6 +321,64 @@
 
 <script>
     $(document).ready(function () {
+        table = $('#notification-tbl').DataTable({
+            bSort: true,
+            fixedHeader: true, // Enable fixed header
+            retrieve: true, // Retrieve the existing table instead of initializing it again
+            paging: true, // Enable pagination
+            searching: true, // Enable search functionality
+            info: true, // Show the number of entries info
+            responsive: true, // Ensure responsiveness
+            buttons: [
+                { 
+                    extend: 'csv', 
+                    text: 'CSV',
+                    title: 'Notification List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'excel', 
+                    text: 'Excel',
+                    title: 'Notification List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'pdf', 
+                    text: 'PDF',
+                    title: 'Notification List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'print', 
+                    text: 'Print',
+                    title: 'Notification List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                }
+            ]
+        });
+
+        // Add event listeners for export options in the dropdown
+        $('#export-csv').on('click', function () {
+            table.button('.buttons-csv').trigger();
+        });
+        $('#export-excel').on('click', function () {
+            table.button('.buttons-excel').trigger();
+        });
+        $('#export-pdf').on('click', function () {
+            table.button('.buttons-pdf').trigger();
+        });
+        $('#export-print').on('click', function () {
+            table.button('.buttons-print').trigger();
+        });
+        
         $('#clear-filters').on('click', function(e) {
             e.preventDefault(); // Prevent the default anchor click behavior
             
@@ -464,7 +581,7 @@
             fetchNotifications(); // Fetch data whenever a filter changes
         });
 
-        fetchNotifications();
+        // fetchNotifications();
 
         function fetchANotifications() {
             $.ajax({
@@ -550,6 +667,9 @@
         $('#addNotifForm').on('submit', function (e) {
             e.preventDefault();
 
+            $('#saveChangesBtn').attr('disabled', true); 
+            $('#saveChangesSpinner').removeClass('d-none');
+
             let formData = {
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
                 notification_msg: $('#add_msg').val(),
@@ -563,17 +683,14 @@
                 success: function (response) {
                     fetchNotifications();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Notifications Added!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        $('#addNotifForm')[0].reset();
-                        
-                        $('#addNotifModal').modal('hide');
-                    });
+                    $('#toastMessage').text(response.message);
+
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
+
+                    $('#addNotifForm')[0].reset();
+                    $('#addNotifModal').modal('hide');
                 },
                 error: function (error) {
                     let errors = error.responseJSON.errors;
@@ -588,6 +705,11 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: "#01A94D"
                     });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#saveChangesBtn').attr('disabled', false);
+                    $('#saveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });
@@ -657,6 +779,9 @@
                 user_id: $('#edit_recipient').val(),
             };
 
+            $('#editsaveChangesBtn').attr('disabled', true); 
+            $('#editsaveChangesSpinner').removeClass('d-none');
+
             $.ajax({
                 url: `/admin/notifications/${id}/update`,
                 type: "PUT",
@@ -664,15 +789,14 @@
                 success: function (response) {
                     fetchNotifications();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Notification Updated!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        $('#editNotifModal').modal('hide');
-                    });
+                    $('#toastMessage').text(response.message);
+
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
+
+                    $('#editNotifForm')[0].reset(); // Reset form
+                    $('#editNotifModal').modal('hide');
                 },
                 error: function (error) {
                     console.log("Error updating notification: ", error);
@@ -711,15 +835,12 @@
                         success: function (response) {
                             fetchANotifications();
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Notification Deleted!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // fetchDumpTrucks();
-                            });
+                            $('#toastMessage').text(response.message);
+
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
+
                         },
                         error: function (error) {
                             console.log("Error deleting data: ", error);
@@ -754,15 +875,11 @@
                             fetchNotifications();
                             fetchANotifications();
                             
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Notification Archived!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // fetchUsers();
-                            });
+                            $('#toastMessage').text(response.message);
+
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
                         },
                         error: function (error) {
                             console.log("Error archiving user: ", error);
@@ -806,15 +923,11 @@
                             fetchNotifications();
                             fetchANotifications();
                             
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Notification Restored!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // fetchUsers();
-                            });
+                            $('#toastMessage').text(response.message);
+
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
                         },
                         error: function (error) {
                             console.log("Error archiving user: ", error);
@@ -827,57 +940,6 @@
                                 confirmButtonText: 'OK',
                                 confirmButtonColor: '#d33'
                             });
-                        }
-                    });
-                }
-            });
-        });
-
-        // Send Notification
-        $(document).on('click', '.send-notif-btn', function () {
-            let id = $(this).data('id');
-
-            Swal.fire({
-                title: 'Send Notification?',
-                text: "This action is irreversible.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Confirm',
-                cancelButtonText: 'Cancel',
-                confirmButtonColor: '#01A94D',
-                cancelButtonColor: '#6c757d',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: `/admin/notifications/${id}/send`,  // Updated to match your route
-                        type: "GET",  // Changed to GET to match your route
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function (response) {
-                            // Refresh notifications or perform any UI updates
-                            fetchNotifications();  // Assuming this refreshes notifications
-
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Notification Sent!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // Any additional logic after success
-                                // fetchDumpTrucks();  // Uncomment if needed
-                            });
-                        },
-                        error: function (error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: 'Failed to send notification.',
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#d33"
-                            });
-                            console.log("Error sending data: ", error);
                         }
                     });
                 }

@@ -1,5 +1,5 @@
 .schedule-header {
-    background-color: #ff6b6b;
+    background-color: #01A94D;
     color: white;
     border-radius: 10px;
     padding: 20px;
@@ -13,7 +13,7 @@
 }
 
 .card-custom {
-    border-left: 5px solid #ff6b6b;
+    border-left: 5px solid #01A94D;
     border-radius: 10px;
     margin-bottom: 10px;
 }
@@ -21,7 +21,7 @@
 .time-line {
 position: relative;
 width: 2px;
-background-color: #ff6b6b;
+background-color: #01A94D;
 height: 100%;
 margin-left: 35px;
 }
@@ -39,7 +39,7 @@ position: absolute;
 left: -10px;
 width: 10px;
 height: 10px;
-background-color: #ff6b6b;
+background-color: #01A94D;
 border-radius: 50%;
 }
 

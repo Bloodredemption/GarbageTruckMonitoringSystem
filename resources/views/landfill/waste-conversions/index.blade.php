@@ -66,7 +66,7 @@
                                 </div>
                                 
                                 <div>
-                                    <a href="" class="btn btn-link btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddWCOV" aria-controls="offcanvasAddWCOV">
+                                    <a href="" class="btn btn-link btn-primary" data-bs-toggle="modal" data-bs-target="#addWasteCModal">
                                         <img src="data:image/svg+xml,%3Csvg width='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Crect width='20' height='20' fill='url(%23pattern0_23_2601)'/%3E%3Cdefs%3E%3Cpattern id='pattern0_23_2601' patternContentUnits='objectBoundingBox' width='1' height='1'%3E%3Cuse xlink:href='%23image0_23_2601' transform='scale(0.0333333)'/%3E%3C/pattern%3E%3Cimage id='image0_23_2601' width='30' height='30' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAdklEQVR4nO3UQQrCMBBA0RzPuBDvv2hA60Iv8boRtF2I0E6oOA+yzYdJmFLSnuGMB+449QzfvIw9wzMZDmMhrrSQ4fKzo8YRzfYa6qfwRZxxl+GKISA64LDFX5hZfeG3Mlx6kW/8D6Nu78uhZ7ji+jzrN1IqgSYK2LXvCFcYxQAAAABJRU5ErkJggg=='/%3E%3C/defs%3E%3C/svg%3E%0A" alt="img">
                                         Add New
                                     </a>
@@ -83,32 +83,28 @@
                                                 <th>Metrics</th>
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
+                                                <th>Status</th>
                                                 <th style="min-width: 100px">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($wasteConversions as $wc)
-                                            <tr>
-                                                <th scope="row">{{ $loop->iteration }}</th>
-                                                <td>{{ $wc->waste_type }}</td>
-                                                <td>{{ $wc->conversion_method }}</td>
-                                                <td>{{ $wc->metrics }}</td>
-                                                <td>{{ $wc->start_date }}</td>
-                                                <td>{{ $wc->end_date }}</td>
-                                                <td>
-                                                    <div class="flex align-items-center list-user-action">
-                                                        <a class="btn btn-sm btn-icon btn-warning edit-wcov-btn" data-id="{{ $wc->id }}">Edit</a>
-                                                        <a class="btn btn-sm btn-icon btn-danger delete-wcov-btn" data-id="{{ $wc->id }}">Delete</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @empty
-                                                <td colspan="6">
-                                                    <span class="text-danger">
-                                                        <strong>No Product Found!</strong>
-                                                    </span>
-                                                </td>
-                                            @endforelse
+                                            @foreach ($wasteConversions as $wc)
+                                                <tr>
+                                                    <th scope="row">{{ $loop->iteration }}</th>
+                                                    <td>{{ $wc->waste_type }}</td>
+                                                    <td>{{ $wc->conversion_method }}</td>
+                                                    <td>{{ $wc->metrics }} kg/s</td>
+                                                    <td>{{ $wc->start_date }}</td>
+                                                    <td>{{ $wc->end_date }}</td>
+                                                    <td>{{ $wc->status }}</td>
+                                                    <td>
+                                                        <div class="flex align-items-center list-user-action">
+                                                            <a class="btn btn-sm btn-icon btn-warning edit-wcov-btn" data-id="{{ $wc->id }}">Edit</a>
+                                                            <a class="btn btn-sm btn-icon btn-danger delete-wcov-btn" data-id="{{ $wc->id }}">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -122,105 +118,106 @@
     </div>
     
     <!-- Offcanvas for Adding New Waste Conversion -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddWCOV" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header" style="padding-bottom: 0;">
-            <div>
-                <h5 id="offcanvasRightLabel">Add New Waste Conversion</h5>
-                <p style="font-size: 15px;">Please fill all the required fields <span style="color: red;">*</span></p>
+    <div class="modal fade z-100" id="addWasteCModal" tabindex="-1" aria-labelledby="addWasteCLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addWasteCLabel">Add Waste Conversion</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addWCOVForm" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="add_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
+                            <select class="form-control" id="add_wt" name="wt" required>
+                                <option></option>
+                                <option value="Biodegradable">Biodegradable</option>
+                                <option value="Residual">Residual</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="add_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="add_cm" name="cm" required>
+                        </div>
+                        <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
+                        <div class="input-group mb-3">
+                            <input type="number" class="form-control" id="add_metrics" name="metrics" required aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">kg/s</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="add_sd" class="form-label">Start Date <span style="color: red;">*</span></label>
+                                <input type="date" class="form-control" id="add_sd" name="sd">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="add_ed" class="form-label">End Date <span style="color: red;">*</span></label>
+                                <input type="date" class="form-control" id="add_ed" name="ed">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button  form="addWCOVForm" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
-            {{-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> --}}
-        </div>
-        <div class="offcanvas-body">
-            <form id="addWCOVForm" action="" method="POST">
-                @csrf
-
-                <div class="mb-3">
-                    <label for="add_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
-                    <select class="form-control" id="add_wt" name="wt" required>
-                        <option></option>
-                        <option value="Biodegradable">Biodegradable</option>
-                        <option value="Residual">Residual</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="add_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" id="add_cm" name="cm" required>
-                </div>
-                <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
-                <div class="input-group mb-3">
-                    <input type="number" class="form-control" id="add_metrics" name="metrics" required aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <span class="input-group-text" id="basic-addon2">kg/s</span>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label for="add_sd" class="form-label">Start Date <span style="color: red;">*</span></label>
-                        <input type="date" class="form-control" id="add_sd" name="sd">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label for="add_ed" class="form-label">End Date <span style="color: red;">*</span></label>
-                        <input type="date" class="form-control" id="add_ed" name="ed">
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary mb-3">Create</button>
-                <button type="button" class="btn btn-light text-reset mb-3" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
-            </form>
         </div>
     </div>
 
     <!-- Offcanvas for Edit Waste Composition -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditWCOV" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header" style="padding-bottom: 0;">
-            <div>
-                <h5 id="offcanvasRightLabel">Edit Waste Conversion</h5>
-                <p style="font-size: 15px;">Please fill all the required fields <span style="color: red;">*</span></p>
+    <div class="modal fade z-100" id="editWasteCModal" tabindex="-1" aria-labelledby="editWasteCLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editWasteCLabel">Update Waste Collection</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editWCOVForm" method="POST">
+                        @csrf
+                        <input type="hidden" id="edit_wcov_id" name="wcov_id">
+        
+                        <div class="mb-3">
+                            <label for="edit_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
+                            <select class="form-control" id="edit_wt" name="wt" required>
+                                <option></option>
+                                <option value="Biodegradable">Biodegradable</option>
+                                <option value="Residual">Residual</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="edit_cm" name="cm" required>
+                        </div>
+                        <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
+                        <div class="input-group mb-3">
+                            <input type="number" class="form-control" id="edit_metrics" name="metrics" required aria-label="" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="editbasic-addon2">kg/s</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="edit_sd" class="form-label">Start Date <span style="color: red;">*</span></label>
+                                <input type="date" class="form-control" id="edit_sd" name="sd">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="edit_ed" class="form-label">End Date <span style="color: red;">*</span></label>
+                                <input type="date" class="form-control" id="edit_ed" name="ed">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" form="editWCOVForm" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
-            {{-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> --}}
-        </div>
-        <div class="offcanvas-body">
-            <form id="editWCOVForm" method="POST">
-                @csrf
-                <input type="hidden" id="edit_wcov_id" name="wcov_id">
-
-                <div class="mb-3">
-                    <label for="edit_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
-                    <select class="form-control" id="edit_wt" name="wt" required>
-                        <option></option>
-                        <option value="Biodegradable">Biodegradable</option>
-                        <option value="Residual">Residual</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="edit_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" id="edit_cm" name="cm" required>
-                </div>
-                <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
-                <div class="input-group mb-3">
-                    <input type="number" class="form-control" id="edit_metrics" name="metrics" required aria-label="" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <span class="input-group-text" id="editbasic-addon2">kg/s</span>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label for="edit_sd" class="form-label">Start Date <span style="color: red;">*</span></label>
-                        <input type="date" class="form-control" id="edit_sd" name="sd">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label for="edit_ed" class="form-label">End Date <span style="color: red;">*</span></label>
-                        <input type="date" class="form-control" id="edit_ed" name="ed">
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn btn-primary mb-3">Update</button>
-                <button type="button" class="btn btn-light text-reset mb-3" data-bs-dismiss="offcanvas" aria-label="Close">Cancel</button>
-            </form>
         </div>
     </div>
 
@@ -263,46 +260,6 @@
             ]
         });
         
-        function updateMetricsLabel(selectId, labelId, addonId) {
-            const wasteTypeSelect = document.getElementById(selectId);
-            const metricsLabel = document.getElementById(labelId);
-            const addonText = document.getElementById(addonId); // Get the element for unit (kg. or sack)
-
-            wasteTypeSelect.addEventListener('change', function() {
-                if (this.value === 'Biodegradable') {
-                    metricsLabel.innerHTML = 'Weight (kilogram/s) <span style="color: red;">*</span>';
-                    addonText.innerHTML = 'kg/s'; // Set the unit to kg.
-                } else if (this.value === 'Residual') {
-                    metricsLabel.innerHTML = 'Number of Sack/s <span style="color: red;">*</span>';
-                    addonText.innerHTML = 'sack/s'; // Set the unit to sack
-                } else {
-                    metricsLabel.innerHTML = 'Weight <span style="color: red;">*</span>';
-                    addonText.innerHTML = 'kg/s'; // Default unit is kg.
-                }
-            });
-        }
-
-        updateMetricsLabel('add_wt', 'add_metrics_label','basic-addon2');
-        updateMetricsLabel('edit_wt', 'edit_metrics_label', 'editbasic-addon2');
-
-        function updateMetricsLabelEdit(selectId, labelId, addonId) {
-            const wasteTypeSelect = document.getElementById(selectId);
-            const metricsLabel = document.getElementById(labelId);
-            const addonText = document.getElementById(addonId); // Get the element for unit (kg. or sack)
-
-            // Use wasteTypeSelect.value instead of this.value
-            if (wasteTypeSelect.value === 'Biodegradable') {
-                metricsLabel.innerHTML = 'Weight (kilogram/s) <span style="color: red;">*</span>';
-                addonText.innerHTML = 'kg/s'; // Set the unit to kg.
-            } else if (wasteTypeSelect.value === 'Residual') {
-                metricsLabel.innerHTML = 'Number of Sack/s <span style="color: red;">*</span>';
-                addonText.innerHTML = 'sack/s'; // Set the unit to sack
-            } else {
-                metricsLabel.innerHTML = 'Weight <span style="color: red;">*</span>';
-                addonText.innerHTML = 'kg/s'; // Default unit is kg.
-            }
-        }
-        
         function fetchWCOV() {
             $.ajax({
                 url: "{{ route('wcov.index') }}", // Your route for fetching barangays
@@ -318,9 +275,10 @@
                                     <td>${counter}</td>
                                     <td>${wasteConversions.waste_type}</td>
                                     <td>${wasteConversions.conversion_method}</td>
-                                    <td>${wasteConversions.metrics}</td>
+                                    <td>${wasteConversions.metrics} kg/s</td>
                                     <td>${wasteConversions.start_date}</td>
                                     <td>${wasteConversions.end_date}</td>
+                                    <td>${wasteConversions.status}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
                                             <a class="btn btn-sm btn-icon btn-warning edit-wcov-btn" data-id="${wasteConversions.id}">Edit</a>
@@ -339,7 +297,7 @@
                     $('#wcov-tbl tbody').html(rows);
 
                     let table = $('#wcov-tbl').DataTable({
-                        bSort: false,
+                        bSort: true,
                         fixedHeader: true, // Enable fixed header
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
@@ -422,7 +380,7 @@
                     }).then(() => {
                         $('#addWCOVForm')[0].reset();
                         
-                        $('#offcanvasAddWCOV').offcanvas('hide');
+                        $('#addWasteCModal').modal('hide');
                     });
                 },
                 error: function (error) {
@@ -457,9 +415,8 @@
                     $('#edit_sd').val(wcov.start_date);
                     $('#edit_ed').val(wcov.end_date);
                     $('#edit_wcov_id').val(wcov.id);
-                    updateMetricsLabelEdit('edit_wt', 'edit_metrics_label', 'editbasic-addon2');
 
-                    $('#offcanvasEditWCOV').offcanvas('show');
+                    $('#editWasteCModal').modal('show');
                 },
                 error: function (error) {
                     console.log("Error fetching waste conversion: ", error);
@@ -481,7 +438,7 @@
         }
 
         // Call this function when the form is displayed
-        $('#offcanvasEditWCOV').on('shown.bs.offcanvas', function () {
+        $('#editWasteCModal').on('shown.bs.modal', function () {
             storeOriginalValues(); // Store values when the offcanvas is shown
         });
 
@@ -535,7 +492,7 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: "#01A94D"
                     }).then(() => {
-                        $('#offcanvasEditWCOV').offcanvas('hide');
+                        $('#editWasteCModal').modal('hide');
                     });
                 },
                 error: function (error) {

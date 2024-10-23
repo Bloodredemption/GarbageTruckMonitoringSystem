@@ -33,7 +33,13 @@ Route::post('/logout', function () {
 //     return view('admin.dashboard');
 // })->name('dashboard');
 
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/waste-composition-data', [DashboardController::class, 'getWasteCompositionData']);
+    Route::get('/dashboard/highest-weekly', [DashboardController::class, 'getHighestWeeklyWaste']);
+    Route::get('/dashboard/getWasteData', [DashboardController::class, 'getWasteData']);
+    Route::get('/dashboard/fetchWasteDataForInfo', [DashboardController::class, 'fetchWasteDataForInfo']);
+});
 
 // Live Tracking
 Route::get('/admin/live-tracking', function () {
@@ -56,11 +62,15 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 // Waste Composition
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/waste-composition', [WasteCompositionController::class, 'admin_index'])->name('awc.index');
+    Route::get('/waste-composition/chartsData', [WasteCompositionController::class, 'chartsData']);
+    Route::get('/waste-composition/barData', [WasteCompositionController::class, 'barData']);
 });
 
 // Waste Conversion
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/waste-conversion', [WasteConversionController::class, 'admin_index'])->name('awcov.index');
+    Route::get('/waste-conversion/chartsData', [WasteConversionController::class, 'chartsData']);
+    Route::get('/waste-conversion/barData', [WasteConversionController::class, 'barData']);
 });
 
 // Reports
@@ -157,7 +167,6 @@ Route::prefix('landfill')->middleware('auth')->group(function () {
     Route::put('/waste-collection/{id}/delete', [WasteCompositionController::class, 'destroy']);
 });
 
-
 // Waste Conversions
 Route::prefix('landfill')->middleware('auth')->group(function () {
     Route::get('/waste-conversions', [WasteConversionController::class, 'index'])->name('wcov.index');
@@ -193,9 +202,9 @@ Route::prefix('driver')->middleware('auth')->group(function () {
 });
 
 // Collection Schedule
-Route::get('/driver/collection-schedule', function () {
-    return view('driver.collection-schedule.index');
-})->name('d.collection-schedule');
+Route::prefix('driver')->middleware('auth')->group(function () {
+    Route::get('/collection-schedule', [CollectionScheduleController::class, 'driver_index'])->name('dcs.index');
+});
 
 // End Driver Side //
 

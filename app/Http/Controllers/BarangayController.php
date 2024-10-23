@@ -19,8 +19,11 @@ class BarangayController extends Controller
             return response()->json(['barangays' => $barangays]);
         }
 
+        $barangays = Barangay::where('isDeleted', 0)
+                ->orderBy('created_at', 'desc')->get();
+
         // Otherwise, return the view (for non-AJAX requests, i.e., the initial page load)
-        return view('admin.barangay.index');
+        return view('admin.barangay.index', compact('barangays'));
     }
 
     public function getArchive()

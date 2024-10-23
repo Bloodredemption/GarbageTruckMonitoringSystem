@@ -24,7 +24,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    @foreach ($wasteCompositions as $wc)
+                    <tr>
+                        <td>{{ $wc->brgy->name }}</td>
+                        <td>{{ $wc->waste_type }}</td>
+                        <td>{{ $wc->metrics }} kg/s</td>
+                        <td>
+                            <a class="btn btn-icon btn-success d-actions update-btn" data-id="{{ $wc->id }}" title="Edit User">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
+                                    <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
+                                    <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
+                                </svg>
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -46,6 +61,8 @@
                                     <option></option>
                                     <option value="Biodegradable">Biodegradable</option>
                                     <option value="Residual">Residual</option>
+                                    {{-- <option value="Recyclables">Recyclables</option>
+                                    <option value="Hazards">Hazards</option> --}}
                                 </select>
                             </div>
                             <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
@@ -95,6 +112,8 @@
                                     <option></option>
                                     <option value="Biodegradable">Biodegradable</option>
                                     <option value="Residual">Residual</option>
+                                    {{-- <option value="Recyclables">Recyclables</option>
+                                    <option value="Hazards">Hazards</option> --}}
                                 </select>
                             </div>
                             <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
@@ -134,46 +153,39 @@
 
 <script>
     $(document).ready(function () {
-        function updateMetricsLabel(selectId, labelId, addonId) {
-            const wasteTypeSelect = document.getElementById(selectId);
-            const metricsLabel = document.getElementById(labelId);
-            const addonText = document.getElementById(addonId); // Get the element for unit (kg. or sack)
+        $('#wc-tbl').DataTable({
+            pageLength: 5,
+            bSort: false,
+            retrieve: true, // Retrieve the existing table instead of initializing it again
+            paging: true, // Enable pagination
+            searching: true, // Enable search functionality
+            info: true, // Show the number of entries info
+            responsive: true, // Ensure responsiveness
+            lengthChange: false, // Disable entries per page
+            fixedHeader: true,
+            scroller: true,
+            language: {
+                searchPlaceholder: 'Search records', // Placeholder for the search input
+                search: "", // Remove the default "Search" label
+            },
+            dom: '<"top"f>rt<"bottom"lp><"clear">', // Modify the DOM structure to control search label placement
+            initComplete: function() {
+                // Remove default search input label and replace with custom icon
+                let searchContainer = $('#wc-tbl_filter');
+                searchContainer.html(`
+                    <div class="custom-search-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path></svg>
+                        <input type="text" id="customSearchBox" placeholder="Search..." class="form-control"/>
+                    </div>
+                `);
 
-            wasteTypeSelect.addEventListener('change', function() {
-                if (this.value === 'Biodegradable') {
-                    metricsLabel.innerHTML = 'Weight (kilogram/s) <span style="color: red;">*</span>';
-                    addonText.innerHTML = 'kg/s'; // Set the unit to kg.
-                } else if (this.value === 'Residual') {
-                    metricsLabel.innerHTML = 'Number of Sack/s <span style="color: red;">*</span>';
-                    addonText.innerHTML = 'sack/s'; // Set the unit to sack
-                } else {
-                    metricsLabel.innerHTML = 'Weight <span style="color: red;">*</span>';
-                    addonText.innerHTML = 'kg/s'; // Default unit is kg.
-                }
-            });
-        }
-
-        updateMetricsLabel('add_wt', 'add_metrics_label','basic-addon2');
-        updateMetricsLabel('edit_wt', 'edit_metrics_label', 'editbasic-addon2');
-
-        function updateMetricsLabelEdit(selectId, labelId, addonId) {
-            const wasteTypeSelect = document.getElementById(selectId);
-            const metricsLabel = document.getElementById(labelId);
-            const addonText = document.getElementById(addonId); // Get the element for unit (kg. or sack)
-
-            // Use wasteTypeSelect.value instead of this.value
-            if (wasteTypeSelect.value === 'Biodegradable') {
-                metricsLabel.innerHTML = 'Weight (kilogram/s) <span style="color: red;">*</span>';
-                addonText.innerHTML = 'kg/s'; // Set the unit to kg.
-            } else if (wasteTypeSelect.value === 'Residual') {
-                metricsLabel.innerHTML = 'Number of Sack/s <span style="color: red;">*</span>';
-                addonText.innerHTML = 'sack/s'; // Set the unit to sack
-            } else {
-                metricsLabel.innerHTML = 'Weight <span style="color: red;">*</span>';
-                addonText.innerHTML = 'kg/s'; // Default unit is kg.
+                // Bind search box input to DataTables search function
+                $('#customSearchBox').on('keyup', function() {
+                    dataTable.search(this.value).draw();
+                });
             }
-        }
-
+        });
+        
         // Fetch barangays and display in the table
         function fetchBrgy() {
             $.ajax({
@@ -231,29 +243,19 @@
                             // Convert the date to the desired format
                             let formattedDate = collectionDate.toLocaleString('en-US', options);
 
-                            var updatedMetrics;
-
-                            if (wasteComposition.waste_type == 'Biodegradable') {
-                                updatedMetrics = wasteComposition.metrics + ' kg/s';
-                            } else if (wasteComposition.waste_type == 'Residual') {
-                                updatedMetrics = wasteComposition.metrics + ' sack/s';
-                            } else {
-                                updatedMetrics = 'Error';
-                            }
-
                             rows += `
-                                <tr class="wc-row" data-id="${wasteComposition.id}">
+                                <tr>
                                     <td>${wasteComposition.brgy.name}</td>
                                     <td>${wasteComposition.waste_type}</td>
-                                    <td>${updatedMetrics}</td>
+                                    <td>${wasteComposition.metrics} kg/s</td>
                                     <td>
-                                        <a class="btn btn-icon btn-success d-actions" data-id="${wasteComposition.id}" title="Edit User">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
-                                                    <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
-                                                    <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
-                                                </svg>
-                                                Edit
-                                            </a>
+                                        <a class="btn btn-icon btn-success d-actions update-btn" data-id="${wasteComposition.id}" title="Edit User">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
+                                                <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
+                                                <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
+                                            </svg>
+                                            Edit
+                                        </a>
                                     </td>
                                 </tr>`;
                             counter++;
@@ -266,6 +268,7 @@
 
                     $('#wc-tbl tbody').html(rows);
 
+                    // Initialize DataTable with custom search icon
                     $('#wc-tbl').DataTable({
                         pageLength: 5,
                         bSort: false,
@@ -278,8 +281,25 @@
                         fixedHeader: true,
                         scroller: true,
                         language: {
-                            searchPlaceholder: 'Search records'
+                            searchPlaceholder: 'Search records', // Placeholder for the search input
+                            search: "", // Remove the default "Search" label
                         },
+                        dom: '<"top"f>rt<"bottom"lp><"clear">', // Modify the DOM structure to control search label placement
+                        initComplete: function() {
+                            // Remove default search input label and replace with custom icon
+                            let searchContainer = $('#wc-tbl_filter');
+                            searchContainer.html(`
+                                <div class="custom-search-wrapper">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path></svg>
+                                    <input type="text" id="customSearchBox" placeholder="Search..." class="form-control"/>
+                                </div>
+                            `);
+
+                            // Bind search box input to DataTables search function
+                            $('#customSearchBox').on('keyup', function() {
+                                dataTable.search(this.value).draw();
+                            });
+                        }
                     });
                 },
                 error: function (error) {
@@ -289,7 +309,7 @@
             });
         }
 
-        fetchWC();
+        // fetchWC();
 
         // Add Dump Truck
         $('#addWCForm').on('submit', function (e) {
@@ -340,7 +360,7 @@
         });
 
         // Edit Waste Composition
-        $('#wc-tbl').on('click', 'tr.wc-row', function () {
+        $('#wc-tbl').on('click', '.update-btn', function () {
             let id = $(this).data('id'); // Get the wasteComposition id from the row
 
             $.ajax({
@@ -353,7 +373,6 @@
                     $('#edit_cd').val(wc.collection_date);
                     $('#edit_brgy').val(wc.brgy_id);
                     $('#edit_wc_id').val(wc.id);
-                    updateMetricsLabelEdit('edit_wt', 'edit_metrics_label', 'editbasic-addon2');
 
                     $('#editWasteModal').modal('show'); // Display the modal after populating the form
                 },

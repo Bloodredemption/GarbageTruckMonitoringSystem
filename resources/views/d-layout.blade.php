@@ -86,20 +86,25 @@
             }
         }
         
-        /* Sticky bottom nav styling */
+        /* Sticky floating bottom nav styling */
         .sticky-bottom-nav {
             font-size: 1rem;
             position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #f8f9fa;
+            bottom: 20px; /* Adjust the bottom distance to create a "floating" effect */
+            left: 50%;
+            transform: translateX(-50%); /* Center the nav horizontally */
+            width: 90%; /* Adjust width to make it float with some padding from the sides */
+            background-color: #fff;
             z-index: 1000;
-            border-top: 1px solid #dee2e6; /* Optional border for better separation */
+            border-radius: 20px; /* More rounded corners for floating appearance */
+            box-shadow: 0 8px 16px rgba(99, 99, 99, 0.2); /* Add shadow to give floating effect */
+            border: none; /* Remove border if you want a cleaner floating look */
+            padding: 10px 15px; /* Add padding for better separation from content */
         }
 
         /* Default nav link and icon color */
         .nav-link {
-            color: #000; /* Default text color */
+            color: #585858; /* Default text color */
             padding: 10px 15px;
             border-radius: 10px; /* Rounded corners for nav buttons */
             transition: all 0.3s ease-in-out; /* Smooth transition for hover and active states */
@@ -110,11 +115,9 @@
         /* Active menu item styling */
         .nav-link.active {
             width: 35%;
-            background-color: #01A94D; /* Inverse background color for active state */
-            color: #fff !important; /* Inverse text color for active */
-            border-radius: 10px; /* Rounded button appearance */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to make it stand out */
-            
+            color: #01A94D !important; /* Inverse text color for active */
+            border-radius: 30px; /* Rounded button appearance */
+
             /* Flexbox properties to center text and icon */
             display: flex;
             justify-content: center; /* Center horizontally */
@@ -124,7 +127,7 @@
 
         /* Ensure the icon inside the active link also changes color */
         .nav-link.active .nav-icon {
-            color: #fff; /* Icon color changes to match the text when active */
+            color: #01A94D; /* Icon color changes to match the text when active */
         }
 
         /* Optional: Add spacing between the icon and the text */

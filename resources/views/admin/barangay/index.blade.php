@@ -147,6 +147,39 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @foreach ($barangays as $br)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $br->name }}, {{ $br->municipality }}, {{ $br->province }}</td>
+                                                        <td>{{ $br->area }}</td>
+                                                        <td>{{ $br->zipcode }}</td>
+                                                        <td>{{ $br->captain }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($br->created_at)->format('Y-m-d') }}</td>
+                                                        <td>
+                                                            <div class="flex align-items-center list-user-action">
+                                                                <!-- Edit Button with Tooltip -->
+                                                                <a class="btn btn-sm btn-icon btn-warning edit-barangay-btn" data-id="{{ $br->id }}" data-bs-toggle="tooltip" title="Edit Barangay">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
+                                                                        <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
+                                                                        <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
+                                                                    </svg>
+                                                                    Edit
+                                                                </a>
+                    
+                                                                <!-- Archive Button with Tooltip -->
+                                                                <a class="btn btn-sm btn-icon btn-secondary archive-barangay-btn" data-id="{{ $br->id }}" data-bs-toggle="tooltip" title="Archive Barangay">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-archive">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                        <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/>
+                                                                        <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"/>
+                                                                        <path d="M10 12l4 0"/>
+                                                                    </svg>
+                                                                    Archive
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
                                                     <!-- Data will be fetched here using AJAX -->
                                                 </tbody>
                                             </table>
@@ -247,7 +280,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="addBarangayForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="addBarangayForm" class="btn btn-primary" id="saveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="saveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
             </div>
         </div>
@@ -318,8 +356,24 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="editBrgyForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="editBrgyForm" class="btn btn-primary" id="editsaveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="editsaveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="userSuccessToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div id="toastMessage" class="toast-body">
+                    <!-- Success message will be dynamically inserted here -->
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
@@ -331,6 +385,64 @@
 
 <script>
     $(document).ready(function () {
+        $('#user-list-table').DataTable({
+            bSort: true,
+            fixedHeader: true, // Enable fixed header
+            retrieve: true, // Retrieve the existing table instead of initializing it again
+            paging: true, // Enable pagination
+            searching: true, // Enable search functionality
+            info: true, // Show the number of entries info
+            responsive: true, // Ensure responsiveness
+            buttons: [
+                { 
+                    extend: 'csv', 
+                    text: 'CSV',
+                    title: 'Barangay List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'excel', 
+                    text: 'Excel',
+                    title: 'Barangay List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'pdf', 
+                    text: 'PDF',
+                    title: 'Barangay List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'print', 
+                    text: 'Print',
+                    title: 'Barangay List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                }
+            ]
+        });
+
+        // Add event listeners for export options in the dropdown
+        $('#export-csv').on('click', function () {
+            table.button('.buttons-csv').trigger();
+        });
+        $('#export-excel').on('click', function () {
+            table.button('.buttons-excel').trigger();
+        });
+        $('#export-pdf').on('click', function () {
+            table.button('.buttons-pdf').trigger();
+        });
+        $('#export-print').on('click', function () {
+            table.button('.buttons-print').trigger();
+        });
+        
         $('#clear-filters').on('click', function(e) {
             e.preventDefault(); // Prevent the default anchor click behavior
             
@@ -480,7 +592,7 @@
             fetchBarangays(); // Fetch data whenever a filter changes
         });
 
-        fetchBarangays();
+        // fetchBarangays();
 
         function fetchABarangays() {
             $.ajax({
@@ -549,6 +661,9 @@
         $('#addBarangayForm').on('submit', function (e) {
             e.preventDefault();
 
+            $('#saveChangesBtn').attr('disabled', true); 
+            $('#saveChangesSpinner').removeClass('d-none');
+
             let formData = {
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
                 name: $('#add_name').val(),
@@ -564,20 +679,17 @@
                 type: "POST",
                 data: formData,
                 success: function (response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Barangay Added!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        $('#addBarangayForm')[0].reset();
-                        fetchBarangays();
-                        
-                        var addBrgyModalEl = document.getElementById('addBarangayModal');
-                        var addBarangayModal = bootstrap.Modal.getInstance(addBrgyModalEl);
-                        addBarangayModal.hide();
-                    });
+                    fetchBarangays();
+
+                    $('#toastMessage').text(response.message);
+
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
+
+                    $('#addBarangayForm')[0].reset();
+                    $('#addBarangayModal').modal('hide'); // Hide modal
+
                 },
                 error: function (error) {
                     let errors = error.responseJSON.errors;
@@ -592,6 +704,11 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: "#01A94D"
                     });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#saveChangesBtn').attr('disabled', false);
+                    $('#saveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });
@@ -680,22 +797,24 @@
                 captain: $('#edit_captain').val(),
             };
 
+            $('#editsaveChangesBtn').attr('disabled', true); 
+            $('#editsaveChangesSpinner').removeClass('d-none');
+
             $.ajax({
                 url: `/admin/barangay/${barangayId}/update`,
                 type: "PUT",
                 data: formData,
                 success: function (response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Barangay Updated!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        fetchBarangays();
-                        $('#editBarangayModal').modal('hide');
+                    fetchBarangays();
 
-                    });
+                    $('#toastMessage').text(response.message);
+
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
+
+                    $('#editBrgyForm')[0].reset();
+                    $('#editBarangayModal').modal('hide');
                 },
                 error: function (error) {
                     console.log("Error updating barangay: ", error);
@@ -733,16 +852,14 @@
                         },
                         success: function (response) {
                             fetchBarangays();
+                            fetchABarangays();
+                            
+                            $('#toastMessage').text(response.message);
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Barangay Deleted!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // 
-                            });
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
+
                         },
                         error: function (error) {
                             console.log("Error deleting barangay: ", error);
@@ -776,15 +893,11 @@
                             fetchBarangays();
                             fetchABarangays();
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Barangay Archived!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // 
-                            });
+                            $('#toastMessage').text(response.message);
+
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
                         },
                         error: function (error) {
                             console.log("Error archiving barangay: ", error);
@@ -818,15 +931,11 @@
                             fetchBarangays();
                             fetchABarangays();
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Barangay Restored!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // 
-                            });
+                            $('#toastMessage').text(response.message);
+
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
                         },
                         error: function (error) {
                             console.log("Error restoring barangay: ", error);

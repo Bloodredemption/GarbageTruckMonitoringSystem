@@ -22,60 +22,8 @@
                                 </nav>
                             </div>
                             <div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="iq-header-img" style="background-color: #01A94D;">
-                
-            </div>
-        </div>          
-        <!-- Nav Header Component End -->
-        <!--Nav End-->
-    </div>
-    <div class="container-fluid content-inner mt-n5 py-0">
-        <div class="row">
-            
-            <div class="col-md-12 col-lg-12">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card" data-aos="fade-up" data-aos-delay="800">
-                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
-                                <div class="header-title">
-                                    <h4 class="card-title">Calendar View</h4>
-                                </div>
-                                
-                                <div>
-                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
-                                        <i class="btn-inner">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                            </svg>
-                                        </i>
-                                        <span>Add New</span>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="card-body">
-                                <div id="calendar" class="calendar-s"></div>
-                            </div>
-
-                            
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-12">
-                        <div class="card" data-aos="fade-up" data-aos-delay="800">
-                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
-                                <div class="header-title">
-                                    <h4 class="card-title">Table View</h4>
-                                </div>
-                                
                                 <div class="dropdown">
-                                    <button class="btn btn-primary text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-soft-light text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-settings">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
@@ -98,30 +46,109 @@
                                     </ul>
                                 </div>
                             </div>
-
-                            <div class="card-body px-0">
-                                <div class="table-responsive">
-                                    <table id="col-sched-tbl" class="table" role="grid" data-bs-toggle="data-table">
-                                        <thead>
-                                            <tr class="ligth" style="background-color: #01A94D; color: white;">
-                                                <th>No.</th>
-                                                <th>Barangay</th>
-                                                <th>Dump Truck</th>
-                                                <th>Driver</th>
-                                                <th>Schedule</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            
-                                        </tbody>
-                                    </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="iq-header-img" style="background-color: #01A94D;">
+                
+            </div>
+        </div>          
+        <!-- Nav Header Component End -->
+        <!--Nav End-->
+    </div>
+    <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+            
+            <div class="col-md-12 col-lg-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" data-aos="fade-up" data-aos-delay="800">
+                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
+                                <div class="header-title">
+                                    <ul class="nav custom-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="table-view-tab" data-bs-toggle="tab" data-bs-target="#table-view" type="button" role="tab" aria-controls="table-view" aria-selected="true">
+                                                Calendar View
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="archive-tab" data-bs-toggle="tab" data-bs-target="#archive" type="button" role="tab" aria-controls="archive" aria-selected="false">
+                                                Table View
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                                        <i class="btn-inner">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                        </i>
+                                        <span>Add New</span>
+                                    </a>
                                 </div>
                             </div>
 
+                            <div class="card-body px-0" style="padding: 0; padding-bottom: 1.5rem;">
+                                <!-- Bootstrap Tabs -->
                             
+                                <!-- Tab Content -->
+                                <div class="tab-content" id="myTabContent">
+                                    <!-- Table View Tab Pane -->
+                                    <div class="tab-pane fade show active" id="table-view" role="tabpanel" aria-labelledby="table-view-tab">
+                                        <div class="table-responsive mt-3">
+                                            <div class="card-body">
+                                                <div id="calendar" class="calendar-s"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Archive Tab Pane -->
+                                    <div class="tab-pane fade" id="archive" role="tabpanel" aria-labelledby="archive-tab">
+                                        <div class="table-responsive mt-3">
+                                            <table id="col-sched-tbl" class="table" role="grid" data-bs-toggle="data-table">
+                                                <thead>
+                                                    <tr class="ligth" style="background-color: #01A94D; color: white;">
+                                                        <th>No.</th>
+                                                        <th>Barangay</th>
+                                                        <th>Dump Truck</th>
+                                                        <th>Driver</th>
+                                                        <th>Schedule</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($collectionSchedules as $cs)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $cs->barangay->name }}</td>
+                                                        <td>{{ $cs->dumpTruck->brand }} {{ $cs->dumpTruck->model }}</td>
+                                                        <td>{{ $cs->driver->fullname }}</td>
+                                                        <td>{{ $cs->scheduled_date }} {{ $cs->scheduled_time }}</td>
+                                                        <td>
+                                                            @if ($cs->status == 'Pending')
+                                                                <span class="badge bg-warning">Pending</span>
+                                                            @elseif ($cs->status == 'Finished')
+                                                                <span class="badge bg-success">Completed</span>
+                                                            @else
+                                                                <span class="badge bg-info">Ongoing</span>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
+                    
                 </div>
 
             </div>
@@ -203,7 +230,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="scheduleForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="scheduleForm" class="btn btn-primary" id="saveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="saveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
             </div>
         </div>
@@ -254,8 +286,24 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="editscheduleForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="editscheduleForm" class="btn btn-primary" id="editsaveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="editsaveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="userSuccessToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div id="toastMessage" class="toast-body">
+                    <!-- Success message will be dynamically inserted here -->
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
@@ -270,6 +318,52 @@
 
 <script>
     $(document).ready(function() {
+        table = $('#col-sched-tbl').DataTable({
+            bSort: true,
+            fixedHeader: true, // Enable fixed header
+            retrieve: true, // Retrieve the existing table instead of initializing it again
+            paging: true, // Enable pagination
+            searching: true, // Enable search functionality
+            info: true, // Show the number of entries info
+            responsive: true, // Ensure responsiveness
+            buttons: [
+                { 
+                    extend: 'csv', 
+                    text: 'CSV',
+                    title: 'Collection Schedule List',
+                },
+                { 
+                    extend: 'excel', 
+                    text: 'Excel',
+                    title: 'Collection Schedule List',
+                },
+                { 
+                    extend: 'pdf', 
+                    text: 'PDF',
+                    title: 'Collection Schedule List',
+                },
+                { 
+                    extend: 'print', 
+                    text: 'Print',
+                    title: 'Collection Schedule List',
+                }
+            ]
+        });
+
+        // Add event listeners for export options in the dropdown
+        $('#export-csv').on('click', function () {
+            table.button('.buttons-csv').trigger();
+        });
+        $('#export-excel').on('click', function () {
+            table.button('.buttons-excel').trigger();
+        });
+        $('#export-pdf').on('click', function () {
+            table.button('.buttons-pdf').trigger();
+        });
+        $('#export-print').on('click', function () {
+            table.button('.buttons-print').trigger();
+        });
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -404,16 +498,14 @@
             initialView: 'dayGridMonth', // Set the default view to Month
 
             dayMaxEvents: 3,
-            contentHeight: "auto",
 
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth' // Show Month, Week, Day, and List view
+                right: 'dayGridMonth,timeGridWeek,timeGridDay' // Show Month, Week, Day, and List view
             },
             navLinks: true, // Clickable day/week names to navigate views
             selectable: true,
-            selectOverlap: false,
             events: {
                 url: "{{ route('cs.events') }}",
                 method: 'GET',
@@ -454,6 +546,7 @@
                 $('#edit_sched_id').val(info.event.extendedProps.sched_id);
                 $('#edit_brgy').val(info.event.extendedProps.brgy_id);
                 $('#edit_dt').val(info.event.extendedProps.dumptruck_id);
+                $('#edit_driver').val(info.event.extendedProps.driver_id);
                 $('#edit_date').val(info.event.startStr.split('T')[0]);
                 $('#edit_time').val(info.event.startStr.split('T')[1].substring(0, 5));
 
@@ -520,6 +613,16 @@
 
                         if (colsched.status == 'pending' || 'finished' || 'ongoing') { 
 
+                            let stats = colsched.status;
+
+                            if (colsched.status == 'Pending') {
+                                stats = '<span class="badge bg-warning">Pending</span>';
+                            } else if (colsched.status == 'Completed') {
+                                stats = '<span class="badge bg-success">Completed</span>';
+                            } else {
+                                stats = '<span class="badge bg-info">Ongoing</span>';
+                            }
+
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
@@ -528,6 +631,7 @@
                                     <td>${colsched.driver.fullname}</td>
                                     <td>${colsched.scheduled_date} ${colsched.scheduled_time}</td>
                                     <td>${colsched.status}</td>
+                                    <td>${stats}</td>
                                 </tr>`;
                             counter++;
                         }
@@ -540,7 +644,7 @@
                     $('#col-sched-tbl tbody').html(rows);
 
                     let table = $('#col-sched-tbl').DataTable({
-                        bSort: false,
+                        bSort: true,
                         fixedHeader: true, // Enable fixed header
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
@@ -592,10 +696,13 @@
             });
         }
 
-        fetchColsched();
+        // fetchColsched();
 
         $('#scheduleForm').on('submit', function (e) {
             e.preventDefault();
+
+            $('#saveChangesBtn').attr('disabled', true); 
+            $('#saveChangesSpinner').removeClass('d-none');
 
             let formData = {
                 brgy_id: $('#add_brgy').val(),
@@ -610,22 +717,18 @@
                 type: "POST",
                 data: formData,
                 success: function (response) {
+                    calendar.refetchEvents();
+                    fetchColsched();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Collection Schedule Added!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        $('#scheduleForm')[0].reset();
+                    $('#toastMessage').text(response.message);
 
-                        var addScheduleModalEl = document.getElementById('addScheduleModal');
-                        var addScheduleModal = bootstrap.Modal.getInstance(addScheduleModalEl);
-                        addScheduleModal.hide();
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show(); // Show the toast
 
-                        calendar.refetchEvents();
-                    });
+                    $('#scheduleForm')[0].reset();
+                    $('#addScheduleModal').modal('hide');
+                    
                 },
                 error: function (error) {
                     let errors = error.responseJSON.errors;
@@ -640,6 +743,11 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: "#01A94D"
                     });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#saveChangesBtn').attr('disabled', false);
+                    $('#saveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });
@@ -687,6 +795,7 @@
                 return; // Exit the function
             }
 
+            
             let formData = {
                 brgy_id: $('#edit_brgy').val(),
                 dumptruck_id: $('#edit_dt').val(),
@@ -695,29 +804,26 @@
                 scheduled_time: $('#edit_time').val(),
             };
 
+            $('#editsaveChangesBtn').attr('disabled', true); 
+            $('#editsaveChangesSpinner').removeClass('d-none');
+
             $.ajax({
                 url: `/admin/collection-schedule/${id}/update`,
                 type: "PUT",
                 data: formData,
                 success: function (response) {
+                    calendar.refetchEvents();
+                    fetchColsched();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Collection Schedule Updated!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
+                    $('#toastMessage').text(response.message);
 
-                        $('#editscheduleForm')[0].reset();
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
 
-                        var editScheduleModalEl = document.getElementById('editScheduleModal');
-                        var editScheduleModal = bootstrap.Modal.getInstance(editScheduleModalEl);
-                        editScheduleModal.hide();
+                    $('#editscheduleForm')[0].reset();
+                    $('#editScheduleModal').modal('hide'); // Hide modal
 
-                        calendar.refetchEvents();
-
-                    });
                 },
                 error: function (error) {
                     console.log("Error updating schedule: ", error);

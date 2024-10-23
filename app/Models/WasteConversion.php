@@ -18,6 +18,7 @@ class WasteConversion extends Model
         'metrics',
         'start_date',
         'end_date',
+        'status',
     ];
 
     public function user()

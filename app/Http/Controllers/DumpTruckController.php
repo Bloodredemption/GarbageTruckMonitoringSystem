@@ -22,7 +22,11 @@ class DumpTruckController extends Controller
             return response()->json(['dumpTrucks' => $dumpTrucks]);
         }
 
-        return view('admin.dump-trucks.index');
+        $dumpTrucks = DumpTruck::whereIn('status', ['active', 'inactive'])
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+
+        return view('admin.dump-trucks.index', compact('dumpTrucks'));
     }
 
     public function getArchive()

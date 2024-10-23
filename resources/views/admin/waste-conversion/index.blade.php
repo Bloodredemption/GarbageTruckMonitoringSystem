@@ -72,7 +72,7 @@
                             </div>
                             <div class="card-body px-0">
                                 <div class="table-responsive">
-                                    <table id="wcov-tbl" class="table table-striped" role="grid" data-bs-toggle="data-table">
+                                    <table id="wcov-tbl" class="table" role="grid" data-bs-toggle="data-table">
                                         <thead>
                                             <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                 <th>No.</th>
@@ -81,25 +81,29 @@
                                                 <th>Metrics</th>
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($wasteConversions as $wc)
+                                            @foreach ($wasteConversions as $wc)
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $wc->waste_type }}</td>
                                                 <td>{{ $wc->conversion_method }}</td>
-                                                <td>{{ $wc->metrics }}</td>
+                                                <td>{{ $wc->metrics }} kg/s</td>
                                                 <td>{{ $wc->start_date }}</td>
                                                 <td>{{ $wc->end_date }}</td>
-                                            </tr>
-                                            @empty
-                                                <td colspan="6">
-                                                    <span class="text-danger">
-                                                        <strong>No Data Found!</strong>
-                                                    </span>
+                                                <td>
+                                                    @if ($wc->status == 'Pending')
+                                                        <span class="badge bg-warning">Pending</span>
+                                                    @elseif ($wc->status == 'Finished')
+                                                        <span class="badge bg-success">Completed</span>
+                                                    @else
+                                                        <span class="badge bg-info">Ongoing</span>
+                                                    @endif
                                                 </td>
-                                            @endforelse
+                                            </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -107,34 +111,55 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 col-xl-6">
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
                         <div class="card aos-init aos-animate" data-aos="fade-up" data-aos-delay="900">
                             <div class="flex-wrap card-header d-flex justify-content-between">
                                 <div class="header-title">
-                                    <h4 class="card-title">Waste Converted</h4>            
+                                    <h4 class="card-title">Waste Converted Count</h4>            
                                 </div>   
-                                <div class="dropdown">
-                                    <a href="#" class="text-gray dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    This Day
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1" style="">
-                                        <li><a class="dropdown-item" href="#">This Day</a></li>
-                                        <li><a class="dropdown-item" href="#">This Week</a></li>
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                    </ul>
+                                <div class="form-group">
+                                    <select class="form-select text-gray" id="timeframeSelect" aria-label="Select Timeframe">
+                                        <option value="day">Daily</option>
+                                        <option value="week">Weekly</option>
+                                        <option value="month">Monthly</option>
+                                        <option value="year">Yearly</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="flex-wrap d-flex align-items-center justify-content-between">
-                                    <div id="myChart" class="col-md-8 col-sm-8 myChart" style="min-height: 208.7px;">
+                                    <div id="myChart" class="col-md-9 col-sm-9 myChart" style="min-height: 208.7px;">
                                             
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-6">
+                        <div class="card aos-init aos-animate" data-aos="fade-up" data-aos-delay="900">
+                            <div class="flex-wrap card-header d-flex justify-content-between">
+                                <div class="header-title">
+                                    <h4 class="card-title">Waste Conversion Histogram</h4>            
+                                </div>   
+                                
+                            </div>
+                            <div class="card-body">
+                                <div class="flex-wrap d-flex align-items-center justify-content-between">
+                                    <div id="otherChart" class="col-md-12 col-sm-12" style="min-height: 208.7px;">
+                                            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
+
             </div>
         </div>
     </div>
@@ -146,6 +171,14 @@
 
 <script>
     $(document).ready(function () {
+        document.querySelector('#timeframeSelect').addEventListener('change', function() {
+            const selectedTimeframe = this.value; // Get selected value
+            updateChart(selectedTimeframe); // Call your updateChart function with the selected timeframe
+        });
+
+        // Initial chart load for 'This Day'
+        updateChart('day');
+        
         $('#wcov-tbl').DataTable({
             fixedHeader: true, // Enable fixed header
             retrieve: true, // Retrieve the existing table instead of initializing it again
@@ -209,15 +242,25 @@
                             // Convert the date to the desired format
                             let formattedDate = collectionDate.toLocaleString('en-US', options2);
                             let formattedDate2 = collectionDate2.toLocaleString('en-US', options2);
+                            let stats = wasteConversions.status;
+
+                            if (wasteConversions.status == 'Pending') {
+                                stats = '<span class="badge bg-warning">Pending</span>';
+                            } else if (wasteConversions.status == 'Completed') {
+                                stats = '<span class="badge bg-success">Completed</span>';
+                            } else {
+                                stats = '<span class="badge bg-info">Ongoing</span>';
+                            }
 
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
                                     <td>${wasteConversions.waste_type}</td>
                                     <td>${wasteConversions.conversion_method}</td>
-                                    <td>${wasteConversions.metrics}</td>
+                                    <td>${wasteConversions.metrics} kg/s</td>
                                     <td>${formattedDate}</td>
                                     <td>${formattedDate2}</td>
+                                    <td>${stats}</td>
                                 </tr>`;
                             counter++;
                         }
@@ -283,35 +326,120 @@
 
     });
 
-    var options = {
-          series: [44, 55],
-          chart: {
-          type: 'donut',
-        },
-        labels: [
-            'Residual',
-            'Biodegradable',
-        ],
-        legend: {
-          formatter: function(val, opts) {
-            return val + " - " + opts.w.globals.series[opts.seriesIndex]
-          }
-        },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }]
-        };
+    let chart;
 
-    var chart = new ApexCharts(document.querySelector("#myChart"), options);
-    chart.render();
+    function updateChart(timeframe) {
+        fetch(`/admin/waste-conversion/chartsData?timeframe=${timeframe}`)
+            .then(response => response.json())
+            .then(data => {
+                // Chart options with the new data
+                var options = {
+                    series: [data.residual, data.biodegradable],
+                    chart: {
+                        type: 'donut',
+                        
+                    },
+                    labels: ['Residual', 'Biodegradable'],
+                    legend: {
+                        formatter: function(val, opts) {
+                            return val + " - " + opts.w.globals.series[opts.seriesIndex];
+                        }
+                    },
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }]
+                };
+
+                
+
+                // Clear previous chart instance
+                if (chart) {
+                    chart.destroy();  // Destroy the existing chart before creating a new one
+                }
+
+                // Render the donut chart with updated data
+                chart = new ApexCharts(document.querySelector("#myChart"), options);
+                chart.render();
+            })
+            .catch(error => console.error('Error fetching waste composition data:', error));
+    }
+
+    function updateBarChart() {
+        fetch('/admin/waste-conversion/barData')
+            .then(response => response.json())
+            .then(data => {
+                // Prepare the options for the bar chart
+                var options2 = {
+                    series: [{
+                        name: 'Residual (sacks)', // Labeling the series
+                        data: data.residual // Data from the controller
+                    }, {
+                        name: 'Biodegradable (kg)', // Labeling the series
+                        data: data.biodegradable // Data from the controller
+                    }],
+                    chart: {
+                        type: 'bar',
+                        height: 350
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: false,
+                            columnWidth: '55%',
+                            endingShape: 'rounded'
+                        },
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        show: true,
+                        width: 2,
+                        colors: ['transparent']
+                    },
+                    xaxis: {
+                        categories: data.months, // Dynamically set the months
+                    },
+                    yaxis: {
+                        title: {
+                            text: 'Metrics'
+                        }
+                    },
+                    fill: {
+                        opacity: 1
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function(val, { seriesIndex }) {
+                                // Dynamic label based on the series
+                                return seriesIndex === 0 ? val + " sacks" : val + " kg";
+                            }
+                        }
+                    }
+                };
+
+                // Destroy the previous chart instance if necessary
+                if (window.chart2) {
+                    window.chart2.destroy();
+                }
+
+                // Render the new chart
+                window.chart2 = new ApexCharts(document.querySelector("#otherChart"), options2);
+                window.chart2.render();
+            })
+            .catch(error => console.error('Error fetching bar chart data:', error));
+    }
+
+    // Call the function to load the chart on page load
+    updateBarChart();
+
 </script>
 
 @endsection

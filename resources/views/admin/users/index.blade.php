@@ -94,7 +94,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                             </svg>
                                         </i>
-                                        <span>Create</span>
+                                        <span>Add</span>
                                     </a>
                                 </div>
                             </div>
@@ -172,7 +172,49 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="userTableBody">
-                                                    <!-- Data will be fetched here using AJAX -->
+                                                    @forelse ($users as $user)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $user->fullname }}</td>
+                                                        <td>{{ $user->username }}</td>
+                                                        <td>{{ $user->contact_num }}</td>
+                                                        <td>{{ $user->user_type }}</td>
+                                                        <td>
+                                                            @if ($user->status === 'active')
+                                                                <span class="badge bg-primary">active</span>
+                                                            @else
+                                                                <span class="badge bg-danger">inactive</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $user->created_at }}</td>
+                                                        <td>
+                                                            <div class="flex align-items-center list-user-action">
+                                                                <a class="btn btn-sm btn-icon btn-warning edit-user-btn" data-id="{{ $user->id }}" title="Edit User">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
+                                                                        <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
+                                                                        <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
+                                                                    </svg>
+                                                                    Edit
+                                                                </a>
+                                                                <a class="btn btn-sm btn-icon btn-secondary archive-user-btn" data-id="{{ $user->id }}" title="Archive User">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-archive">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                        <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/>
+                                                                        <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"/>
+                                                                        <path d="M10 12l4 0"/>
+                                                                    </svg>
+                                                                    Archive
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    @empty
+                                                    <td colspan="6">
+                                                        <span class="text-danger">
+                                                            <strong>No Data Found!</strong>
+                                                        </span>
+                                                    </td>
+                                                    @endforelse
                                                 </tbody>
                                             </table>
                                         </div>
@@ -191,7 +233,7 @@
                                                         <th>Contact No.</th>
                                                         <th>Role</th>
                                                         <th>Date Archive</th>
-                                                        <th style="min-width: 100px">Action</th>
+                                                        <th class="no-sort" style="min-width: 100px">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="auserTableBody">
@@ -266,7 +308,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="addUserForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="addUserForm" class="btn btn-primary" id="saveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="saveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
             </div>
         </div>
@@ -324,7 +371,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" form="editUserForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="editUserForm" class="btn btn-primary" id="editsaveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="editsaveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
             </div>
         </div>
@@ -360,6 +412,18 @@
         </div>
     </div>
     
+    <!-- Toast container (can be placed anywhere in your HTML) -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="userSuccessToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div id="toastMessage" class="toast-body">
+                    <!-- Success message will be dynamically inserted here -->
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer Section Start -->
     @include('partials.footer')
     <!-- Footer Section End -->    
@@ -398,6 +462,65 @@
     });
 
     $(document).ready(function () {
+        $(document).ready(function() {
+            var table = $('#datatable').DataTable({
+                fixedHeader: true, // Enable fixed header
+                retrieve: true, // Retrieve the existing table instead of initializing it again
+                paging: true, // Enable pagination
+                searching: true, // Enable search functionality
+                info: true, // Show the number of entries info
+                responsive: true, // Ensure responsiveness
+                buttons: [
+                    { 
+                        extend: 'csv', 
+                        text: 'CSV',
+                        title: 'Users List',
+                        exportOptions: {
+                            columns: ':not(:last-child)' // Exclude action column
+                        }
+                    },
+                    { 
+                        extend: 'excel', 
+                        text: 'Excel',
+                        title: 'Users List',
+                        exportOptions: {
+                            columns: ':not(:last-child)' // Exclude action column
+                        }
+                    },
+                    { 
+                        extend: 'pdf', 
+                        text: 'PDF',
+                        title: 'Users List',
+                        exportOptions: {
+                            columns: ':not(:last-child)' // Exclude action column
+                        }
+                    },
+                    { 
+                        extend: 'print', 
+                        text: 'Print',
+                        title: 'Users List',
+                        exportOptions: {
+                            columns: ':not(:last-child)' // Exclude action column
+                        }
+                    }
+                ]
+            });
+
+            // Add event listeners for export options in the dropdown
+            $('#export-csv').on('click', function () {
+                table.button('.buttons-csv').trigger();
+            });
+            $('#export-excel').on('click', function () {
+                table.button('.buttons-excel').trigger();
+            });
+            $('#export-pdf').on('click', function () {
+                table.button('.buttons-pdf').trigger();
+            });
+            $('#export-print').on('click', function () {
+                table.button('.buttons-print').trigger();
+            });
+        });
+        
         $('#clear-filters').on('click', function(e) {
             e.preventDefault(); // Prevent the default anchor click behavior
             
@@ -489,13 +612,13 @@
 
                     // Reinitialize the DataTable with export buttons but without displaying the default buttons
                     let table = $('#datatable').DataTable({
-                        bSort: false,
                         fixedHeader: true, // Enable fixed header
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
                         searching: true, // Enable search functionality
                         info: true, // Show the number of entries info
                         responsive: true, // Ensure responsiveness
+                        
                         buttons: [
                             { 
                                 extend: 'csv', 
@@ -558,8 +681,6 @@
             fetchUsers(); // Fetch data whenever a filter changes
         });
 
-        fetchUsers();
-
         function fetchAUsers() {
             $.ajax({
                 url: "{{ route('users.getArchive') }}", // Route for fetching users
@@ -572,7 +693,7 @@
                         if (ausers.status == 'archive') {
 
                             const updatedAt = new Date(ausers.updated_at);
-                            const formattedupdatedAt = updatedAt.toLocaleDateString('en-US');
+                            const formattedupdatedAt = updatedAt.toLocaleDateString('en-CA');
 
                             rows += `
                                 <tr>
@@ -629,6 +750,9 @@
         $('#addUserForm').on('submit', function (e) {
             e.preventDefault(); // Prevent form from submitting normally
             
+            $('#saveChangesBtn').attr('disabled', true); 
+            $('#saveChangesSpinner').removeClass('d-none'); // Show spinner
+
             let formData = {
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
                 firstname: $('#add_firstname').val(),
@@ -648,18 +772,15 @@
                 success: function (response) {
                     fetchUsers();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        $('#addUserForm')[0].reset();
+                    // Set the dynamic message in the toast body
+                    $('#toastMessage').text(response.message);
 
-                        $('#addUserModal').modal('hide');
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show(); // Show the toast
 
-                    });
+                    $('#addUserForm')[0].reset(); // Reset form
+                    $('#addUserModal').modal('hide'); // Hide modal
                 },
                 error: function (error) {
                     console.log("Error adding user: ", error);
@@ -681,6 +802,11 @@
                             confirmButtonColor: "#01A94D"
                         });
                     }
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#saveChangesBtn').attr('disabled', false);
+                    $('#saveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });
@@ -792,6 +918,9 @@
                 return; // Exit the function
             }
 
+            $('#editsaveChangesBtn').attr('disabled', true); 
+            $('#editsaveChangesSpinner').removeClass('d-none');
+
             $.ajax({
                 url: `/admin/users/${userId}/update`,
                 type: "PUT",
@@ -799,16 +928,16 @@
                 success: function (response) {
                     fetchUsers();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'User Updated!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D" // Optional: Customize the confirm button color
-                    }).then(() => {
+                    // Set the dynamic message in the toast body
+                    $('#toastMessage').text(response.message);
 
-                        $('#editUserModal').modal('hide');
-                    });
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
+
+                    $('#editUserForm')[0].reset(); // Reset form
+                    $('#editUserModal').modal('hide'); // Hide modal
+
                 },
                 error: function (error) {
                     console.log("Error updating user: ", error);
@@ -821,6 +950,11 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#d33' // Optional: Customize error button color
                     });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#editsaveChangesBtn').attr('disabled', false);
+                    $('#editsaveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });
@@ -849,16 +983,15 @@
                         },
                         success: function (response) {
                             fetchUsers();
+                            fetchAUsers();
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'User Deleted!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // fetchUsers();
-                            });
+                            // Set the dynamic message in the toast body
+                            $('#toastMessage').text(response.message);
+
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
+
                         },
                         error: function (error) {
                             console.log("Error deleting user: ", error);
@@ -902,15 +1035,13 @@
                             fetchUsers();
                             fetchAUsers();
                             
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'User Archived!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // fetchUsers();
-                            });
+                           // Set the dynamic message in the toast body
+                            $('#toastMessage').text(response.message);
+
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
+
                         },
                         error: function (error) {
                             console.log("Error archiving user: ", error);
@@ -954,15 +1085,13 @@
                             fetchUsers();
                             fetchAUsers();
                             
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'User Restored!',
-                                text: response.message,
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: "#01A94D"
-                            }).then(() => {
-                                // fetchUsers();
-                            });
+                            // Set the dynamic message in the toast body
+                            $('#toastMessage').text(response.message);
+
+                            // Trigger Bootstrap toast instead of SweetAlert
+                            var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                            toastEl.show();
+
                         },
                         error: function (error) {
                             console.log("Error restoring user: ", error);

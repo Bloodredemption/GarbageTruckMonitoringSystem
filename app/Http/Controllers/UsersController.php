@@ -26,8 +26,15 @@ class UsersController extends Controller
             return response()->json(['users' => $users]);
         }
 
+        $users = Users::where(function($query) {
+            $query->where('status', 'active')
+                  ->orWhere('status', 'inactive');
+        })
+        ->orderBy('created_at', 'desc')
+        ->get();
+
         // Otherwise, return the view (for non-AJAX requests, i.e., the initial page load)
-        return view('admin.users.index');
+        return view('admin.users.index', compact('users'));
     }
 
     public function getArchive()
