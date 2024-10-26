@@ -79,8 +79,7 @@
                                                 <th>Waste Type</th>
                                                 <th>Conversion Method</th>
                                                 <th>Metrics</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th>
+                                                <th>Conversion Date</th>
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
@@ -91,16 +90,24 @@
                                                 <td>{{ $wc->waste_type }}</td>
                                                 <td>{{ $wc->conversion_method }}</td>
                                                 <td>{{ $wc->metrics }} kg/s</td>
-                                                <td>{{ $wc->start_date }}</td>
-                                                <td>{{ $wc->end_date }}</td>
+                                                <td>{{ $wc->start_date }} to {{ $wc->end_date }}</td>
                                                 <td>
-                                                    @if ($wc->status == 'Pending')
-                                                        <span class="badge bg-warning">Pending</span>
-                                                    @elseif ($wc->status == 'Finished')
-                                                        <span class="badge bg-success">Completed</span>
-                                                    @else
-                                                        <span class="badge bg-info">Ongoing</span>
-                                                    @endif
+                                                    @if ($wc->status == 'Finished')
+                                                            <span class="badge text-success">
+                                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" /></svg>
+                                                                Finished
+                                                            </span>
+                                                        @elseif ($wc->status == 'Ongoing')
+                                                            <span class="badge text-secondary">
+                                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-refresh"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" /></svg>
+                                                                Ongoing
+                                                            </span>
+                                                        @else
+                                                            <span class="badge text-warning">
+                                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-square-rounded-minus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2l.324 .001l.318 .004l.616 .017l.299 .013l.579 .034l.553 .046c4.785 .464 6.732 2.411 7.196 7.196l.046 .553l.034 .579c.005 .098 .01 .198 .013 .299l.017 .616l.005 .642l-.005 .642l-.017 .616l-.013 .299l-.034 .579l-.046 .553c-.464 4.785 -2.411 6.732 -7.196 7.196l-.553 .046l-.579 .034c-.098 .005 -.198 .01 -.299 .013l-.616 .017l-.642 .005l-.642 -.005l-.616 -.017l-.299 -.013l-.579 -.034l-.553 -.046c-4.785 -.464 -6.732 -2.411 -7.196 -7.196l-.046 -.553l-.034 -.579a28.058 28.058 0 0 1 -.013 -.299l-.017 -.616c-.003 -.21 -.005 -.424 -.005 -.642l.001 -.324l.004 -.318l.017 -.616l.013 -.299l.034 -.579l.046 -.553c.464 -4.785 2.411 -6.732 7.196 -7.196l.553 -.046l.579 -.034c.098 -.005 .198 -.01 .299 -.013l.616 -.017c.21 -.003 .424 -.005 .642 -.005zm3 9h-6l-.117 .007a1 1 0 0 0 .117 1.993h6l.117 -.007a1 1 0 0 0 -.117 -1.993z" /></svg>
+                                                                Pending
+                                                            </span>
+                                                        @endif
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -242,14 +249,24 @@
                             // Convert the date to the desired format
                             let formattedDate = collectionDate.toLocaleString('en-US', options2);
                             let formattedDate2 = collectionDate2.toLocaleString('en-US', options2);
-                            let stats = wasteConversions.status;
 
-                            if (wasteConversions.status == 'Pending') {
-                                stats = '<span class="badge bg-warning">Pending</span>';
-                            } else if (wasteConversions.status == 'Completed') {
-                                stats = '<span class="badge bg-success">Completed</span>';
+                            let status = wasteConversions.status;
+
+                            if (status == 'Finished') {
+                                status = `<span class="badge text-success">
+                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" /></svg>
+                                    Finished
+                                </span>`;
+                            } else if (status == 'Ongoing') {
+                                status = `<span class="badge text-secondary">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-refresh"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" /></svg>
+                                            Ongoing
+                                        </span>`
                             } else {
-                                stats = '<span class="badge bg-info">Ongoing</span>';
+                                status = `<span class="badge text-warning">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-square-rounded-minus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2l.324 .001l.318 .004l.616 .017l.299 .013l.579 .034l.553 .046c4.785 .464 6.732 2.411 7.196 7.196l.046 .553l.034 .579c.005 .098 .01 .198 .013 .299l.017 .616l.005 .642l-.005 .642l-.017 .616l-.013 .299l-.034 .579l-.046 .553c-.464 4.785 -2.411 6.732 -7.196 7.196l-.553 .046l-.579 .034c-.098 .005 -.198 .01 -.299 .013l-.616 .017l-.642 .005l-.642 -.005l-.616 -.017l-.299 -.013l-.579 -.034l-.553 -.046c-4.785 -.464 -6.732 -2.411 -7.196 -7.196l-.046 -.553l-.034 -.579a28.058 28.058 0 0 1 -.013 -.299l-.017 -.616c-.003 -.21 -.005 -.424 -.005 -.642l.001 -.324l.004 -.318l.017 -.616l.013 -.299l.034 -.579l.046 -.553c.464 -4.785 2.411 -6.732 7.196 -7.196l.553 -.046l.579 -.034c.098 -.005 .198 -.01 .299 -.013l.616 -.017c.21 -.003 .424 -.005 .642 -.005zm3 9h-6l-.117 .007a1 1 0 0 0 .117 1.993h6l.117 -.007a1 1 0 0 0 -.117 -1.993z" /></svg>
+                                            Pending
+                                        </span>`
                             }
 
                             rows += `
@@ -258,8 +275,7 @@
                                     <td>${wasteConversions.waste_type}</td>
                                     <td>${wasteConversions.conversion_method}</td>
                                     <td>${wasteConversions.metrics} kg/s</td>
-                                    <td>${formattedDate}</td>
-                                    <td>${formattedDate2}</td>
+                                    <td>${formattedDate} to ${formattedDate2}</td>
                                     <td>${stats}</td>
                                 </tr>`;
                             counter++;

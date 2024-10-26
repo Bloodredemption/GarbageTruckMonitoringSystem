@@ -14,7 +14,12 @@
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
                                 <h1><strong>Waste Collection Records</strong></h1>
-                                <p>Daily waste collection records will be displayed here.</p>
+                                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{ route('lf.dashboard')}}">Dashboard</a></li>
+                                        <li class="breadcrumb-item active text-white" aria-current="page">Waste Collection</li>
+                                    </ol>
+                                </nav>
                             </div>
                             <div>
                                 <div class="dropdown">
@@ -66,13 +71,58 @@
                                 </div>
 
                                 <div>
-                                    <a href="" class="btn btn-link btn-primary" data-bs-toggle="modal" data-bs-target="#addWasteModal">
-                                        <img src="data:image/svg+xml,%3Csvg width='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Crect width='20' height='20' fill='url(%23pattern0_23_2601)'/%3E%3Cdefs%3E%3Cpattern id='pattern0_23_2601' patternContentUnits='objectBoundingBox' width='1' height='1'%3E%3Cuse xlink:href='%23image0_23_2601' transform='scale(0.0333333)'/%3E%3C/pattern%3E%3Cimage id='image0_23_2601' width='30' height='30' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAdklEQVR4nO3UQQrCMBBA0RzPuBDvv2hA60Iv8boRtF2I0E6oOA+yzYdJmFLSnuGMB+449QzfvIw9wzMZDmMhrrSQ4fKzo8YRzfYa6qfwRZxxl+GKISA64LDFX5hZfeG3Mlx6kW/8D6Nu78uhZ7ji+jzrN1IqgSYK2LXvCFcYxQAAAABJRU5ErkJggg=='/%3E%3C/defs%3E%3C/svg%3E%0A" alt="img">
-                                        Add New
+                                    <a href="#" class=" text-center btn btn-outline-secondary btn-icon mt-lg-0 mt-md-0 mt-3 " data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        <i class="btn-inner">
+                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-adjustments-horizontal"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 6l8 0" /><path d="M16 6l4 0" /><path d="M8 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 12l2 0" /><path d="M10 12l10 0" /><path d="M17 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 18l11 0" /><path d="M19 18l1 0" /></svg>
+                                        </i>
+                                        <span>Filter</span>
+                                    </a>
+                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                        <i class="btn-inner">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                        </i>
+                                        <span>Create</span>
                                     </a>
                                 </div>
                             </div>
                             <div class="card-body px-0">
+                                <div class="pl-3 pr-3" style="padding-left: 1.5rem; padding-right: 1.5rem; padding-bottom: 1rem;">
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            
+                                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div class="text-end">
+                                                        <a href="#" class="text-center btn-icon mt-lg-0 mt-md-0 mt-5" id="clear-filters">
+                                                            <i class="btn-inner">
+                                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+                                                            </i>
+                                                            <span>Clear Filter</span>
+                                                        </a>
+                                                    </div>
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="date" class="form-label">Date Created</label>
+                                                            <input type="text" id="created-date" name="start" class="form-control flatpickr_humandate flatpickr-input active" placeholder="Select Date" readonly>
+                                                        </div>
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="role" class="form-label">Waste Type</label>
+                                                            <select class="form-control" id="wt-filter" name="role">
+                                                                <option value="">Select Waste Type</option>
+                                                                <option value="Biodegradable">Biodegradable</option>
+                                                                <option value="Residual">Residual</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="table-responsive">
                                     <table id="wcol-tbl" class="table" role="grid" data-bs-toggle="data-table">
                                         <thead>
@@ -86,6 +136,30 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach ($wasteCompositions as $wc)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $wc->waste_type }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($wc->collection_date)->format('Y-m-d') }}</td>
+                                                <td>{{ $wc->metrics }} kg/s</td>
+                                                <td>{{ $wc->brgy->name }}</td>
+                                                <td>
+                                                    <div class="flex align-items-center list-user-action">
+                                                        <a class="btn btn-sm btn-icon btn-warning edit-wc-btn" data-id="{{ $wc->id }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
+                                                                <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
+                                                                <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
+                                                            </svg>
+                                                            Edit
+                                                        </a>
+                                                        <a class="btn btn-sm btn-icon btn-danger delete-wc-btn" data-id="{{ $wc->id }}">
+                                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                                            Delete
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @endforeach
                                             <!-- Rows will be dynamically added here -->
                                         </tbody>
                                     </table>
@@ -104,7 +178,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addWasteLabel">Add Waste Collection</h1>
+                    <h1 class="modal-title fs-5" id="addWasteLabel">Create Waste Collection</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -116,8 +190,6 @@
                                 <option></option>
                                 <option value="Biodegradable">Biodegradable</option>
                                 <option value="Residual">Residual</option>
-                                <option value="Recyclables">Recyclables</option>
-                                <option value="Hazards">Hazards</option>
                             </select>
                         </div>
                         <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
@@ -167,8 +239,6 @@
                                 <option></option>
                                 <option value="Biodegradable">Biodegradable</option>
                                 <option value="Residual">Residual</option>
-                                <option value="Recyclables">Recyclables</option>
-                                <option value="Hazards">Hazards</option>
                             </select>
                         </div>
                         <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
@@ -206,6 +276,64 @@
 
 <script>
     $(document).ready(function () {
+        let table = $('#wcol-tbl').DataTable({
+            bSort: true,
+            fixedHeader: true, // Enable fixed header
+            retrieve: true, // Retrieve the existing table instead of initializing it again
+            paging: true, // Enable pagination
+            searching: true, // Enable search functionality
+            info: true, // Show the number of entries info
+            responsive: true, // Ensure responsiveness
+            buttons: [
+                { 
+                    extend: 'csv', 
+                    text: 'CSV',
+                    title: 'Waste Collection List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'excel', 
+                    text: 'Excel',
+                    title: 'Waste Collection List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'pdf', 
+                    text: 'PDF',
+                    title: 'Waste Collection List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                { 
+                    extend: 'print', 
+                    text: 'Print',
+                    title: 'Waste Collection List',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                }
+            ]
+        });
+
+        // Add event listeners for export options in the dropdown
+        $('#export-csv').on('click', function () {
+            table.button('.buttons-csv').trigger();
+        });
+        $('#export-excel').on('click', function () {
+            table.button('.buttons-excel').trigger();
+        });
+        $('#export-pdf').on('click', function () {
+            table.button('.buttons-pdf').trigger();
+        });
+        $('#export-print').on('click', function () {
+            table.button('.buttons-print').trigger();
+        });
+        
         // Fetch barangays and display in the table
         function fetchBrgy() {
             $.ajax({
@@ -239,30 +367,26 @@
         fetchBrgy();
 
         function fetchWC() {
+            let role = $('#wt-filter').val();
+            let created_date = $('#created-date').val();
+            let calendarDate = new Date(created_date).toLocaleDateString('en-CA');
+
             $.ajax({
                 url: "{{ route('lwc.index') }}", // Your route for fetching barangays
                 type: "GET",
+                data: {
+                    role: role,              // Pass the role filter
+                    created_date: calendarDate // Pass the created date filter
+                },
                 success: function (response) {
                     let rows = '';
                     let counter = 1;
                     $.each(response.wasteCompositions, function (key, wasteComposition) {
-                        if (wasteComposition.isDeleted == '0') { 
-
-                            let collectionDate = new Date(wasteComposition.collection_date);
-
-                            // Format the date to a more readable format
-                            let options = {
-                                year: 'numeric',
-                                month: 'long',  // e.g., September
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: 'numeric',
-                                hour12: true    // For AM/PM format
-                            };
+                        let tableDate = new Date(wasteComposition.collection_date).toLocaleDateString('en-CA');
+                        if ((role === '' || wasteComposition.waste_type === role) &&
+                            (created_date === '' || tableDate === created_date)) { 
 
                             // Convert the date to the desired format
-                            let formattedDate = collectionDate.toLocaleString('en-US', options);
-
                             let updatedMetrics = '';
 
                             if (wasteComposition.waste_type == 'Biodegradable') {
@@ -271,17 +395,28 @@
                                 updatedMetrics = `${wasteComposition.metrics} sack/s`;
                             }
 
+                            let formatteddate = tableDate;
+
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
                                     <td>${wasteComposition.waste_type}</td>
-                                    <td>${formattedDate}</td>
+                                    <td>${formatteddate}</td>
                                     <td>${updatedMetrics}</td>
                                     <td>${wasteComposition.brgy.name}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
-                                            <a class="btn btn-sm btn-icon btn-warning edit-wc-btn" data-id="${wasteComposition.id}">Edit</a>
-                                            <a class="btn btn-sm btn-icon btn-danger delete-wc-btn" data-id="${wasteComposition.id}">Delete</a>
+                                            <a class="btn btn-sm btn-icon btn-warning edit-wc-btn" data-id="${wasteComposition.id}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
+                                                    <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
+                                                    <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
+                                                </svg>
+                                                Edit
+                                            </a>
+                                            <a class="btn btn-sm btn-icon btn-danger delete-wc-btn" data-id="${wasteComposition.id}">
+                                                <svg xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                                Delete
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>`;
@@ -296,7 +431,7 @@
                     $('#wcol-tbl tbody').html(rows);
 
                     let table = $('#wcol-tbl').DataTable({
-                        bSort: false,
+                        bSort: true,
                         fixedHeader: true, // Enable fixed header
                         retrieve: true, // Retrieve the existing table instead of initializing it again
                         paging: true, // Enable pagination
@@ -348,7 +483,25 @@
             });
         }
 
-        fetchWC();
+        // fetchWC();
+
+        $('#clear-filters').on('click', function(e) {
+            e.preventDefault(); // Prevent the default anchor click behavior
+            
+            // Reset all select elements and inputs
+            $('#wt-filter').val('');
+            let calendarInstance = document.querySelector('#created-date')._flatpickr;
+            if (calendarInstance) {
+                calendarInstance.clear();  // Clear the Flatpickr instance
+            }
+            
+            // Fetch users again to update the table without filters
+            fetchWC();
+        });
+
+        $('#wt-filter, #created-date').on('change', function () {
+            fetchWC(); // Fetch data whenever a filter changes
+        });
 
         // Add Dump Truck
         $('#addWCForm').on('submit', function (e) {

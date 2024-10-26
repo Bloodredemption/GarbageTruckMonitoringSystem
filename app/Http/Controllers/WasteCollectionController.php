@@ -18,13 +18,21 @@ class WasteCollectionController extends Controller
             
             $wasteCompositions = WasteComposition::with('brgy:id,name')
                             ->where('user_id', $userId)
+                            ->where('isDeleted', 0)
                             ->orderBy('created_at', 'desc')
                             ->get();
         
             return response()->json(['wasteCompositions' => $wasteCompositions]);
         }
 
-        return view('landfill.waste-collection.index');
+        $userId = Auth::id();
+            
+        $wasteCompositions = WasteComposition::with('brgy:id,name')
+                        ->where('user_id', $userId)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+        return view('landfill.waste-collection.index', compact('wasteCompositions'));
     }
 
     /**

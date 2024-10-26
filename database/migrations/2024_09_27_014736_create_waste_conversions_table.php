@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('metrics');
             $table->string('start_date');
             $table->string('end_date');
-            $table->string('status')->default('Ongoing');
+            $table->string('status')->default('Pending');
             $table->integer('isDeleted')->default(0);
             $table->timestamps();
         });

@@ -263,70 +263,11 @@
                             <span class="item-name">Residents Concerns</span>
                         </a>
                     </li>
-
-                    {{-- <li><hr class="hr-horizontal"></li>
-                    <li class="nav-item static-item">
-                        <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                            <span class="default-icon">Reports</span>
-                            <span class="mini-icon">-</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link "  href="">
-                            <i class="icon">
-                                <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <rect width="30" height="30" fill="url(#pattern0_18_1469)"/>
-                                        <defs>
-                                            <pattern id="pattern0_18_1469" patternContentUnits="objectBoundingBox" width="1" height="1">
-                                            <use xlink:href="#image0_18_1469" transform="scale(0.0333333)"/>
-                                            </pattern>
-                                            <image id="image0_18_1469" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABnUlEQVR4nO3WzUtVQRjHccNF7Vpki+jNXUYl1DKMSC8VLYSivyIobNWqfyS5/QFBtKrWZWDhwo2SXmqnC18gE3sPP3FgwKM4xzn3TuLCH5zNwzy/78w8c56Zrq597RXhNB7iNT5jLXyf8AojOJUTeAJP8dvOKsY0cbxT6C0sq68l3GwXOow/2tdf3KkLvYgfOtd39KdCD+CtfHpXeKaAr8uvRgq4GUm+nJA7EMkdTQFPR5IHEnKvRHKnUsCr8ms1Bfz1P4BXUsBTdWtcUdtaW92sW+OK2m46XBhEX8xkSH4NlRbVwqFYAxnLCB0LnofxJcRGYqs+n6llfsOF4Pm4FH+/Uwf72eElcTt4nQt9O+33wrj2tIgbwePINk1ppQraaAP4C09wLHgcxeQ248Zj0H4slAZ+wFXcw0t8LD19WiF2HydLHtcwF5nggxi4FZKeF5d50rW2kXsWz7Aegc7iYKpfFagnlOVR2JkqreFMx9AA7sWbxDOwXnSvLODSBBqhM82U6j8TYhNbHoKXssIrJtWNu3iB+eIM7Qp4T+ofbWXJ11AKmMoAAAAASUVORK5CYII="/>
-                                        </defs>
-                                        <rect width="30" height="30" fill="url(#pattern0_18_1477)"/>
-                                        <defs>
-                                            <pattern id="pattern0_18_1477" patternContentUnits="objectBoundingBox" width="1" height="1">
-                                            <use xlink:href="#image0_18_1477" transform="scale(0.0333333)"/>
-                                            </pattern>
-                                            <image id="image0_18_1477" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAACSElEQVR4nO2Wv2sUURDHVyy0s1AL8Wenoga0lIj4gygWguJfISixshIr9c27TW5nNhYmnEHuZjYsiJWx1ghRLGwixqCdFhpBDfF3yMnbS7zDvL39cUtI4cBrlvfm877znZ1dx/kfKyVKA7XtQHIJiB9okjdAMttY/BqQRzVKr/LCbYUBFVa3aJTbgPJLk9TbrcYervT1hZs7goLHpzTKxyTgkguQTGuUk/mgvpzWxL+zQpvqeU5R7WwmqIuyX6N8zwttKudv2pOuVNB6vb5KIz/qFNri+2OTMxGsMegpCtpcfDwZTFyxHVYYHEw6qzzujoEPJYKB5IUV7HF38tngkBWMPJFCscwUX2qZSaP4S+Fg5M/JipEnsnrcxtsspeZKVo9jvf2nuUokR13iXfYkXnCs6FKbnC2ipq4OD6+1DxCSsQLBYyanuhWuA5JPjdJLr1V1yRvZW8TI1MhflV/bt6D2yt8KED+J9xqDHiD+kbu8yHPakzNR8w3InmhuU8rXS5OM5wPzB+XzCZPjun9n/ZKhhG1eLzNfcwB/AvJgf391k8lxDcONQPLcsnfcDvWkC1DeN28oTwH5MBCf1yT3AeXl4q+P6VLzTKNccG8GWxdzANaOAPFb2wVLJBfjSjwVHUK5az7mqT5rC6HKwW6NEgLyfIz3rxBH1zidhuvyBmMLIF82lWnbcCSzUK7udIqIG+VgB6A8TNnp82Z6OUVGoxmjyTTZ4v9k9Az5WYvqafBHDjjLEWEYrlYo5zTKPY38zvTQsoBXZPwBwf6jRG7aWlkAAAAASUVORK5CYII="/>
-                                        </defs>
-                                </svg>
-                            </i>
-                            <span class="item-name">Weekly Report</span>
-                        </a>
-                    </li> --}}
-
                     <li><hr class="hr-horizontal"></li>
                     <li class="nav-item static-item">
                         <a class="nav-link static-item disabled" href="#" tabindex="-1">
                             <span class="default-icon">Others</span>
                             <span class="mini-icon">-</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/reports') ? 'active' : '' }}"  href="{{ route('reports.index') }}">
-                            <i class="icon">
-                                <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                    @if(request()->is('admin/reports'))
-                                        <rect width="30" height="30" fill="url(#pattern0_367_813)"/>
-                                        <defs>
-                                            <pattern id="pattern0_367_813" patternContentUnits="objectBoundingBox" width="1" height="1">
-                                                <use xlink:href="#image0_367_813" transform="scale(0.0333333)"/>
-                                            </pattern>
-                                            <image id="image0_367_813" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAwUlEQVR4nO3WSwrCMBSF4Swos3aYBShuw4EV3HTtJDvoRH8HBg3FvHpTQcmBQuA2+cohgyrVopQCDsBEfmZgEJcHXCnL3T1nKVyaI3Bz+OVrsHrukeOsgKvgrITFOALY7T95F27YDAZMBJ+3hIsaCabB0oS7/YGqLdABvVuH5qYmbAHtvaMX+GvuPqwKbL1D9WJtP8xtDdhmQEFUAnepamOoBDaJy9RH5iJYnAa3qiW/t7GM75MTAfaV8BHYZcN/nQc5VjlIyycjUAAAAABJRU5ErkJggg=="/>
-                                        </defs>
-                                    @else
-                                        <rect width="30" height="30" fill="url(#pattern0_367_815)"/>
-                                        <defs>
-                                            <pattern id="pattern0_367_815" patternContentUnits="objectBoundingBox" width="1" height="1">
-                                                <use xlink:href="#image0_367_815" transform="scale(0.0333333)"/>
-                                            </pattern>
-                                            <image id="image0_367_815" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA80lEQVR4nO3TXQqCQBAH8DlQb/boAYqu0UMF3cMdfXDGM8zUubKXbtBLGSsIIvm9BZkLiwMj+1v+jgDzAoCQdWNYrsiaddmG5Y4k+9HhIWvaFc1hkme+WQ5j4awnvEXWh8WR9Pg1GADACY4DYCc4DoRH4zgCzvFEd8XA9Zp27AkHsfi1OMv9Y3DfRGrXDOPfRm1IbxGJZxJd2rqub6fcGWxIb2F8XhTv2LqMl/v2Yk5gUzrUPsu17VX71TQGwe8ObbuIk28ckXht0Tahg+EgFr9pmPJeTf/3fyecYZ5Q1Kkr1JBcOsMhn9YucIsi6aozPOn1AuAa8rg2SY4DAAAAAElFTkSuQmCC"/>
-                                        </defs>
-                                    @endif
-                                </svg>
-                            </i>
-                            <span class="item-name">Reports</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -355,6 +296,79 @@
                             <span class="item-name">Users</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-bs-toggle="collapse" href="#sidebar-widget" role="button" aria-expanded="false" aria-controls="sidebar-widget">
+                            <i class="icon">
+                                <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    @if(request()->is('admin/reports'))
+                                        <rect width="30" height="30" fill="url(#pattern0_367_813)"/>
+                                        <defs>
+                                            <pattern id="pattern0_367_813" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                                <use xlink:href="#image0_367_813" transform="scale(0.0333333)"/>
+                                            </pattern>
+                                            <image id="image0_367_813" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAwUlEQVR4nO3WSwrCMBSF4Swos3aYBShuw4EV3HTtJDvoRH8HBg3FvHpTQcmBQuA2+cohgyrVopQCDsBEfmZgEJcHXCnL3T1nKVyaI3Bz+OVrsHrukeOsgKvgrITFOALY7T95F27YDAZMBJ+3hIsaCabB0oS7/YGqLdABvVuH5qYmbAHtvaMX+GvuPqwKbL1D9WJtP8xtDdhmQEFUAnepamOoBDaJy9RH5iJYnAa3qiW/t7GM75MTAfaV8BHYZcN/nQc5VjlIyycjUAAAAABJRU5ErkJggg=="/>
+                                        </defs>
+                                    @else
+                                        <rect width="30" height="30" fill="url(#pattern0_367_815)"/>
+                                        <defs>
+                                            <pattern id="pattern0_367_815" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                                <use xlink:href="#image0_367_815" transform="scale(0.0333333)"/>
+                                            </pattern>
+                                            <image id="image0_367_815" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA80lEQVR4nO3TXQqCQBAH8DlQb/boAYqu0UMF3cMdfXDGM8zUubKXbtBLGSsIIvm9BZkLiwMj+1v+jgDzAoCQdWNYrsiaddmG5Y4k+9HhIWvaFc1hkme+WQ5j4awnvEXWh8WR9Pg1GADACY4DYCc4DoRH4zgCzvFEd8XA9Zp27AkHsfi1OMv9Y3DfRGrXDOPfRm1IbxGJZxJd2rqub6fcGWxIb2F8XhTv2LqMl/v2Yk5gUzrUPsu17VX71TQGwe8ObbuIk28ckXht0Tahg+EgFr9pmPJeTf/3fyecYZ5Q1Kkr1JBcOsMhn9YucIsi6aozPOn1AuAa8rg2SY4DAAAAAElFTkSuQmCC"/>
+                                        </defs>
+                                    @endif
+                                </svg>
+                            </i>
+                            <span class="item-name">Reports</span>
+                            <i class="right-icon">
+                                <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </i>
+                        </a>
+                        <ul class="sub-nav collapse" id="sidebar-widget" data-bs-parent="#sidebar-menu" style="">
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('admin/reports/daily') ? 'active' : '' }}" href="{{ route('reports.daily') }}">
+                                    <i class="icon">
+                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                            <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                            </g>
+                                        </svg>
+                                    </i>
+                                    <i class="sidenav-mini-icon"> D </i>
+                                    <span class="item-name">Daily Report</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link  {{ request()->is('admin/reports/quarterly') ? 'active' : '' }}" href="{{ route('reports.quarterly') }}">
+                                    <i class="icon">
+                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                            <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                            </g>
+                                        </svg>
+                                    </i>
+                                    <i class="sidenav-mini-icon"> Q </i>
+                                    <span class="item-name">Quarterly Report</span>
+                                </a>
+                            </li>
+                             <li class="nav-item">
+                                <a class="nav-link {{ request()->is('admin/reports/yearly') ? 'active' : '' }}" href="{{ route('reports.yearly') }}">
+                                    <i class="icon">
+                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                            <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                            </g>
+                                        </svg>
+                                    </i>
+                                    <i class="sidenav-mini-icon"> Y </i>
+                                    <span class="item-name">Yearly Report</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
                     <li class="nav-item mb-5">
                         <a class="nav-link {{ request()->is('admin/help') ? 'active' : '' }}"  href="{{ route('help') }}">
                             <i class="icon">

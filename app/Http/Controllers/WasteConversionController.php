@@ -231,4 +231,14 @@ class WasteConversionController extends Controller
 
         return response()->json(['message' => 'Waste conversion successfully deleted.']);
     }
+
+    public function finish(string $id)
+    {
+        $wasteConversion = WasteConversion::findOrFail($id);
+        $wasteConversion->status = 'Finished';
+        $wasteConversion->end_date = Carbon::now()->format('Y-m-d');
+        $wasteConversion->save();
+
+        return response()->json(['message' => 'Waste conversion finished.']);
+    }
 }

@@ -109,31 +109,37 @@
                                     <form id="loginForm" method="POST" action="{{ route('login') }}">
                                         @csrf
                                         <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="username" class="form-label">Username</label>
-                                                <input type="text" class="form-control" id="username" name="username" aria-describedby="username" placeholder=" " required>
-                                                @error('username')
-                                                    <span>{{ $message }}</span>
-                                                @enderror
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label for="username" class="form-label">Username</label>
+                                                    <input type="text" class="form-control" id="username" name="username" placeholder=" " required>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="password" class="form-label">Password</label>
-                                                <input type="password" class="form-control" id="password" name="password" aria-describedby="password" placeholder=" " required>
-                                                @error('password')
-                                                    <span>{{ $message }}</span>
-                                                @enderror
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label for="password" class="form-label">Password</label>
+                                                    <div class="input-group">
+                                                        <input type="password" class="form-control" id="password" name="password" placeholder=" " required>
+                                                        <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                                                            <!-- Show Password SVG (initial state) -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                    @error('password')
+                                                        <span>{{ $message }}</span>
+                                                    @enderror
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-12 d-flex justify-content-between">
-                                            <div class="form-check mb-3">
-                                                <input type="checkbox" class="form-check-input" id="customCheck1">
-                                                <label class="form-check-label" for="customCheck1">Remember Me</label>
+                                            <div class="col-lg-12 d-flex justify-content-between">
+                                                <div class="form-check mb-3">
+                                                    <input type="checkbox" class="form-check-input" id="rememberMe" checked>
+                                                    <label class="form-check-label" for="rememberMe">Remember Me</label>
+                                                </div>
                                             </div>
-                                            {{-- <a href="recoverpw.html">Forgot Password?</a> --}}
-                                        </div>
                                         </div>
                                         <div class="d-flex justify-content-center mb-4">
                                             <button id="loginButton" type="submit" class="btn btn-primary" style="width: 100%;">
@@ -155,5 +161,78 @@
         </section>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordField = document.getElementById('password');
+            const togglePassword = document.getElementById('togglePassword');
+            const rememberMeCheckbox = document.getElementById('rememberMe');
+            const usernameField = document.getElementById('username');
+
+            // SVGs for show and hide password icons
+            const showPasswordSvg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                </svg>
+            `;
+            const hidePasswordSvg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye-off">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+                    <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
+                    <path d="M3 3l18 18" />
+                </svg>
+            `;
+
+            // Show/Hide Password Functionality
+            togglePassword.addEventListener('click', () => {
+                const isPasswordHidden = passwordField.getAttribute('type') === 'password';
+                passwordField.setAttribute('type', isPasswordHidden ? 'text' : 'password');
+                togglePassword.innerHTML = isPasswordHidden ? hidePasswordSvg : showPasswordSvg;
+            });
+
+            // Load Username from Cookie if Exists
+            const savedUsername = getCookie('username');
+            if (savedUsername) {
+                usernameField.value = savedUsername;
+                rememberMeCheckbox.checked = true;
+            }
+
+            // Store Username in Cookie if "Remember Me" is checked
+            rememberMeCheckbox.addEventListener('change', () => {
+                if (rememberMeCheckbox.checked) {
+                    setCookie('username', usernameField.value, 30); // Store for 30 days
+                } else {
+                    deleteCookie('username');
+                }
+            });
+
+            // Update Cookie whenever Username is changed and "Remember Me" is checked
+            usernameField.addEventListener('input', () => {
+                if (rememberMeCheckbox.checked) {
+                    setCookie('username', usernameField.value, 30);
+                }
+            });
+
+            // Cookie Helper Functions
+            function setCookie(name, value, days) {
+                const expires = new Date(Date.now() + days * 864e5).toUTCString();
+                document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+            }
+
+            function getCookie(name) {
+                return document.cookie.split('; ').reduce((r, v) => {
+                    const parts = v.split('=');
+                    return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+                }, '');
+            }
+
+            function deleteCookie(name) {
+                setCookie(name, '', -1);
+            }
+        });
+
+    </script>
   </body>
 </html>

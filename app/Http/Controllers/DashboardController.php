@@ -6,6 +6,7 @@ use App\Models\WasteComposition;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\WasteConversion;
 
 class DashboardController extends Controller
 {
@@ -15,6 +16,169 @@ class DashboardController extends Controller
     public function index()
     {
         return view('admin.dashboard');
+    }
+
+    public function landfill_index() 
+    {
+        return view('landfill.dashboard');
+    }
+
+    public function driver_index() 
+    {
+        return view('driver.dashboard');
+    }
+
+    public function lfgetWeeklyWasteData()
+    {
+        // Define the start and end dates for the week (you can customize this logic)
+        $startDate = Carbon::now()->startOfWeek(); // Start of current week
+        $endDate = Carbon::now()->endOfWeek();     // End of current week
+
+        // Fetch the waste conversions for the specified week and Finished status
+        $wasteConversions = WasteConversion::where('status', 'Finished')
+            ->whereBetween('start_date', [$startDate, $endDate])
+            ->get();
+
+        // Calculate total metrics for that week
+        $totalMetrics = $wasteConversions->sum('metrics');
+
+        // Group by waste_type and calculate percentage for each type
+        $data = $wasteConversions->groupBy('waste_type')->map(function ($group) use ($totalMetrics) {
+            $wasteTypeTotal = $group->sum('metrics');
+            $percentage = ($totalMetrics > 0) ? ($wasteTypeTotal / $totalMetrics) * 100 : 0;
+            return [
+                'waste_type' => $group->first()->waste_type,
+                'metrics' => $wasteTypeTotal,
+                'percentage' => round($percentage, 1), // rounded to 1 decimal
+            ];
+        })->values(); // Get values as an array
+
+        return response()->json($data);
+    }
+
+    public function lffetchWasteData(Request $request)
+    {
+        $timeframe = $request->input('timeframe', 'day');
+        $now = Carbon::today();  // Use today's date without time for comparison
+
+        // Define date range based on selected timeframe
+        switch ($timeframe) {
+            case 'day':
+                $startDate = $now;
+                $endDate = $now;
+                $displayDate = $now->format('F j, Y');
+                $breakdown = 'Daily';
+                break;
+            case 'week':
+                $startDate = $now->copy()->startOfWeek();
+                $endDate = $now->copy()->endOfWeek();
+                $displayDate = $startDate->format('F j') . ' - ' . $endDate->format('j, Y');
+                $breakdown = 'Weekly';
+                break;
+            case 'month':
+                $startDate = $now->copy()->startOfMonth();
+                $endDate = $now->copy()->endOfMonth();
+                $displayDate = $now->format('F Y');
+                $breakdown = 'Monthly';
+                break;
+            case 'year':
+                $startDate = $now->copy()->startOfYear();
+                $endDate = $now->copy()->endOfYear();
+                $displayDate = 'Year ' . $now->format('Y');
+                $breakdown = 'Yearly';
+                break;
+            default:
+                return response()->json(['error' => 'Invalid timeframe selected'], 400);
+        }
+
+        // Convert startDate and endDate to strings for date comparison
+        $startDateString = $startDate->format('Y-m-d');
+        $endDateString = $endDate->format('Y-m-d');
+
+        // Fetch data for each waste type with status 'Finished'
+        $wasteData = WasteConversion::where('status', 'Finished')
+            ->whereDate('start_date', '>=', $startDateString)
+            ->whereDate('end_date', '<=', $endDateString)
+            ->groupBy('waste_type')
+            ->selectRaw('waste_type, SUM(metrics) as total')
+            ->pluck('total', 'waste_type');
+
+        return response()->json([
+            'data' => [
+                'biodegradable' => $wasteData->get('Biodegradable', 0),
+                'residual' => $wasteData->get('Residual', 0),
+                'recyclable' => $wasteData->get('Recyclable', 0),
+                'hazard' => $wasteData->get('Hazard', 0),
+            ],
+            'displayDate' => $displayDate,
+            'breakdown' => $breakdown,
+        ]);
+    }
+
+    public function lffetchWasteSummary(Request $request)
+    {
+        $timeframe = $request->input('timeframe', 'week');  // Default to weekly
+
+        $query = WasteConversion::where('status', 'Finished');
+
+        // Determine grouping and formatting based on timeframe
+        switch ($timeframe) {
+            case 'week':
+                // Define the start and end of the current week
+                $startOfWeek = Carbon::now()->startOfWeek();
+                $endOfWeek = Carbon::now()->endOfWeek();
+
+                // Sum all metrics within this week
+                $total = $query
+                    ->whereBetween('start_date', [$startOfWeek, $endOfWeek])
+                    ->sum('metrics');
+
+                // Format category for the current week
+                $categories = [$startOfWeek->format('M j') . ' - ' . $endOfWeek->format('M j')];
+                $series = [$total];
+                break;
+
+            case 'month':
+                $data = $query
+                    ->selectRaw('YEAR(start_date) AS year, MONTH(start_date) AS month, SUM(metrics) AS total')
+                    ->groupBy('year', 'month')
+                    ->orderBy('year')
+                    ->orderBy('month')
+                    ->get();
+
+                $categories = [];
+                $series = [];
+
+                foreach ($data as $month) {
+                    $categories[] = Carbon::createFromDate($month->year, $month->month, 1)->format('M');
+                    $series[] = $month->total;
+                }
+                break;
+
+            case 'year':
+                $data = $query
+                    ->selectRaw('YEAR(start_date) AS year, SUM(metrics) AS total')
+                    ->groupBy('year')
+                    ->orderBy('year')
+                    ->get();
+
+                $categories = [];
+                $series = [];
+
+                foreach ($data as $year) {
+                    $categories[] = (string) $year->year;
+                    $series[] = $year->total;
+                }
+                break;
+
+            default:
+                return response()->json(['error' => 'Invalid timeframe selected'], 400);
+        }
+
+        return response()->json([
+            'categories' => $categories,
+            'series' => $series,
+        ]);
     }
 
     public function getWasteCompositionData(Request $request)

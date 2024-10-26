@@ -94,7 +94,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                             </svg>
                                         </i>
-                                        <span>Add</span>
+                                        <span>Create</span>
                                     </a>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="userTableBody">
-                                                    @forelse ($users as $user)
+                                                    @foreach ($users as $user)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $user->fullname }}</td>
@@ -186,7 +186,7 @@
                                                                 <span class="badge bg-danger">inactive</span>
                                                             @endif
                                                         </td>
-                                                        <td>{{ $user->created_at }}</td>
+                                                        <td>{{ $user->created_at->format('Y-m-d') }}</td>
                                                         <td>
                                                             <div class="flex align-items-center list-user-action">
                                                                 <a class="btn btn-sm btn-icon btn-warning edit-user-btn" data-id="{{ $user->id }}" title="Edit User">
@@ -208,13 +208,7 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                    @empty
-                                                    <td colspan="6">
-                                                        <span class="text-danger">
-                                                            <strong>No Data Found!</strong>
-                                                        </span>
-                                                    </td>
-                                                    @endforelse
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -706,11 +700,11 @@
                                     <td>
                                         <div class="flex align-items-center list-user-action">
                                             <a class="btn btn-sm btn-icon btn-secondary restore-user-btn" data-id="${ausers.id}">
-                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
                                                 Restore
                                             </a>
                                             <a class="btn btn-sm btn-icon btn-danger delete-user-btn" data-id="${ausers.id}">
-                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                                                 Delete
                                             </a>
                                         </div>

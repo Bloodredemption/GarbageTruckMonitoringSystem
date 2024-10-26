@@ -75,7 +75,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 // Reports
 Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::get('/reports/daily', [ReportsController::class, 'daily'])->name('reports.daily');
+    Route::get('/reports/quarterly', [ReportsController::class, 'quarterly'])->name('reports.quarterly');
+    Route::get('/reports/yearly', [ReportsController::class, 'yearly'])->name('reports.yearly');
 });
 
 // Dump Trucks
@@ -153,9 +155,12 @@ Route::get('/admin/profile', function () {
 // Start Landfill Side //
 
 // Dashboard
-Route::get('/landfill/dashboard', function () {
-    return view('landfill.dashboard');
-})->name('lf.dashboard');
+Route::prefix('landfill')->middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'landfill_index'])->name('lf.dashboard');
+    Route::get('/dashboard/weeklyConvertedWaste', [DashboardController::class, 'lfgetWeeklyWasteData']);
+    Route::get('/dashboard/fetchWasteData', [DashboardController::class, 'lffetchWasteData']);
+    Route::get('/dashboard/fetchWasteSummary', [DashboardController::class, 'lffetchWasteSummary']);
+});
 
 // Waste Collection
 Route::prefix('landfill')->middleware('auth')->group(function () {
@@ -175,6 +180,7 @@ Route::prefix('landfill')->middleware('auth')->group(function () {
     Route::get('/waste-conversions/{id}/edit', [WasteConversionController::class, 'edit']);
     Route::put('/waste-conversions/{id}/update', [WasteConversionController::class, 'update']);
     Route::put('/waste-conversions/{id}/delete', [WasteConversionController::class, 'destroy']);
+    Route::put('/waste-conversions/{id}/finish', [WasteConversionController::class, 'finish']);
 });
 
 // Help
@@ -187,9 +193,9 @@ Route::get('/landfill/help', function () {
 // Start Driver Side //
 
 // Dashboard
-Route::get('/driver/dashboard', function () {
-    return view('driver.dashboard');
-})->name('d.dashboard');
+Route::prefix('driver')->middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'driver_index'])->name('d.dashboard');
+});
 
 // Waste Composition
 Route::prefix('driver')->middleware('auth')->group(function () {

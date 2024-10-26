@@ -38,26 +38,110 @@
     </div>
     <div class="conatiner-fluid content-inner mt-n5 py-0">
         <div class="row">
-            
-            <div class="col-md-12 col-lg-12">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card" data-aos="fade-up" data-aos-delay="800">
-                            <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
-                                <div class="header-title">
-                                    <h4 class="card-title">Some Text Here</h4>
-                                    <p class="mb-0">Sub Title Here</p>          
-                                </div>
-                                
-                            </div>
-                            <div class="card-body">
-                                {{-- <div id="d-main" class="d-main"></div> --}}
+            <!-- Waste Generated Histogram -->
+            <div class="col-lg-6">
+                <div class="card aos-init aos-animate" data-aos="fade-up" data-aos-delay="900">
+                    <div class="flex-wrap card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h5 class="card-title"><strong>Waste Converted Histogram</strong></h5>            
+                        </div>   
+                        <div class="form-group">
+                            <select class="form-select text-gray" id="timeframeSelect" aria-label="Select Timeframe">
+                                <option value="week">Weekly</option>
+                                <option value="month">Monthly</option>
+                                <option value="year">Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body" style="padding-top: 0;">
+                        <div class="flex-wrap d-flex align-items-center justify-content-between">
+                            <div id="myChart" class="col-md-12 col-sm-12 myChart" style="min-height: 208.7px;">
+                                    
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+        
+            <div class="col-lg-6 d-flex flex-column justify-content-between">
+                <div class="card flex-fill">
+                    <div class="flex-wrap card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h5 class="card-title"><strong>Waste Converted Composition <span id="totalConverted">(Total: 0 kg /Weekly)</span></strong></h5>            
+                        </div>   
+                        
+                    </div>
+                    <div class="card-body" style="padding-top: 0;">
+                        <div class="row d-flex align-items-center">
+                            <div id="wccChart" class="wccChart pt-4" style="padding-left: 0;">
+                                <!-- Chart will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+
+        <div class="row">
+            <!-- Waste Generation Weekly Breakdown -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="flex-wrap card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h5 class="card-title"><strong>Waste Conversion <span id="wgbreak">Daily</span> Breakdown</strong></h5>            
+                        </div>   
+                        <div class="form-group">
+                            <select class="form-select text-gray" id="timeframeSelect2" aria-label="Select Timeframe">
+                                <option value="day">Daily</option>
+                                <option value="week">Weekly</option>
+                                <option value="month">Monthly</option>
+                                <option value="year">Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body" style="padding-top: 0;">
+                        <div class="row d-flex align-items-center">
+                            <!-- Chart Section -->
+                            <div id="smyChart" class="col-md-8 col-sm-8 smyChart" style="min-height: 208.7px; padding-left: 0;">
+                                <!-- Chart will be inserted here -->
+                            </div>
+                            
+                            <!-- Text Section -->
+                            <div class="col-md-4 col-sm-4 text-black" style="padding-left: 0;">
+                                <p id="displayDate" class="text-start mb-0">October 25, 2024</p> <!-- This will be updated dynamically -->
+                                <hr>
+                                <p class="mb-1 d-flex justify-content-between">
+                                    <span>Biodegradables</span> 
+                                    <span id="biodegradableCount">0 kg/s</span> <!-- Dynamic biodegradable count -->
+                                </p>
+                                <p class="mb-1 d-flex justify-content-between">
+                                    <span>Residuals</span> 
+                                    <span id="residualCount">0 kg/s</span> <!-- Dynamic residual count -->
+                                </p>
+                                <p class="mb-1 d-flex justify-content-between">
+                                    <span>Recyclables</span> 
+                                    <span id="recyclableCount">0 kg/s</span> <!-- Dynamic residual count -->
+                                </p>
+                                <p class="mb-1 d-flex justify-content-between">
+                                    <span>Hazards</span> 
+                                    <span id="hazardCount">0 kg/s</span> <!-- Dynamic residual count -->
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Calendar -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Insert calendar here -->
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -65,5 +149,271 @@
     @include('partials.footer')
     <!-- Footer Section End -->    
 </main>
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+
+<script>
+    $(document).ready(function(){
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            dayMaxEvents: 3,
+            contentHeight: "auto",
+            initialView: 'dayGridMonth', // Month view
+            headerToolbar: {
+                left: 'prev',
+                center: 'title',
+                right: 'next'
+            },
+            events: {
+                url: "{{ route('cs.events') }}",
+                method: 'GET',
+                failure: function() {
+                    alert('There was an error while fetching events!');
+                }
+            },
+            eventDidMount: function(info) {
+                // Add pointer style when hovering over events
+                info.el.style.cursor = 'pointer';
+
+                // Set the tooltip content using the event title or other extended properties
+                var tooltipContent = 'Barangay: ' + info.event.extendedProps.brgy_name + 
+                                    ', Dump Truck: ' + info.event.extendedProps.dumptruck;
+
+                // Set tooltip attributes
+                $(info.el).attr('title', tooltipContent);
+                $(info.el).tooltip({
+                    placement: 'top', // Tooltip will appear above the event
+                    trigger: 'hover', // Show tooltip on hover
+                    container: 'body' // Append tooltip to the body to avoid CSS issues
+                });
+            },
+            
+        });
+
+        calendar.render();
+
+        // Data: series and labels
+        function fetchWasteData() {
+            fetch(`/landfill/dashboard/weeklyConvertedWaste`)
+                .then(response => response.json())
+                .then(data => {
+                    let series = [];
+                    let labels = [];
+                    let metrics = [];
+                    let totalMetrics = 0;
+
+                    data.forEach(item => {
+                        series.push(item.metrics);
+                        labels.push(`${item.percentage}% ${item.waste_type}`);
+                        metrics.push(item.metrics);
+                        totalMetrics += item.metrics;
+                    });
+
+                    document.getElementById('totalConverted').innerText = `(Total: ${totalMetrics} kg / Weekly)`;
+
+                    // Render the chart with the fetched data
+                    renderChart(series, labels);
+                })
+                .catch(error => console.error('Error fetching waste data:', error));
+        }
+
+        // Function to render chart
+        function renderChart(series, labels) {
+            var options = {
+                series: series,
+                chart: {
+                    width: '100%',
+                    height: 300,
+                    type: 'pie',
+                },
+                labels: labels,
+                theme: {
+                    monochrome: {
+                        enabled: true,
+                        color: '#28a745',
+                    },
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            offset: -5,
+                        },
+                    },
+                },
+                grid: {
+                    padding: {
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                    },
+                },
+                dataLabels: {
+                    formatter(val, opts) {
+                        return val.toFixed(1) + '%';
+                    },
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (value, { seriesIndex }) {
+                            // Tooltip with kg value on hover
+                            return `${value} kg`;
+                        },
+                    },
+                },
+                legend: {
+                    show: true,
+                },
+            };
+
+            var chart = new ApexCharts(document.querySelector("#wccChart"), options);
+            chart.render();
+        }
+
+        // Call the function to fetch and display data
+        fetchWasteData();
+      
+        var colors = ['#01A94D', '#3B8AFF', '#FFC107', '#FF5722'];
+        
+        var options2 = {
+            series: [{
+                data: []
+            }],
+            chart: {
+                height: 350,
+                type: 'bar',
+                events: {
+                    click: function(chart, w, e) {
+                    // console.log(chart, w, e)
+                    }
+                }
+            },
+            colors: colors,
+            plotOptions: {
+                bar: {
+                    columnWidth: '45%',
+                    distributed: true,
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            legend: {
+                show: false
+            },
+            xaxis: {
+            categories: [
+                'Biodegradable',
+                'Residuals',
+                'Recyclables',
+                'Hazards',
+            ],
+            labels: {
+                style: {
+                colors: colors,
+                fontSize: '12px'
+                }
+            }
+            }
+        };
+
+        var chart2 = new ApexCharts(document.querySelector("#smyChart"), options2);
+        chart2.render();
+
+        document.getElementById('timeframeSelect2').addEventListener('change', function() {
+            const timeframe = this.value;
+            fetchWasteData2(timeframe);
+        });
+
+        fetchWasteData2('day');
+
+        // Fetch and update data based on timeframe
+        function fetchWasteData2(timeframe) {
+            fetch(`/landfill/dashboard/fetchWasteData?timeframe=${timeframe}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update title, date display, and counts
+                    document.getElementById('wgbreak').textContent = data.breakdown;
+                    document.getElementById('displayDate').textContent = data.displayDate;
+
+                    document.getElementById('biodegradableCount').textContent = `${data.data.biodegradable} kg/s`;
+                    document.getElementById('residualCount').textContent = `${data.data.residual} kg/s`;
+                    document.getElementById('recyclableCount').textContent = `${data.data.recyclable} kg/s`;
+                    document.getElementById('hazardCount').textContent = `${data.data.hazard} kg/s`;
+
+                    // Update chart with new data
+                    chart2.updateSeries([{
+                        data: [
+                            data.data.biodegradable,
+                            data.data.residual,
+                            data.data.recyclable,
+                            data.data.hazard
+                        ]
+                    }]);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        var options3 = {
+            series: [{
+                name: "Desktops",
+                data: []
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+            },
+            xaxis: {
+                categories: [],
+            }
+        };
+
+        var chart3 = new ApexCharts(document.querySelector("#myChart"), options3);
+        chart3.render();
+
+        document.getElementById('timeframeSelect').addEventListener('change', function() {
+            const timeframe = this.value;
+            fetchWasteSummary(timeframe);
+        });
+
+        fetchWasteSummary('week');
+
+        function fetchWasteSummary(timeframe) {
+            fetch(`/landfill/dashboard/fetchWasteSummary?timeframe=${timeframe}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the chart with fetched data
+                    chart3.updateOptions({
+                        xaxis: {
+                            categories: data.categories
+                        },
+                        series: [{
+                            name: "Waste Converted (kg)",
+                            data: data.series
+                        }]
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+
+    });
+</script>
 
 @endsection

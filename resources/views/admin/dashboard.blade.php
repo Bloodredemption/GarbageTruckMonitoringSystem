@@ -335,6 +335,35 @@
             });
         }
 
+        var options = {
+            series: [{
+                name: "Waste Generated"
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f3f3', 'transparent'],
+                    opacity: 0.5
+                },
+            }
+        };
+
+        // Create the new chart instance
+        chart = new ApexCharts(document.querySelector("#myChart"), options);
+        chart.render();
+
         function updateChart(categories, data) {
             // If chart exists, destroy it before creating a new one
             if (chart) {
@@ -350,7 +379,7 @@
                     height: 350,
                     type: 'line',
                     zoom: {
-                        enabled: false
+                        enabled: true
                     }
                 },
                 dataLabels: {
@@ -430,8 +459,8 @@
                 success: function(response) {
                     // Update the displayed date and waste data
                     $('#displayDate').text(response.dateLabel); // Update the date display
-                    $('#biodegradableCount').text(response.biodegradable + ' Kilograms');
-                    $('#residualCount').text(response.residual + ' Kilograms');
+                    $('#biodegradableCount').text(response.biodegradable + ' kg/s');
+                    $('#residualCount').text(response.residual + ' kg/s');
 
                     // Update the chart with new data
                     chart2.updateSeries([{

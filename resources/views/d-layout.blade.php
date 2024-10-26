@@ -11,7 +11,9 @@
     <link href='https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css' rel='stylesheet'>
     <link rel="stylesheet" href="{{ asset('assets/css/core/libs.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/col-sched.css') }}" />
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
 
@@ -20,7 +22,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background-color: #01A94D; /* Example background */
+            background-color: #fff; /* Example background */
             padding: 10px;
         }
 
@@ -43,13 +45,13 @@
         .notification-icon {
             font-size: 24px;
             cursor: pointer;
-            color: #fff;
+            color: #01A94D;
             position: relative;
         }
 
         /* Optional: Add a notification count bubble */
         .notification-icon::after {
-            content: attr(data-count);
+            content: attr('1');
             position: absolute;
             top: -5px;
             right: -10px;
@@ -108,8 +110,11 @@
             padding: 10px 15px;
             border-radius: 10px; /* Rounded corners for nav buttons */
             transition: all 0.3s ease-in-out; /* Smooth transition for hover and active states */
-            display: inline-flex;
-            align-items: center;
+
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            text-align: center; /* Ensure the text is centered */
         }
 
         /* Active menu item styling */
@@ -119,10 +124,7 @@
             border-radius: 30px; /* Rounded button appearance */
 
             /* Flexbox properties to center text and icon */
-            display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            text-align: center; /* Ensure the text is centered */
+            
         }
 
         /* Ensure the icon inside the active link also changes color */
