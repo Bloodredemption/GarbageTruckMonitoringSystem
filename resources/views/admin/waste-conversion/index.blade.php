@@ -186,7 +186,7 @@
         // Initial chart load for 'This Day'
         updateChart('day');
         
-        $('#wcov-tbl').DataTable({
+        let table = $('#wcov-tbl').DataTable({
             fixedHeader: true, // Enable fixed header
             retrieve: true, // Retrieve the existing table instead of initializing it again
             paging: true, // Enable pagination
@@ -215,6 +215,19 @@
                     title: 'Waste Conversion List',
                 }
             ]
+        });
+
+        $('#export-csv').on('click', function () {
+            table.button('.buttons-csv').trigger();
+        });
+        $('#export-excel').on('click', function () {
+            table.button('.buttons-excel').trigger();
+        });
+        $('#export-pdf').on('click', function () {
+            table.button('.buttons-pdf').trigger();
+        });
+        $('#export-print').on('click', function () {
+            table.button('.buttons-print').trigger();
         });
 
         function fetchWCOV() {

@@ -17,6 +17,8 @@
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
 
+        
+        
         /* Sticky header and bottom nav styling */
         .sticky-header {
             position: sticky;
@@ -51,11 +53,9 @@
 
         /* Optional: Add a notification count bubble */
         .notification-icon::after {
-            content: attr('1');
             position: absolute;
             top: -5px;
             right: -10px;
-            background-color: red;
             color: white;
             font-size: 12px;
             border-radius: 50%;
@@ -65,26 +65,52 @@
         /* Responsive adjustments */
         @media (min-width: 768px) {
             .logo-img {
-                width: 150px; /* Increase logo size for larger screens */
+                width: 150px;
             }
 
             .d-actions {
-                --bs-btn-padding-y: .25rem; 
-                --bs-btn-padding-x: .5rem; 
+                --bs-btn-padding-y: .25rem;
+                --bs-btn-padding-x: .5rem;
                 --bs-btn-font-size: .75rem;
+            }
+
+            .sticky-bottom-nav {
+                width: 95%;
+                padding: 8px 10px;
+            }
+
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 6px;
             }
         }
 
         /* Further adjustments for very small screens (mobile) */
-        @media (max-width: 576px) {
+        @media (max-width: 400px) {
             .logo-img {
-                width: 150px; /* Smaller logo for mobile */
+                width: 150px;
+            }
+            
+            .d-actions {
+                --bs-btn-padding-y: .15rem;
+                --bs-btn-padding-x: .3rem;
+                --bs-btn-font-size: .55rem;
             }
 
-            .d-actions {
-                --bs-btn-padding-y: .15rem; 
-                --bs-btn-padding-x: .3rem; 
-                --bs-btn-font-size: .55rem;
+            /* New styles for small screens */
+            .sticky-bottom-nav {
+                width: 100%;
+                bottom: 10px;
+                font-size: 0.8rem;
+            }
+
+            .nav-link {
+                font-size: 0.8rem;
+                padding: 4px;
+            }
+
+            .nav-icon {
+                font-size: 18px;
             }
         }
         
@@ -92,58 +118,58 @@
         .sticky-bottom-nav {
             font-size: 1rem;
             position: fixed;
-            bottom: 20px; /* Adjust the bottom distance to create a "floating" effect */
+            bottom: 20px;
             left: 50%;
-            transform: translateX(-50%); /* Center the nav horizontally */
-            width: 90%; /* Adjust width to make it float with some padding from the sides */
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
             background-color: #fff;
             z-index: 1000;
-            border-radius: 20px; /* More rounded corners for floating appearance */
-            box-shadow: 0 8px 16px rgba(99, 99, 99, 0.2); /* Add shadow to give floating effect */
-            border: none; /* Remove border if you want a cleaner floating look */
-            padding: 10px 15px; /* Add padding for better separation from content */
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(99, 99, 99, 0.2);
         }
 
-        /* Default nav link and icon color */
+        /* Make container responsive to fit all links */
         .nav-link {
-            color: #585858; /* Default text color */
-            padding: 10px 15px;
-            border-radius: 10px; /* Rounded corners for nav buttons */
-            transition: all 0.3s ease-in-out; /* Smooth transition for hover and active states */
-
+            flex: 1;
+            color: #585858;
+            padding: 8px;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
             display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            text-align: center; /* Ensure the text is centered */
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
-        /* Active menu item styling */
+        .sticky-bottom-nav .nav-link {
+            display: flex !important; /* Ensure flex layout is applied */
+            flex-direction: column !important; /* Stack icon and text vertically */
+            align-items: center !important; /* Center content */
+            justify-content: center !important; /* Center content vertically */
+        }
+
+        .sticky-bottom-nav .nav-icon {
+            margin-bottom: 4px; /* Space between icon and text */
+        }
+
+
+        /* Active link color only */
         .nav-link.active {
-            width: 35%;
-            color: #01A94D !important; /* Inverse text color for active */
-            border-radius: 30px; /* Rounded button appearance */
-
-            /* Flexbox properties to center text and icon */
-            
+            color: #01A94D !important;
         }
 
-        /* Ensure the icon inside the active link also changes color */
-        .nav-link.active .nav-icon {
-            color: #01A94D; /* Icon color changes to match the text when active */
-        }
-
-        /* Optional: Add spacing between the icon and the text */
         .nav-icon {
-            font-size: 24px;
+            font-size: 20px;
+            margin-bottom: 4px; /* Space between icon and text */
         }
 
-        /* Add margin between icon and text */
         .nav-link span {
-            margin-left: 8px; /* Add spacing between the icon and text */
+            font-size: 0.85rem; /* Smaller font for text */
         }
 
         .main-content {
-            padding-top: 20px; /* Space for sticky header */
+            padding-top: 0; /* Space for sticky header */
             padding-bottom: 70px; /* Space for sticky bottom nav */
         }
         
@@ -205,6 +231,35 @@
 
         .dt-info, .dt-search-1 {
             font-size: 0.8rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: #000;
+            width: 100%;
+            transition: background-color 0.2s ease;
+        }
+        .menu-item:hover {
+            background-color: #f8f9fa;
+        }
+        .icon-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+        }
+        .menu-text {
+            flex-grow: 1;
+            margin-left: 10px;
+            font-size: 0.9rem;
         }
     </style>
 </head>

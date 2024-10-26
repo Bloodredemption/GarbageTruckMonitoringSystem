@@ -170,7 +170,7 @@
     updateChart('day');
 
     $(document).ready(function () {
-        $('#wc-tbl').DataTable({
+        let table = $('#wc-tbl').DataTable({
             bSort: true,
             fixedHeader: true, // Enable fixed header
             retrieve: true, // Retrieve the existing table instead of initializing it again

@@ -385,7 +385,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#user-list-table').DataTable({
+        let table = $('#user-list-table').DataTable({
             bSort: true,
             fixedHeader: true, // Enable fixed header
             retrieve: true, // Retrieve the existing table instead of initializing it again

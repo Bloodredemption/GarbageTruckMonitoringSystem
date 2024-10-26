@@ -83,6 +83,9 @@
                 --bs-primary-shade-20: #01A94D;
             }
 
+            body {
+                --sidebar-width: 18rem;
+            }
             .no-data-image {
                 max-width: 300px;
             }

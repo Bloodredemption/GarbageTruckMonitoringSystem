@@ -326,7 +326,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#dump-trucks-tbl').DataTable({
+        let table = $('#dump-trucks-tbl').DataTable({
             bSort: false,
             fixedHeader: true, // Enable fixed header
             retrieve: true, // Retrieve the existing table instead of initializing it again

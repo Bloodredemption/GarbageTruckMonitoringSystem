@@ -30,6 +30,11 @@ class NotificationController extends Controller
         return view('admin.notifications.index', compact('notifications'));
     }
 
+    public function driver_index()
+    {
+        return view('driver.notifications.index');
+    }
+
     public function getArchive()
     {
         $anotifs = Notification::with('user:id,fullname')

@@ -263,13 +263,6 @@
                             <span class="item-name">Residents Concerns</span>
                         </a>
                     </li>
-                    <li><hr class="hr-horizontal"></li>
-                    <li class="nav-item static-item">
-                        <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                            <span class="default-icon">Others</span>
-                            <span class="mini-icon">-</span>
-                        </a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('admin/users') ? 'active' : '' }}"  href="{{ route('users.index') }}">
                             <i class="icon">
@@ -296,11 +289,18 @@
                             <span class="item-name">Users</span>
                         </a>
                     </li>
+                    <li><hr class="hr-horizontal"></li>
+                    <li class="nav-item static-item">
+                        <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                            <span class="default-icon">Others</span>
+                            <span class="mini-icon">-</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
-                        <a class="nav-link collapsed" data-bs-toggle="collapse" href="#sidebar-widget" role="button" aria-expanded="false" aria-controls="sidebar-widget">
+                        <a class="nav-link collapsed {{ request()->is('admin/reports*') ? 'active' : '' }}" data-bs-toggle="collapse" href="#sidebar-reports" role="button" aria-expanded="{{ request()->is('admin/reports*') ? 'true' : 'false' }}" aria-controls="sidebar-widget">
                             <i class="icon">
                                 <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                    @if(request()->is('admin/reports'))
+                                    @if(request()->is('admin/reports*'))
                                         <rect width="30" height="30" fill="url(#pattern0_367_813)"/>
                                         <defs>
                                             <pattern id="pattern0_367_813" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -326,48 +326,129 @@
                                 </svg>
                             </i>
                         </a>
-                        <ul class="sub-nav collapse" id="sidebar-widget" data-bs-parent="#sidebar-menu" style="">
+                        <ul class="sub-nav collapse {{ request()->is('admin/reports/*') ? 'show' : '' }}" id="sidebar-reports" data-bs-parent="#sidebar-menu">
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->is('admin/reports/daily') ? 'active' : '' }}" href="{{ route('reports.daily') }}">
-                                    <i class="icon">
-                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                                            <g>
-                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                                            </g>
-                                        </svg>
-                                    </i>
-                                    <i class="sidenav-mini-icon"> D </i>
-                                    <span class="item-name">Daily Report</span>
+                                <a class="nav-link collapsed" data-bs-toggle="collapse" href="#waste-collected" role="button" aria-expanded="{{ request()->is('admin/reports/waste-collected*') ? 'true' : 'false' }}" aria-controls="waste-collected">
+                                    <span class="item-name">Waste Collected Reports</span>
                                 </a>
+                                <ul class="sub-nav collapse {{ request()->is('admin/reports/waste-collected*') ? 'show' : '' }}" id="waste-collected" data-bs-parent="#sidebar-reports">
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->is('admin/reports/waste-collected/daily') ? 'active' : '' }}" href="{{ route('reports.wcoldaily') }}">
+                                            <i class="icon">
+                                                <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                                    <g>
+                                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                                    </g>
+                                                </svg>
+                                            </i>
+                                            <i class="sidenav-mini-icon"> D </i>
+                                            <span class="item-name">Daily</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->is('admin/reports/waste-collected/weekly') ? 'active' : '' }}" href="{{ route('reports.wcolweekly') }}">
+                                            <i class="icon">
+                                                <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                                    <g>
+                                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                                    </g>
+                                                </svg>
+                                            </i>
+                                            <i class="sidenav-mini-icon"> D </i>
+                                            <span class="item-name">Weekly</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->is('admin/reports/waste-collected/monthly') ? 'active' : '' }}" href="{{ route('reports.wcolmonthly') }}">
+                                            <i class="icon">
+                                                <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                                    <g>
+                                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                                    </g>
+                                                </svg>
+                                            </i>
+                                            <i class="sidenav-mini-icon"> M </i>
+                                            <span class="item-name">Monthly</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->is('admin/reports/waste-collected/yearly') ? 'active' : '' }}" href="{{ route('reports.wcolyearly') }}">
+                                            <i class="icon">
+                                                <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                                    <g>
+                                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                                    </g>
+                                                </svg>
+                                            </i>
+                                            <i class="sidenav-mini-icon"> Y </i>
+                                            <span class="item-name">Yearly</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+                    
                             <li class="nav-item">
-                                <a class="nav-link  {{ request()->is('admin/reports/quarterly') ? 'active' : '' }}" href="{{ route('reports.quarterly') }}">
-                                    <i class="icon">
-                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                                            <g>
-                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                                            </g>
-                                        </svg>
-                                    </i>
-                                    <i class="sidenav-mini-icon"> Q </i>
-                                    <span class="item-name">Quarterly Report</span>
+                                <a class="nav-link collapsed" data-bs-toggle="collapse" href="#waste-converted" role="button" aria-expanded="{{ request()->is('admin/reports/waste-converted*') ? 'true' : 'false' }}" aria-controls="waste-converted">
+                                    <span class="item-name">Waste Converted Reports</span>
                                 </a>
-                            </li>
-                             <li class="nav-item">
-                                <a class="nav-link {{ request()->is('admin/reports/yearly') ? 'active' : '' }}" href="{{ route('reports.yearly') }}">
-                                    <i class="icon">
-                                        <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                                            <g>
-                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                                            </g>
-                                        </svg>
-                                    </i>
-                                    <i class="sidenav-mini-icon"> Y </i>
-                                    <span class="item-name">Yearly Report</span>
-                                </a>
+                                <ul class="sub-nav collapse {{ request()->is('admin/reports/waste-converted*') ? 'show' : '' }}" id="waste-converted" data-bs-parent="#sidebar-reports">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                            <i class="icon">
+                                                <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                                    <g>
+                                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                                    </g>
+                                                </svg>
+                                            </i>
+                                            <i class="sidenav-mini-icon"> D </i>
+                                            <span class="item-name">Daily</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                            <i class="icon">
+                                                <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                                    <g>
+                                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                                    </g>
+                                                </svg>
+                                            </i>
+                                            <i class="sidenav-mini-icon"> D </i>
+                                            <span class="item-name">Weekly</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                            <i class="icon">
+                                                <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                                    <g>
+                                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                                    </g>
+                                                </svg>
+                                            </i>
+                                            <i class="sidenav-mini-icon"> M </i>
+                                            <span class="item-name">Monthly</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">
+                                            <i class="icon">
+                                                <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                                    <g>
+                                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                                    </g>
+                                                </svg>
+                                            </i>
+                                            <i class="sidenav-mini-icon"> Y </i>
+                                            <span class="item-name">Yearly</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
+                    
                     
                     <li class="nav-item mb-5">
                         <a class="nav-link {{ request()->is('admin/help') ? 'active' : '' }}"  href="{{ route('help') }}">

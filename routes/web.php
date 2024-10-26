@@ -12,6 +12,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\WasteCollectionController;
 use App\Http\Controllers\WasteCompositionController;
 use App\Http\Controllers\WasteConversionController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -75,9 +76,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 // Reports
 Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/reports/daily', [ReportsController::class, 'daily'])->name('reports.daily');
-    Route::get('/reports/quarterly', [ReportsController::class, 'quarterly'])->name('reports.quarterly');
-    Route::get('/reports/yearly', [ReportsController::class, 'yearly'])->name('reports.yearly');
+    Route::get('/reports/waste-collected/daily', [ReportsController::class, 'wcoldaily'])->name('reports.wcoldaily');
+    Route::get('/reports/waste-collected/weekly', [ReportsController::class, 'wcolweekly'])->name('reports.wcolweekly');
+    Route::get('/reports/waste-collected/monthly', [ReportsController::class, 'wcolmonthly'])->name('reports.wcolmonthly');
+    Route::get('/reports/waste-collected/yearly', [ReportsController::class, 'wcolyearly'])->name('reports.wcolyearly');
 });
 
 // Dump Trucks
@@ -212,6 +214,14 @@ Route::prefix('driver')->middleware('auth')->group(function () {
     Route::get('/collection-schedule', [CollectionScheduleController::class, 'driver_index'])->name('dcs.index');
 });
 
-// End Driver Side //
+Route::prefix('driver')->middleware('auth')->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'driver_index'])->name('notif.index');
+});
 
-Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
+Route::prefix('driver')->middleware('auth')->group(function () {
+    Route::get('/account', [ProfileController::class, 'index'])->name('acc.index');
+    Route::get('/account/personal-information', [ProfileController::class, 'personalinfo'])->name('personalinfo');
+    Route::get('/account/help', [ProfileController::class, 'help'])->name('help');
+});
+
+// End Driver Side //
