@@ -220,7 +220,9 @@ Route::prefix('driver')->middleware('auth')->group(function () {
 
 Route::prefix('driver')->middleware('auth')->group(function () {
     Route::get('/account', [ProfileController::class, 'index'])->name('acc.index');
+    Route::get('/account/change-password', [ProfileController::class, 'change_pass'])->name('changepass');
     Route::get('/account/personal-information', [ProfileController::class, 'personalinfo'])->name('personalinfo');
+    Route::get('/account/personal-information/edit', [ProfileController::class, 'personalinfoedit'])->name('personalinfoedit');
     Route::get('/account/help', [ProfileController::class, 'help'])->name('help');
 });
 

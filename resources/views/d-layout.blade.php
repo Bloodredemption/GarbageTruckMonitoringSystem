@@ -17,7 +17,61 @@
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
 
-        
+        .calendar {
+            display: flex;
+            justify-content: flex-start;
+            overflow-x: auto;
+            overflow-y: hidden; /* Hide vertical scrollbar */
+            padding-top: 10px;
+            border-radius: 10px;
+            scrollbar-width: none; /* For Firefox */
+        }
+
+        /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+        .calendar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Style for individual day boxes */
+        .calendar .day {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background-color: #e0e0e0;
+            margin: 0 5px;
+            color: #000;
+            text-align: center;
+            cursor: pointer; /* Add cursor pointer to indicate clickability */
+        }
+
+        /* Current date style */
+        .calendar .day.current {
+            background-color: #01A94D;
+            color: #fff;
+        }
+
+        /* Selected date style (same as current date) */
+        .calendar .day.selected {
+            background-color: #01A94D;
+            color: #fff;
+        }
+
+        /* Day number */
+        .day span.date {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Day of the week */
+        .day span.day-name {
+            font-size: 12px;
+            text-transform: capitalize;
+        }
         
         /* Sticky header and bottom nav styling */
         .sticky-header {
@@ -254,12 +308,39 @@
             width: 35px;
             height: 35px;
             border-radius: 50%;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
         }
         .menu-text {
             flex-grow: 1;
             margin-left: 10px;
-            font-size: 0.9rem;
+            font-size: 1rem;
+        }
+
+        .logout-btn {
+            border: 1px solid #dc3545; /* Danger color for border */
+            border-radius: 0.5rem;
+            color: #dc3545; /* Danger color for text and icons */
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .logout-btn .icon-circle svg,
+        .logout-btn .menu-text,
+        .logout-btn svg {
+            color: #dc3545; /* Set initial icon and text color to danger */
+            transition: color 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #dc3545; /* Danger color for background */
+            color: #fff; /* White text on hover */
+            text-decoration: none; /* Remove underline on hover */
+        }
+
+        /* Change icon and text to white on hover */
+        .logout-btn:hover .icon-circle svg,
+        .logout-btn:hover .menu-text,
+        .logout-btn:hover svg {
+            color: #fff; /* Set to white on hover */
         }
     </style>
 </head>
@@ -277,6 +358,7 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
     <script src="{{ asset('assets/js/sweetalert.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
     
 </body>
 </html>

@@ -12,7 +12,7 @@
     </a>
 
     <!-- Title -->
-    <span class="fw-semibold flex-grow-1 text-center">Notifications</span>
+    <span class="fw-bold flex-grow-1 text-center">Notifications</span>
 </header>
 
 

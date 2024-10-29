@@ -12,7 +12,7 @@
     </a>
 
     <!-- Title -->
-    <span class="fw-semibold flex-grow-1 text-center">Help</span>
+    <span class="fw-bold flex-grow-1 text-center">Help</span>
 
     <!-- Home Icon -->
     <a href="{{ route('d.dashboard') }}" class="position-absolute" style="right: 1rem;">
@@ -32,8 +32,7 @@
             <div class="d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
                 <div class="d-flex flex-column align-items-center justify-content-center p-4" style="height: 80vh;">
                     <img src="{{ asset('assets/images/no-data.svg')}}" class="img-fluid mb-4" width="75%" alt="No Data Found">
-                    <h3 class="fw-bold">No notifications found</h3>
-                    <p style="color: #525356; font-size: 15px;">All of your notifications will be displayed here</p>
+                    <h3 class="fw-bold">No help found</h3>
                 </div>
             </div>
         </div>

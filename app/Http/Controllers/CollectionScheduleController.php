@@ -210,13 +210,18 @@ class CollectionScheduleController extends Controller
         return response()->json(['message' => 'Collection schedule successfully deleted.']);
     }
 
-    public function driver_index() {
-        $currentDate = Carbon::today()->toDateString();
-
+    public function driver_index(Request $request) {
+        $date = $request->query('date') ?? Carbon::today()->toDateString();
+    
         $schedules = CollectionSchedule::with('barangay:id,name')
-                    ->whereDate('scheduled_date', $currentDate)
+                    ->whereDate('scheduled_date', $date)
                     ->get();
-
+    
+        // Check if this is an AJAX request
+        if ($request->ajax()) {
+            return response()->json($schedules);
+        }
+    
         return view('driver.collection-schedule.index', compact('schedules'));
     }
 }

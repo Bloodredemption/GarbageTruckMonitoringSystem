@@ -150,6 +150,7 @@
 <a href="#" class="floating-btn" data-bs-toggle="modal" data-bs-target="#addWasteModal">
     <i class='bx bx-plus'></i>
 </a>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
 <script>
     $(document).ready(function () {
