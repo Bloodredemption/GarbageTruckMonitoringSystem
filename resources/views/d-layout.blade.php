@@ -441,6 +441,52 @@
                 confirmButtonText: 'OK'
             });
         }); 
+
+        async function fetchGeolocationData() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(async function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    console.log('Geolocation data: ', { latitude, longitude });
+                    try {
+                        // Get CSRF token from the meta tag
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                        const response = await fetch('/geolocation', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken // Add CSRF token to headers
+                            },
+                            body: JSON.stringify({ latitude, longitude })
+                        });
+
+                        const data = await response.json();
+
+                        // Display the entire JSON response
+                        document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
+
+                    } catch (error) {
+                        console.error('Error fetching geolocation data:', error);
+                        document.getElementById('json-output').textContent = 'Error fetching geolocation data';
+                    }
+                }, function (error) {
+                    console.error('Geolocation error:', error);
+                    document.getElementById('json-output').textContent = 'Error getting geolocation from browser';
+                }, {
+                    enableHighAccuracy: true, // Use GPS for accurate location if available
+                    timeout: 5000,            // Timeout for getting the location
+                    maximumAge: 0             // Do not use cached location data
+                });
+            } else {
+                document.getElementById('json-output').textContent = 'Geolocation is not supported by this browser.';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchGeolocationData();
+        });
     </script>
 </body>
 </html>

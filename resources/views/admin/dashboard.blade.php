@@ -260,7 +260,7 @@
                             data: {
                                 api_key: '4CaWSd2hOXKX8hLx9Q6yCFeFj7jHt5Wf',
                                 country: 'PH',
-                                year: 2024
+                                year: 2024 // Adjust to dynamic year based on the calendar views
                             },
                             success: function(response) {
                                 // Extract holidays and format them for FullCalendar

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ asset('assets/images/bali_logo.png') }}" />
     <title>Waste Collection Complaint Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -55,12 +56,12 @@
                     <label for="add_complaintType" class="form-label">Complaint Type</label>
                     <select class="form-select" id="add_complaintType" name="complaintType" required>
                         <option value="" disabled selected>Select a complaint type</option>
-                        <option value="missed_collection">Missed Collection</option>
-                        <option value="improper_disposal">Improper Disposal</option>
-                        <option value="damaged_bins">Damaged Collection Bins</option>
-                        <option value="odor_issues">Odor Issues</option>
-                        <option value="waste_overflow">Uncollected Waste Overflow</option>
-                        <option value="other">Other</option>
+                        <option value="Missed Collection">Missed Collection</option>
+                        <option value="Improper Disposal">Improper Disposal</option>
+                        <option value="Damaged Collection Bins">Damaged Collection Bins</option>
+                        <option value="dor Issues">Odor Issues</option>
+                        <option value="Uncollected Waste Overflow">Uncollected Waste Overflow</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
                 <div class="mb-3">

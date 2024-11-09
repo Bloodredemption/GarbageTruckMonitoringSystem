@@ -134,9 +134,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 });
 
 // Residents Concerns
-Route::get('/admin/residents-concerns', function () {
-    return view('admin.residents-concerns.index');
-})->name('residents-concerns');
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/residents-concerns', [ResidentsConcernsController::class, 'admin_index'])->name('residents-concerns');
+    Route::get('/residents-concerns/{id}/show', [ResidentsConcernsController::class, 'show'])->name('viewConcerns');
+});
 
 // Users
 Route::prefix('admin')->middleware('auth')->group(function () {

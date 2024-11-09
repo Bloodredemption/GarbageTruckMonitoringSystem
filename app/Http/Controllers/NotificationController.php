@@ -148,6 +148,8 @@ class NotificationController extends Controller
         $notification = Notification::findOrFail($id);
         $notification->update($request->all());
 
+        event(new NotificationSent($notification->notification_msg));
+        
         return response()->json(['message' => 'Notification successfully updated.']);
     }
 

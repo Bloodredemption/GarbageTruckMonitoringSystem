@@ -15,6 +15,13 @@ class ResidentsConcernsController extends Controller
         return view('residents-concerns.index');
     }
 
+    public function admin_index() 
+    {
+        $concerns = ResidentsConcerns::orderBy('created_at', 'desc')->get();
+
+        return view('admin.residents-concerns.index', compact('concerns'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -68,9 +75,23 @@ class ResidentsConcernsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ResidentsConcerns $residentsConcerns)
+    public function show($id)
     {
-        //
+        $concerns = ResidentsConcerns::findOrFail($id);
+
+        // Return user data as JSON
+        return response()->json([
+            'concern' => [
+                'fullname' => $concerns->fullname,
+                'complaint_type' => $concerns->complaint_type,
+                'contact_num' => $concerns->contact_num,
+                'brgy_location' => $concerns->brgy_location,
+                'complaint_subject' => $concerns->complaint_subject,
+                'complaint_details' => $concerns->complaint_details,
+                'dateOfIncident' => $concerns->dateOfIncident,
+                'attachments' => $concerns->attachments,
+            ]
+        ]);
     }
 
     /**
