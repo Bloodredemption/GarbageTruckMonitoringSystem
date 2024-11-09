@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('barangays', function (Blueprint $table) {
+        Schema::create('truck_locations', function (Blueprint $table) {
             $table->id();
-            $table->Integer('user_id');
-            $table->string('area_name');
-            $table->string('population');
-            $table->string('captain');
-            $table->Integer('isDeleted')->default(0);
+            $table->integer('user_id')->nullable();
+            $table->integer('truck_id')->nullable();
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
             $table->timestamps();
+
+            $table->index(['latitude', 'longitude']);
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('barangays');
+        Schema::dropIfExists('truck_locations');
     }
 };

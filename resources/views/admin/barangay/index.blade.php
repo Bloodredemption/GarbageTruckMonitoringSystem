@@ -138,9 +138,8 @@
                                                 <thead>
                                                     <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                         <th>No.</th>
-                                                        <th>Address</th>
-                                                        <th>Area</th>
-                                                        <th>Zip Code</th>
+                                                        <th>Area Name</th>
+                                                        <th>Population</th>
                                                         <th>Captain</th>
                                                         <th>Date Created</th>
                                                         <th style="min-width: 100px">Action</th>
@@ -150,9 +149,8 @@
                                                     @foreach ($barangays as $br)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $br->name }}, {{ $br->municipality }}, {{ $br->province }}</td>
-                                                        <td>{{ $br->area }}</td>
-                                                        <td>{{ $br->zipcode }}</td>
+                                                        <td>{{ $br->area_name }}</td>
+                                                        <td>{{ $br->population }}</td>
                                                         <td>{{ $br->captain }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($br->created_at)->format('Y-m-d') }}</td>
                                                         <td>
@@ -193,9 +191,8 @@
                                                 <thead>
                                                     <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                         <th>No.</th>
-                                                        <th>Address</th>
-                                                        <th>Area</th>
-                                                        <th>Zip Code</th>
+                                                        <th>Area Name</th>
+                                                        <th>Population</th>
                                                         <th>Captain</th>
                                                         <th>Date Archived</th>
                                                         <th style="min-width: 100px">Action</th>
@@ -229,49 +226,54 @@
                     <form id="addBarangayForm" action="{{ route('barangays.store') }}" method="POST" class="text-black">
                         @csrf
                         <div class="mb-3">
-                            <label for="add_name" class="form-label">Barangay <span style="color: red;">*</span></label>
+                            <label for="add_name" class="form-label">Area Name <span style="color: red;">*</span></label>
                             <select class="form-control" id="add_name" name="name" required>
                                 <option value=""></option>
-                                <option value="Brgy. 1">Brgy 1</option>
-                                <option value="Brgy. 2">Brgy 2</option>
-                                <option value="Brgy. 3">Brgy 3</option>
-                                <option value="Brgy. 4">Brgy 4</option>
-                                <option value="Brgy. 5">Brgy 5</option>
-                                <option value="Brgy. 6">Brgy 6</option>
-                                <option value="Brgy. Linggangao">Brgy Linggangao</option>
-                                <option value="Brgy. San Isidro">Brgy San Isidro</option>
-                                <option value="Brgy. Cala-Cala">Brgy Cala-Cala</option>
-                                <option value="Brgy. Talusan">Brgy Talusan</option>
-                                <option value="Brgy. Baliwagan">Brgy Baliwagan</option>
-                                <option value="Brgy. Binitinan">Brgy Binitinan</option>
-                                <option value="Brgy. Hermano">Brgy Hermano</option>
-                                <option value="Brgy. Cogon">Brgy Cogon</option>
-                                <option value="Brgy. Mandangoa">Brgy Mandangoa</option>
-                                <option value="Brgy. Mambayaan">Brgy Mambayaan</option>
-                                <option value="Brgy. Napaliran">Brgy Napaliran</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="add_muni" class="form-label">Municipality <span style="color: red;">*</span></label>
-                            <select class="form-control" id="add_muni" name="muni" >
-                                <option value="Balingasag">Balingasag</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="add_prov" class="form-label">Province <span style="color: red;">*</span></label>
-                            <select class="form-control" id="add_prov" name="prov" >
-                                <option value="Misamis Oriental">Misamis Oriental</option>
+                                <option value="custom">Add Custom Area</option>
+                                <option value="Brgy. 1">Brgy. 1</option>
+                                <option value="Brgy. 2">Brgy. 2</option>
+                                <option value="Brgy. 3">Brgy. 3</option>
+                                <option value="Brgy. 4">Brgy. 4</option>
+                                <option value="Brgy. 5">Brgy. 5</option>
+                                <option value="Brgy. 6">Brgy. 6</option>
+                                <option value="Brgy. Waterfall">Brgy. Waterfall</option>
+                                <option value="Brgy. Linggangao">Brgy. Linggangao</option>
+                                <option value="Brgy. San Isidro">Brgy. San Isidro</option>
+                                <option value="Brgy. Cala-Cala">Brgy. Cala-Cala</option>
+                                <option value="Brgy. Talusan">Brgy. Talusan</option>
+                                <option value="Brgy. Baliwagan">Brgy. Baliwagan</option>
+                                <option value="Brgy. Binitinan">Brgy. Binitinan</option>
+                                <option value="Brgy. Hermano">Brgy. Hermano</option>
+                                <option value="Brgy. Cogon">Brgy. Cogon</option>
+                                <option value="Brgy. Mandangoa">Brgy. Mandangoa</option>
+                                <option value="Brgy. Mambayaan">Brgy. Mambayaan</option>
+                                <option value="Brgy. Napaliran">Brgy. Napaliran</option>
+                                <option value="Brgy. Balagnan">Brgy Balagnan</option>
+                                <option value="Brgy. San Francisco">Brgy. San Francisco</option>
+                                <option value="Brgy. Blanco">Brgy. Blanco</option>
+                                <option value="Brgy. Calawag">Brgy. Calawag</option>
+                                <option value="Brgy. Camuayan">Brgy. Camuayan</option>
+                                <option value="Brgy. Dansuli">Brgy. Dansuli</option>
+                                <option value="Brgy. Dumarait">Brgy. Dumarait</option>
+                                <option value="Brgy. Kibanban">Brgy. Kibanban</option>
+                                <option value="Brgy. Linabu">Brgy. Linabu</option>
+                                <option value="Brgy. Quezon">Brgy. Quezon</option>
+                                <option value="Brgy. Rosario">Brgy. Rosario</option>
+                                <option value="Brgy. Samay">Brgy. Samay</option>
+                                <option value="Brgy. San Juan">Brgy. San Juan</option>
                             </select>
                         </div>
         
-                        <div class="mb-3">
-                            <label for="add_area" class="form-label">Collection Area <span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="add_area" name="area" required>
+                        <div class="mb-3 d-none" id="custom_area_input">
+                            <label for="custom_area_name" class="form-label">Custom Area Name <span style="color: red;">*</span></label>
+                            <input type="text" id="custom_area_name" name="custom_name" class="form-control">
                         </div>
+
                         <div class="mb-3">
-                            <label for="add_zipcode" class="form-label">Zip Code <span style="color: red;">*</span></label>
-                            <input type="number" class="form-control" id="add_zipcode" name="zipcode" required>
+                            <label for="add_population" class="form-label">Population <span style="color: red;">*</span></label>
+                            <input type="number" class="form-control" id="add_population" name="population" required>
                         </div>
+
                         <div class="mb-3">
                             <label for="add_captain" class="form-label">Captain <span style="color: red;">*</span></label>
                             <input type="text" class="form-control" id="add_captain" name="captain" required>
@@ -306,47 +308,45 @@
                         <input type="hidden" id="edit_brgy_id" name="brgy_id">
         
                         <div class="mb-3">
-                            <label for="edit_name" class="form-label">Barangay <span style="color: red;">*</span></label>
+                            <label for="edit_name" class="form-label">Area Name <span style="color: red;">*</span></label>
                             <select class="form-control" id="edit_name" name="name" required>
                                 <option value=""></option>
-                                <option value="Brgy. 1">Brgy 1</option>
-                                <option value="Brgy. 2">Brgy 2</option>
-                                <option value="Brgy. 3">Brgy 3</option>
-                                <option value="Brgy. 4">Brgy 4</option>
-                                <option value="Brgy. 5">Brgy 5</option>
-                                <option value="Brgy. 6">Brgy 6</option>
-                                <option value="Brgy. Linggangao">Brgy Linggangao</option>
-                                <option value="Brgy. San Isidro">Brgy San Isidro</option>
-                                <option value="Brgy. Cala-Cala">Brgy Cala-Cala</option>
-                                <option value="Brgy. Talusan">Brgy Talusan</option>
-                                <option value="Brgy. Baliwagan">Brgy Baliwagan</option>
-                                <option value="Brgy. Binitinan">Brgy Binitinan</option>
-                                <option value="Brgy. Hermano">Brgy Hermano</option>
-                                <option value="Brgy. Cogon">Brgy Cogon</option>
-                                <option value="Brgy. Mandangoa">Brgy Mandangoa</option>
-                                <option value="Brgy. Mambayaan">Brgy Mambayaan</option>
-                                <option value="Brgy. Napaliran">Brgy Napaliran</option>
+                                <option value="Brgy. 1">Brgy. 1</option>
+                                <option value="Brgy. 2">Brgy. 2</option>
+                                <option value="Brgy. 3">Brgy. 3</option>
+                                <option value="Brgy. 4">Brgy. 4</option>
+                                <option value="Brgy. 5">Brgy. 5</option>
+                                <option value="Brgy. 6">Brgy. 6</option>
+                                <option value="Brgy. Waterfall">Brgy. Waterfall</option>
+                                <option value="Brgy. Linggangao">Brgy. Linggangao</option>
+                                <option value="Brgy. San Isidro">Brgy. San Isidro</option>
+                                <option value="Brgy. Cala-Cala">Brgy. Cala-Cala</option>
+                                <option value="Brgy. Talusan">Brgy. Talusan</option>
+                                <option value="Brgy. Baliwagan">Brgy. Baliwagan</option>
+                                <option value="Brgy. Binitinan">Brgy. Binitinan</option>
+                                <option value="Brgy. Hermano">Brgy. Hermano</option>
+                                <option value="Brgy. Cogon">Brgy. Cogon</option>
+                                <option value="Brgy. Mandangoa">Brgy. Mandangoa</option>
+                                <option value="Brgy. Mambayaan">Brgy. Mambayaan</option>
+                                <option value="Brgy. Napaliran">Brgy. Napaliran</option>
+                                <option value="Brgy. Balagnan">Brgy Balagnan</option>
+                                <option value="Brgy. San Francisco">Brgy. San Francisco</option>
+                                <option value="Brgy. Blanco">Brgy. Blanco</option>
+                                <option value="Brgy. Calawag">Brgy. Calawag</option>
+                                <option value="Brgy. Camuayan">Brgy. Camuayan</option>
+                                <option value="Brgy. Dansuli">Brgy. Dansuli</option>
+                                <option value="Brgy. Dumarait">Brgy. Dumarait</option>
+                                <option value="Brgy. Kibanban">Brgy. Kibanban</option>
+                                <option value="Brgy. Linabu">Brgy. Linabu</option>
+                                <option value="Brgy. Quezon">Brgy. Quezon</option>
+                                <option value="Brgy. Rosario">Brgy. Rosario</option>
+                                <option value="Brgy. Samay">Brgy. Samay</option>
+                                <option value="Brgy. San Juan">Brgy. San Juan</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="edit_muni" class="form-label">Municipality <span style="color: red;">*</span></label>
-                            <select class="form-control" id="edit_muni" name="muni" >
-                                <option value="Balingasag">Balingasag</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_prov" class="form-label">Province <span style="color: red;">*</span></label>
-                            <select class="form-control" id="edit_prov" name="prov" >
-                                <option value="Misamis Oriental">Misamis Oriental</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_area" class="form-label">Collection Area <span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="edit_area" name="area" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_zipcode" class="form-label">Zip Code <span style="color: red;">*</span></label>
-                            <input type="number" class="form-control" id="edit_zipcode" name="zipcode" required>
+                            <label for="edit_population" class="form-label">Population <span style="color: red;">*</span></label>
+                            <input type="number" class="form-control" id="edit_population" name="population" required>
                         </div>
                         <div class="mb-3">
                             <label for="edit_captain" class="form-label">Captain <span style="color: red;">*</span></label>
@@ -385,6 +385,23 @@
 
 <script>
     $(document).ready(function () {
+
+        const areaSelect = document.getElementById('add_name');
+        const customAreaInput = document.getElementById('custom_area_input');
+        const customAreaName = document.getElementById('custom_area_name');
+
+        // Listen for changes on the select dropdown
+        areaSelect.addEventListener('change', function() {
+            if (areaSelect.value === 'custom') {
+                customAreaInput.classList.remove('d-none'); // Show custom area input
+                customAreaName.required = true; // Make custom input required
+            } else {
+                customAreaInput.classList.add('d-none'); // Hide custom area input
+                customAreaName.value = ''; // Clear custom input value
+                customAreaName.required = false; // Remove required from custom input
+            }
+        });
+        
         let table = $('#user-list-table').DataTable({
             bSort: true,
             fixedHeader: true, // Enable fixed header
@@ -482,9 +499,8 @@
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
-                                    <td>${barangay.name}, ${barangay.municipality}, ${barangay.province}</td>
-                                    <td>${barangay.area}</td>
-                                    <td>${barangay.zipcode}</td>
+                                    <td>${barangay.area_name}</td>
+                                    <td>${barangay.population}</td>
                                     <td>${barangay.captain}</td>
                                     <td>${formatteddate}</td>
                                     <td>
@@ -611,9 +627,8 @@
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
-                                    <td>${abarangay.name}, ${abarangay.municipality}, ${abarangay.province}</td>
-                                    <td>${abarangay.area}</td>
-                                    <td>${abarangay.zipcode}</td>
+                                    <td>${abarangay.area_name}</td>
+                                    <td>${abarangay.population}</td>
                                     <td>${abarangay.captain}</td>
                                     <td>${formatteddate}</td>
                                     <td>
@@ -658,19 +673,76 @@
         fetchABarangays();
 
         // Add Barangay
+        // $('#addBarangayForm').on('submit', function (e) {
+        //     e.preventDefault();
+
+        //     $('#saveChangesBtn').attr('disabled', true); 
+        //     $('#saveChangesSpinner').removeClass('d-none');
+
+        //     let formData = {
+        //         _token: "{{ csrf_token() }}", // Laravel CSRF token
+        //         brgy_name: $('#add_name').val(),
+        //         collection_area: $('#add_area').val(),
+        //         population: $('#add_population').val(),
+        //         captain: $('#add_captain').val(),
+        //     };
+
+        //     $.ajax({
+        //         url: "{{ route('barangays.store') }}", // Route for storing barangay
+        //         type: "POST",
+        //         data: formData,
+        //         success: function (response) {
+        //             fetchBarangays();
+
+        //             $('#toastMessage').text(response.message);
+
+        //             // Trigger Bootstrap toast instead of SweetAlert
+        //             var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+        //             toastEl.show();
+
+        //             $('#addBarangayForm')[0].reset();
+        //             $('#addBarangayModal').modal('hide'); // Hide modal
+
+        //         },
+        //         error: function (error) {
+        //             let errors = error.responseJSON.errors;
+        //             let errorMessage = '';
+        //             for (let field in errors) {
+        //                 errorMessage += errors[field][0] + '<br>';
+        //             }
+        //             Swal.fire({
+        //                 icon: 'error',
+        //                 title: 'Error!',
+        //                 html: errorMessage,
+        //                 confirmButtonText: 'OK',
+        //                 confirmButtonColor: "#01A94D"
+        //             });
+        //         },
+        //         complete: function() {
+        //             // Re-enable the button and hide spinner after the request is complete
+        //             $('#saveChangesBtn').attr('disabled', false);
+        //             $('#saveChangesSpinner').addClass('d-none'); // Hide spinner
+        //         }
+        //     });
+        // });
+
         $('#addBarangayForm').on('submit', function (e) {
             e.preventDefault();
 
             $('#saveChangesBtn').attr('disabled', true); 
             $('#saveChangesSpinner').removeClass('d-none');
 
+            let areaName = $('#add_name').val();
+    
+            // Check if the selected area name is 'custom' and use the custom input value instead
+            if (areaName === 'custom') {
+                areaName = $('#custom_area_name').val(); // Replace with the value from the custom input field
+            }
+            
             let formData = {
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
-                name: $('#add_name').val(),
-                municipality: $('#add_muni').val(),
-                province: $('#add_prov').val(),
-                area: $('#add_area').val(),
-                zipcode: $('#add_zipcode').val(),
+                area_name: areaName,
+                population: $('#add_population').val(),
                 captain: $('#add_captain').val(),
             };
 
@@ -722,13 +794,9 @@
                 type: "GET",
                 success: function (response) {
                     $('#edit_brgy_id').val(response.barangay.id);
-                    $('#edit_name').val(response.barangay.name);
-                    $('#edit_muni').val(response.barangay.municipality);
-                    $('#edit_prov').val(response.barangay.province);
-                    $('#edit_area').val(response.barangay.area);
-                    $('#edit_zipcode').val(response.barangay.zipcode);
+                    $('#edit_name').val(response.barangay.area_name);
+                    $('#edit_population').val(response.barangay.population);
                     $('#edit_captain').val(response.barangay.captain);
-
 
                     $('#editBarangayModal').modal('show');
 
@@ -745,11 +813,8 @@
 
         function storeOriginalValues() {
             originalValues = {
-                name: $('#edit_name').val(),
-                municipality: $('#edit_muni').val(),
-                province: $('#edit_prov').val(),
-                area: $('#edit_area').val(),
-                zipcode: $('#edit_zipcode').val(),
+                area_name: $('#edit_name').val(),
+                population: $('#edit_population').val(),
                 captain: $('#edit_captain').val(),
             };
         }
@@ -765,11 +830,8 @@
 
             // Check for changes
             const currentValues = {
-                name: $('#edit_name').val(),
-                municipality: $('#edit_muni').val(),
-                province: $('#edit_prov').val(),
-                area: $('#edit_area').val(),
-                zipcode: $('#edit_zipcode').val(),
+                area_name: $('#edit_name').val(),
+                population: $('#edit_population').val(),
                 captain: $('#edit_captain').val(),
             };
 
@@ -789,11 +851,8 @@
 
             let formData = {
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
-                name: $('#edit_name').val(),
-                municipality: $('#edit_muni').val(),
-                province: $('#edit_prov').val(),
-                area: $('#edit_area').val(),
-                zipcode: $('#edit_zipcode').val(),
+                area_name: $('#edit_name').val(),
+                population: $('#edit_population').val(),
                 captain: $('#edit_captain').val(),
             };
 

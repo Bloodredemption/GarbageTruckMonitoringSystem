@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Users;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -20,6 +21,7 @@ class UsersController extends Controller
                 $query->where('status', 'active')
                       ->orWhere('status', 'inactive');
             })
+            ->where('id', '!=', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -30,11 +32,13 @@ class UsersController extends Controller
             $query->where('status', 'active')
                   ->orWhere('status', 'inactive');
         })
+        ->where('id', '!=', Auth::id()) // Exclude the logged-in user
         ->orderBy('created_at', 'desc')
         ->get();
 
         // Otherwise, return the view (for non-AJAX requests, i.e., the initial page load)
         return view('admin.users.index', compact('users'));
+
     }
 
     public function getArchive()

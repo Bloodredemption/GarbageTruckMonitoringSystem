@@ -12,7 +12,10 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\WasteCollectionController;
 use App\Http\Controllers\WasteCompositionController;
 use App\Http\Controllers\WasteConversionController;
+use App\Http\Controllers\GeolocationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ResidentsConcernsController;
+use App\Http\Controllers\TruckLocationController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -30,9 +33,11 @@ Route::post('/logout', function () {
 // Start Admin Side //
 
 // Dashboard
-// Route::get('/admin/dashboard', function () {
-//     return view('admin.dashboard');
-// })->name('dashboard');
+
+Route::get('/residents-concerns', [ResidentsConcernsController::class, 'index'])->name('rc.index');
+Route::post('/residents-concerns/submit', [ResidentsConcernsController::class, 'store'])->name('rc.store');
+
+Route::post('/geolocation', [GeolocationController::class, 'storeCoordinates']);
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -43,13 +48,19 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 });
 
 // Live Tracking
-Route::get('/admin/live-tracking', function () {
-    return view('admin.live-tracking.index');
-})->name('live-tracking');
+// Route::get('/admin/live-tracking', function () {
+//     return view('admin.live-tracking.index');
+// })->name('live-tracking');
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/live-tracking', [TruckLocationController::class, 'index'])->name('live-tracking');
+    Route::get('/live-tracking/fetchCoords', [TruckLocationController::class, 'getLatestLocation']);
+});
 
 // Collection Schedule
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/collection-schedule', [CollectionScheduleController::class, 'index'])->name('cs.index');
+    Route::get('/collection-schedule/checkConflict', [CollectionScheduleController::class, 'checkConflict'])->name('cs.checkConflict');
     Route::get('/collection-schedule/getBrgy', [CollectionScheduleController::class, 'getBrgy'])->name('cs.getBrgy');
     Route::get('/collection-schedule/getDumptruck', [CollectionScheduleController::class, 'getDumptruck'])->name('cs.getDumptruck');
     Route::get('/collection-schedule/getDriver', [CollectionScheduleController::class, 'getDriver'])->name('cs.getDriver');
@@ -76,10 +87,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 // Reports
 Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/reports/waste-collected/daily', [ReportsController::class, 'wcoldaily'])->name('reports.wcoldaily');
-    Route::get('/reports/waste-collected/weekly', [ReportsController::class, 'wcolweekly'])->name('reports.wcolweekly');
-    Route::get('/reports/waste-collected/monthly', [ReportsController::class, 'wcolmonthly'])->name('reports.wcolmonthly');
-    Route::get('/reports/waste-collected/yearly', [ReportsController::class, 'wcolyearly'])->name('reports.wcolyearly');
+    Route::get('/reports/waste-collected', [ReportsController::class, 'wasteCollected'])->name('reports.wCol');
+    Route::get('/reports/waste-converted', [ReportsController::class, 'wasteConverted'])->name('reports.wCov');
 });
 
 // Dump Trucks
@@ -166,12 +175,13 @@ Route::prefix('landfill')->middleware('auth')->group(function () {
 
 // Waste Collection
 Route::prefix('landfill')->middleware('auth')->group(function () {
-    Route::get('/waste-collection', [WasteCollectionController::class, 'index'])->name('lwc.index');
-    Route::get('/waste-collection/getBarangay', [WasteCompositionController::class, 'getBarangay'])->name('lwc.getBrgy');
-    Route::post('/waste-collection', [WasteCompositionController::class, 'store'])->name('lwc.store');
-    Route::get('/waste-collection/{id}/edit', [WasteCompositionController::class, 'edit']);
-    Route::put('/waste-collection/{id}/update', [WasteCompositionController::class, 'update']);
-    Route::put('/waste-collection/{id}/delete', [WasteCompositionController::class, 'destroy']);
+    Route::get('/waste-composition', [WasteCollectionController::class, 'index'])->name('lwc.index');
+    Route::get('/waste-composition/getBarangay', [WasteCompositionController::class, 'getBarangay'])->name('lwc.getBrgy');
+    Route::post('/waste-composition', [WasteCompositionController::class, 'store'])->name('lwc.store');
+    Route::get('/waste-composition/{id}/edit', [WasteCompositionController::class, 'edit']);
+    Route::put('/waste-composition/{id}/update', [WasteCompositionController::class, 'update']);
+    Route::put('/waste-composition/{id}/delete', [WasteCompositionController::class, 'destroy']);
+    
 });
 
 // Waste Conversions
@@ -183,6 +193,9 @@ Route::prefix('landfill')->middleware('auth')->group(function () {
     Route::put('/waste-conversions/{id}/update', [WasteConversionController::class, 'update']);
     Route::put('/waste-conversions/{id}/delete', [WasteConversionController::class, 'destroy']);
     Route::put('/waste-conversions/{id}/finish', [WasteConversionController::class, 'finish']);
+    Route::put('/waste-conversions/{id}/restore', [WasteConversionController::class, 'restore']);
+    Route::put('/waste-conversions/{id}/archive', [WasteConversionController::class, 'archive']);
+    Route::get('/waste-conversions/getArchive', [WasteConversionController::class, 'getArchive'])->name('wcov.getArchive');
 });
 
 // Help
@@ -197,6 +210,7 @@ Route::get('/landfill/help', function () {
 // Dashboard
 Route::prefix('driver')->middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'driver_index'])->name('d.dashboard');
+    Route::get('/dashboard/waste-collection-data', [DashboardController::class, 'getWasteCollectionData']);
 });
 
 // Waste Composition
@@ -207,15 +221,18 @@ Route::prefix('driver')->middleware('auth')->group(function () {
     Route::get('/waste-composition/{id}/edit', [WasteCompositionController::class, 'edit']);
     Route::put('/waste-composition/{id}/update', [WasteCompositionController::class, 'update']);
     Route::put('/waste-composition/{id}/delete', [WasteCompositionController::class, 'destroy']);
+    Route::get('/waste-composition/search', [WasteCompositionController::class, 'search'])->name('wc.search');
 });
 
 // Collection Schedule
 Route::prefix('driver')->middleware('auth')->group(function () {
     Route::get('/collection-schedule', [CollectionScheduleController::class, 'driver_index'])->name('dcs.index');
+    Route::get('/collection-schedule/fetch', [CollectionScheduleController::class, 'fetchByDate'])->name('dcs.fetch');
 });
 
 Route::prefix('driver')->middleware('auth')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'driver_index'])->name('notif.index');
+    Route::post('/notifications/markAsRead', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 });
 
 Route::prefix('driver')->middleware('auth')->group(function () {
@@ -223,7 +240,9 @@ Route::prefix('driver')->middleware('auth')->group(function () {
     Route::get('/account/change-password', [ProfileController::class, 'change_pass'])->name('changepass');
     Route::get('/account/personal-information', [ProfileController::class, 'personalinfo'])->name('personalinfo');
     Route::get('/account/personal-information/edit', [ProfileController::class, 'personalinfoedit'])->name('personalinfoedit');
-    Route::get('/account/help', [ProfileController::class, 'help'])->name('help');
+    Route::put('/account/personal-information/edit/{id}/update', [ProfileController::class, 'personalinfoedit_update'])->name('personalinfoeditupdate');
+    Route::put('/account/personal-information/edit/{id}/change-password', [ProfileController::class, 'changePassword'])->name('personalinfoeditupdatepass');
+    Route::get('/account/help', [ProfileController::class, 'help'])->name('driver.help');
 });
 
 // End Driver Side //

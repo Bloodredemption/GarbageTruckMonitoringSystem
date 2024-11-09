@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>GTMS Driver</title>
     <!-- Bootstrap 5 CSS -->
     <link rel="shortcut icon" href="{{ asset('assets/images/bali_logo.png') }}" />
@@ -16,6 +17,16 @@
     
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
+
+        .calendar-navigation {
+            display: flex;
+            align-items: center;
+        }
+
+        .chevron {
+            cursor: pointer;
+            padding: 10px;
+        }
 
         .calendar {
             display: flex;
@@ -42,7 +53,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 8px;
-            background-color: #e0e0e0;
+            background-color: #e0e0e09a;
             margin: 0 5px;
             color: #000;
             text-align: center;
@@ -57,8 +68,8 @@
 
         /* Selected date style (same as current date) */
         .calendar .day.selected {
-            background-color: #01A94D;
-            color: #fff;
+            border: 1px solid #01A94D;
+            color: #01A94D;
         }
 
         /* Day number */
@@ -234,13 +245,13 @@
             right: 20px; /* Distance from the right */
             background-color: #01A94D;
             color: #fff;
-            border-radius: 50%;
+            border-radius: 10px;
             width: 50px;
             height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            font-size: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 99;
             transition: background-color 0.3s ease;
@@ -253,7 +264,7 @@
 
         /* Ensure the icon inside the floating button is centered */
         .floating-btn i {
-            font-size: 28px; /* Size of the plus (+) icon */
+            font-size: 24px; /* Size of the plus (+) icon */
         }
 
         /* Set the font size for the table headers */
@@ -342,6 +353,60 @@
         .logout-btn:hover svg {
             color: #fff; /* Set to white on hover */
         }
+
+        .custom-border {
+            border: 1px solid #cccccc96; /* Default border color */
+            box-shadow: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .custom-border:active,
+        .custom-border:focus,
+        .custom-border:focus-within {
+            border-color: #01A94D; /* Change to desired border color on click */
+            box-shadow: none; /* Disable Bootstrap default shadow */
+            outline: none;
+        }
+
+        .nav-pills-d .nav-link-d {
+            border-radius: 12px;
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            margin-right: 10px;
+        }
+
+        .nav-pills-d .nav-link-d.custom-active {
+            background-color: #01a94d27;
+            color: #01A94D;
+            border: 1px solid #01A94D;
+        }
+
+        .nav-link-d {
+            padding: 8px;
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+        }
+
+        .viewBtn {
+            color: #4b4b4b;
+        }
+
+        .viewBtn.active {
+            color: #01A94D;
+        }
+
+        .waste-container {
+            max-height: 70vh; /* Adjust height as needed */
+            overflow-y: auto;
+            overflow-x: hidden;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .waste-container::-webkit-scrollbar {
+            display: none;  /* Hide scrollbar in Chrome, Safari, and Opera */
+        }
     </style>
 </head>
 <body>
@@ -358,7 +423,24 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
     <script src="{{ asset('assets/js/sweetalert.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script>
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('6067e4f4c5d9c44a0efa', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+            Swal.fire({
+                title: 'New Notification',
+                text: 'Please check your inbox for notifications.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        }); 
+    </script>
 </body>
 </html>

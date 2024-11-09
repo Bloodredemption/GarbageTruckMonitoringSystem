@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Barangay extends Model
+class TruckLocation extends Model
 {
     use HasFactory;
 
-    protected $table = 'barangays';
+    protected $table = 'truck_locations';
 
     protected $fillable = [
         'user_id',
-        'area_name',
-        'population',
-        'captain',
+        'truck_id',
+        'latitude',
+        'longitude',
     ];
 }

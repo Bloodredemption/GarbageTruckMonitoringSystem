@@ -30,8 +30,8 @@
                     <div class="d-flex flex-column align-items-center">
                         <img src="{{ asset('assets/images/avatars/01.png')}}" alt="Profile Picture" class="rounded-circle mb-2" style="width: 100px; height: 100px;">
                     </div>
-                    <h5 class="card-title mt-2"><strong>MENRO Driver</strong></h5>
-                    <p style="font-size: 0.9rem;" class="card-text">Driver</p>
+                    <h5 class="card-title mt-2"><strong>{{ $user->fullname }}</strong></h5>
+                    <p style="font-size: 0.9rem;" class="card-text">{{ $user->user_type }}</p>
                     
                 </div>
             </div>
@@ -46,7 +46,7 @@
                 </svg>
                 <div class="list-group-item border-0">
                     <small class="text-muted d-block">Fullname</small>
-                    <span class="d-block mt-1 fw-bold">MENRO Driver</span>
+                    <span class="d-block mt-1 fw-bold">{{ $user->fullname }}</span>
                 </div>
             </div>
 
@@ -57,7 +57,7 @@
                 </svg>
                 <div class="list-group-item border-0">
                     <small class="text-muted d-block">Contact No.</small>
-                    <span class="d-block mt-1 fw-bold">+639876543210</span>
+                    <span class="d-block mt-1 fw-bold">+{{ $user->contact_num }}</span>
                 </div>
             </div>
             
@@ -70,7 +70,7 @@
                 </svg>
                 <div class="list-group-item border-0">
                     <small class="text-muted d-block">Username</small>
-                    <span class="d-block mt-1 fw-bold">menrodriver</span>
+                    <span class="d-block mt-1 fw-bold">{{ $user->username }}</span>
                 </div>
             </div>
             
@@ -88,4 +88,16 @@
     </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Profile Updated!',
+            text: '{{ session("success") }}',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#01A94D'
+        });
+    @endif
+</script>
 @endsection

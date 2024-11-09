@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barangay;
+use App\Models\CollectionSchedule;
 use App\Models\WasteComposition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,20 +17,26 @@ class WasteCompositionController extends Controller
      */
     public function index()
     {
+        $currentDate = now();
+
         if (request()->ajax()) {
             $userId = Auth::id();
 
-            $wasteCompositions = WasteComposition::with('brgy:id,name')
+            $wasteCompositions = WasteComposition::whereDate('collection_date', $currentDate)
+                            ->with('brgy:id,area_name')
                             ->where('user_id', $userId)
                             ->orderBy('created_at', 'desc')
                             ->get();
         
-            return response()->json(['wasteCompositions' => $wasteCompositions]);
+            $html = view('driver.waste-composition._waste_compositions', compact('wasteCompositions'))->render();
+
+            return response()->json(['html' => $html]);
         }
 
         $userId = Auth::id();
 
-        $wasteCompositions = WasteComposition::with('brgy:id,name')
+        $wasteCompositions = WasteComposition::whereDate('collection_date', $currentDate)
+                        ->with('brgy:id,area_name')
                         ->where('user_id', $userId)
                         ->orderBy('created_at', 'desc')
                         ->get();
@@ -37,10 +44,34 @@ class WasteCompositionController extends Controller
         return view('driver.waste-composition.index', compact('wasteCompositions'));
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $userId = Auth::id();
+
+        $currentDate = now();
+
+        // Fetch waste compositions where `waste_type` or `brgy.name` matches the search query
+        $wasteCompositions = WasteComposition::whereDate('collection_date', $currentDate)
+                            ->with('brgy:id,area_name')
+                            ->where('user_id', $userId)
+                            ->whereHas('brgy', function ($q) use ($query) {
+                                $q->where('area_name', 'like', "%{$query}%");
+                            })
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+
+        // Return the view as HTML content
+        return response()->json([
+            'html' => view('driver.waste-composition._waste_compositions', compact('wasteCompositions'))->render()
+        ]);
+    }
+
     public function admin_index()
     {
         if (request()->ajax()) {
-            $wasteCompositions = WasteComposition::with('brgy:id,name')
+            $wasteCompositions = WasteComposition::with('brgy:id,area_name')
                             ->with('user:id,user_type')
                             ->orderBy('created_at', 'desc')
                             ->get();
@@ -48,7 +79,7 @@ class WasteCompositionController extends Controller
             return response()->json(['wasteCompositions' => $wasteCompositions]);
         }
 
-        $wasteCompositions = WasteComposition::with('brgy:id,name')
+        $wasteCompositions = WasteComposition::with('brgy:id,area_name')
                             ->with('user:id,fullname,user_type')
                             ->orderBy('created_at', 'desc')
                             ->get();
@@ -132,7 +163,7 @@ class WasteCompositionController extends Controller
 
     public function getBarangay()
     {
-        $barangays = Barangay::get(['id', 'name', 'area']);
+        $barangays = Barangay::get(['id', 'area_name']);
         return response()->json(['barangays' => $barangays]);
     }
 
@@ -152,29 +183,27 @@ class WasteCompositionController extends Controller
         $request->validate([
             'brgy_id' => 'required|exists:barangays,id',
             'waste_type' => 'required|string',
-            'collection_date' => 'required|date',
             'metrics' => 'required|string',
         ]);
 
         $userId = Auth::id();
+        $currentDate = now();
+        $currentDateFormatted = $currentDate->format('Y-m-d'); // Format the date for comparison
 
-        // Check waste_type and assign the appropriate unit
-        $metricsWithUnit = $request->input('metrics');
-        
-        if ($request->input('waste_type') === 'Biodegradable') {
-            $metricsWithUnit .= ''; // Append 'sack' for Biodegradable
-        } elseif ($request->input('waste_type') === 'Residual') {
-            $metricsWithUnit .= ''; // Append 'kg' for Residual
-        }
-
-        // Merge the metrics field with the other request data
+        // Create the WasteComposition record
         WasteComposition::create(array_merge(
-            $request->except('metrics'), // Exclude original metrics field
-            ['metrics' => $metricsWithUnit], // Add modified metrics with appropriate unit
-            ['user_id' => $userId] // Add user ID
+            $request->all(),
+            ['user_id' => $userId],
+            ['collection_date' => $currentDate]
         ));
 
-        return response()->json(['message' => 'Waste composition successfully added.']);
+        // Update CollectionSchedule status to "Finished" based on matching criteria
+        CollectionSchedule::where('user_id', $userId)
+            ->where('brgy_id', $request->input('brgy_id'))
+            ->whereDate('scheduled_date', $currentDateFormatted) // Use whereDate for Y-m-d comparison
+            ->update(['status' => 'Finished']);
+
+        return response()->json(['message' => 'Waste composition successfully added and collection status updated to Finished.']);
     }
 
     /**
@@ -202,7 +231,6 @@ class WasteCompositionController extends Controller
         $request->validate([
             'brgy_id' => 'required|exists:barangays,id',
             'waste_type' => 'required|string',
-            'collection_date' => 'required|date',
             'metrics' => 'required|string',
         ]);
 
@@ -218,10 +246,13 @@ class WasteCompositionController extends Controller
             $metricsWithUnit .= ''; // Append 'kg' for Residual
         }
 
+        $currentDate = now();
+
         // Update the record, merging the modified metrics
         $wasteComposition->update(array_merge(
             $request->except('metrics'), // Exclude original metrics field
-            ['metrics' => $metricsWithUnit] // Add modified metrics with appropriate unit
+            ['metrics' => $metricsWithUnit],
+            ['collection_date' => $currentDate]
         ));
 
         return response()->json(['message' => 'Waste composition successfully updated.']);

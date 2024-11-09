@@ -13,7 +13,7 @@
                     <div class="col-md-12">
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
-                                <h1><strong>Daily Reports</strong></h1>
+                                <h1><strong>Waste Converted Reports</strong></h1>
                                 <p>Contains current location of the selected dump truck.</p>
                             </div>
                             {{-- <div>

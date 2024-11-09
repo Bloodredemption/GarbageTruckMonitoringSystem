@@ -177,7 +177,7 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $user->fullname }}</td>
                                                         <td>{{ $user->username }}</td>
-                                                        <td>{{ $user->contact_num }}</td>
+                                                        <td>+{{ $user->contact_num }}</td>
                                                         <td>{{ $user->user_type }}</td>
                                                         <td>
                                                             @if ($user->status === 'active')
@@ -567,7 +567,7 @@
                                     <td>${counter}</td>
                                     <td><a href="#" class="view-user-btn" data-id="${user.id}">${user.fullname}</a></td>
                                     <td>${user.username}</td>
-                                    <td>+${String(user.contact_num).replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '$1 $2 $3 $4')}</td>
+                                    <td>+${user.contact_num}</td>
                                     <td>${user.user_type}</td>
                                     <td>${user.status == 'active' ? '<span class="badge bg-primary">active</span>' : '<span class="badge bg-danger">inactive</span>'}</td>
                                     <td>${formatteddate}</td>
@@ -694,7 +694,7 @@
                                     <td>${counter}</td>
                                     <td><a href="#" class="view-user-btn" data-id="${ausers.id}">${ausers.fullname}</a></td>
                                     <td>${ausers.username}</td>
-                                    <td>+${String(ausers.contact_num).replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '$1 $2 $3 $4')}</td>
+                                    <td>+${ausers.contact_num}</td>
                                     <td>${ausers.user_type}</td>
                                     <td>${formattedupdatedAt}</td>
                                     <td>

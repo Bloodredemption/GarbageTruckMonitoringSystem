@@ -13,11 +13,11 @@
                     <div class="col-md-12">
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
-                                <h1><strong>Waste Collection Records</strong></h1>
+                                <h1><strong>Waste Composition Records</strong></h1>
                                 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{ route('lf.dashboard')}}">Dashboard</a></li>
-                                        <li class="breadcrumb-item active text-white" aria-current="page">Waste Collection</li>
+                                        <li class="breadcrumb-item active text-white" aria-current="page">Waste Composition</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -66,7 +66,7 @@
                         <div class="card" data-aos="fade-up" data-aos-delay="800">
                             <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
                                 <div class="header-title">
-                                    <h4 class="card-title">Waste Collection List</h4>
+                                    <h4 class="card-title">Waste Composition List</h4>
                                     {{-- <p class="mb-0">Sub Title Here</p>           --}}
                                 </div>
 
@@ -77,7 +77,7 @@
                                         </i>
                                         <span>Filter</span>
                                     </a>
-                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                    <a href="#" class=" text-center btn btn-primary btn-icon mt-lg-0 mt-md-0 mt-3" data-bs-toggle="modal" data-bs-target="#addWasteModal">
                                         <i class="btn-inner">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -178,7 +178,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addWasteLabel">Create Waste Collection</h1>
+                    <h1 class="modal-title fs-5" id="addWasteLabel">Create Waste Composition</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -225,7 +225,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="editWasteLabel">Update Waste Collection</h1>
+                    <h1 class="modal-title fs-5" id="editWasteLabel">Update Waste Composition</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -288,7 +288,7 @@
                 { 
                     extend: 'csv', 
                     text: 'CSV',
-                    title: 'Waste Collection List',
+                    title: 'Waste Composition List',
                     exportOptions: {
                         columns: ':not(:last-child)'
                     }
@@ -296,7 +296,7 @@
                 { 
                     extend: 'excel', 
                     text: 'Excel',
-                    title: 'Waste Collection List',
+                    title: 'Waste Composition List',
                     exportOptions: {
                         columns: ':not(:last-child)'
                     }
@@ -304,7 +304,7 @@
                 { 
                     extend: 'pdf', 
                     text: 'PDF',
-                    title: 'Waste Collection List',
+                    title: 'Waste Composition List',
                     exportOptions: {
                         columns: ':not(:last-child)'
                     }
@@ -312,7 +312,7 @@
                 { 
                     extend: 'print', 
                     text: 'Print',
-                    title: 'Waste Collection List',
+                    title: 'Waste Composition List',
                     exportOptions: {
                         columns: ':not(:last-child)'
                     }
@@ -442,22 +442,22 @@
                             { 
                                 extend: 'csv', 
                                 text: 'CSV',
-                                title: 'Waste Collection List',
+                                title: 'Waste Composition List',
                             },
                             { 
                                 extend: 'excel', 
                                 text: 'Excel',
-                                title: 'Waste Collection List',
+                                title: 'Waste Composition List',
                             },
                             { 
                                 extend: 'pdf', 
                                 text: 'PDF',
-                                title: 'Waste Collection List',
+                                title: 'Waste Composition List',
                             },
                             { 
                                 extend: 'print', 
                                 text: 'Print',
-                                title: 'Waste Collection List',
+                                title: 'Waste Composition List',
                             }
                         ]
                     });
@@ -524,7 +524,7 @@
 
                     Swal.fire({
                         icon: 'success',
-                        title: 'Waste Collection Added!',
+                        title: 'Waste Composition Added!',
                         text: response.message,
                         confirmButtonText: 'OK',
                         confirmButtonColor: "#01A94D"
@@ -556,7 +556,7 @@
             let id = $(this).data('id');
 
             $.ajax({
-                url: `/landfill/waste-collection/${id}/edit`,
+                url: `/landfill/waste-composition/${id}/edit`,
                 type: "GET",
                 success: function (response) {
                     let wc = response.wasteComposition;
@@ -627,7 +627,7 @@
             };
 
             $.ajax({
-                url: `/landfill/waste-collection/${id}/update`,
+                url: `/landfill/waste-composition/${id}/update`,
                 type: "PUT",
                 data: formData,
                 success: function (response) {
@@ -635,7 +635,7 @@
 
                     Swal.fire({
                         icon: 'success',
-                        title: 'Waste Collection Updated!',
+                        title: 'Waste Composition Updated!',
                         text: response.message,
                         confirmButtonText: 'OK',
                         confirmButtonColor: "#01A94D"
@@ -660,7 +660,7 @@
             let id = $(this).data('id');
 
             Swal.fire({
-                title: 'Delete Waste Collection?',
+                title: 'Delete Waste Composition?',
                 text: "This action is irreversible.",
                 icon: 'warning',
                 showCancelButton: true,
@@ -671,7 +671,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `/landfill/waste-collection/${id}/delete`,
+                        url: `/landfill/waste-composition/${id}/delete`,
                         type: "PUT",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -23,7 +23,9 @@
 
         <!-- Customizer Css -->
         <link rel="stylesheet" href="{{ asset('assets/css/customizer.min.css') }}" />
-
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        
         <link rel="stylesheet" href="{{ asset('assets/vendor/flatpickr/dist/flatpickr.min.css') }}" />
         <script src="{{ asset('assets/vendor/flatpickr/dist/flatpickr.min.js')}}"></script>
         <script src="{{ asset('assets/js/plugins/flatpickr.js')}}" defer></script>
@@ -66,6 +68,7 @@
         <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/daygrid/main.css')}}' />
         <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/timegrid/main.css')}}' />
         <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/list/main.css')}}' />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 
         <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -147,7 +150,67 @@
                 box-shadow: none; /* Remove default Bootstrap focus outline */
             }
 
-            
+            .bootstrap-tagsinput {
+                background-color: #fff;
+                border: 1px solid #eee;
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+                display: inline-block;
+                padding: 4px 6px;
+                color: #555;
+                vertical-align: middle;
+                border-radius: 4px;
+                width: 100%;
+                line-height: 25px;
+                cursor: text;
+            }
+            .bootstrap-tagsinput input {
+                border: none;
+                box-shadow: none;
+                outline: none;
+                background-color: transparent;
+                padding: .5rem 1rem;
+                margin: 0;
+                width: auto;
+            }
+            .bootstrap-tagsinput.form-control input::-moz-placeholder {
+                color: #777;
+                opacity: 1;
+            }
+            .bootstrap-tagsinput.form-control input:-ms-input-placeholder {
+                color: #777;
+            }
+            .bootstrap-tagsinput.form-control input::-webkit-input-placeholder {
+                color: #777;
+            }
+            .bootstrap-tagsinput input:focus {
+                border: none;
+                box-shadow: none;
+            }
+            .bootstrap-tagsinput .tag {
+                position: relative;
+                display: inline-block;
+                font-size: .875rem;
+                color: #77838f;
+                background-color: rgba(119, 131, 143, 0.1);
+                border-radius: 0.3125rem;
+                padding: .25rem 0.8rem .25rem;
+                margin-bottom: .25rem;
+                margin-right: 0;
+            }
+            .bootstrap-tagsinput .tag [data-role="remove"] {
+                margin-left: 8px;
+                cursor: pointer;
+            }
+            .bootstrap-tagsinput .tag [data-role="remove"]:after {
+                content: "x";
+                padding: 0px 2px;
+            }
+            .bootstrap-tagsinput .tag [data-role="remove"]:hover {
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+            }
+            .bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
+                box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+            }
         </style>
     </head>
     <body class="">

@@ -14,7 +14,12 @@
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
                                 <h1><strong>Live Tracking</strong></h1>
-                                <p>Contains current location of the selected dump truck.</p>
+                                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Dashboard</a></li>
+                                        <li class="breadcrumb-item active text-white" aria-current="page">Live Tracking</li>
+                                    </ol>
+                                </nav>
                             </div>
                             {{-- <div>
                                 <a href="" class="btn btn-link btn-soft-light">
@@ -44,15 +49,69 @@
                     <div class="col-md-12">
                         <div class="card" data-aos="fade-up" data-aos-delay="800">
                             <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
-                                <div class="header-title">
+                                {{-- <div class="header-title">
                                     <h4 class="card-title">Some Text Here</h4>
                                     <p class="mb-0">Sub Title Here</p>          
-                                </div>
+                                </div> --}}
                                 
                             </div>
                             <div class="card-body">
-                                <iframe src="https://sinotrack.com/" allowfullscreen 
-                                        style="width: 100%; height: 100vh; border: none;"></iframe>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div id="map" style="height: 500px;"></div>
+                                    </div>
+                                    <div class="col-md-4" style="padding-left: 0; padding-right: 0;">
+                                        <div class="border-1 mt-0">
+                                            <div class="card-header" style="padding-top: 0;">
+                                                <div class="flex-wrap d-flex justify-content-between align-items-center bg-white" style="padding-top: 0;">
+                                                    <div class="header-title">
+                                                        <h5 class="card-title"><strong>Today's Schedule <span id="currentDay">({{ $currentDayName }})</span></strong></h5>            
+                                                    </div>   
+                                                    <a href="{{ route('cs.index') }}">See All</a>
+                                                </div>
+                                                <p class="mb-0" id="currentDate">{{ $currentDateFormatted }}</p>
+                                            </div>
+                                            <div style="padding-top: 0;">
+                                                <div class="border-1">
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-borderless">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="ps-0 pb-2 border-bottom">Area</th>
+                                                                        <th class="border-bottom pb-2">Time</th>
+                                                                        <th class="border-bottom pb-2">Status</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse ($schedules as $schedule)
+                                                                        <tr>
+                                                                            <td class="ps-0">{{ $schedule->barangay->area_name ?? 'N/A' }}</td>
+                                                                            <td>
+                                                                                <p class="mb-0"><span class="font-weight-bold me-2">{{ \Carbon\Carbon::parse($schedule->scheduled_time)->format('h:i A') }}</span></p>
+                                                                            </td>
+                                                                            <td class="text-muted">
+                                                                                <span class="badge rounded-pill 
+                                                                                    {{ $schedule->status == 'Pending' ? 'bg-warning' : ($schedule->status == 'Finished' ? 'bg-success' : 'bg-secondary') }}">
+                                                                                    {{ $schedule->status }}
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="3" class="text-center">No schedules found for today</td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -66,5 +125,56 @@
     @include('partials.footer')
     <!-- Footer Section End -->    
 </main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize the map
+        var map = L.map('map').setView([0, 0], 18); // Initial placeholder coordinates
+
+        // Add the OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Marker placeholder (this will be updated with the truck's location)
+        var marker;
+
+        // Function to update marker position
+        function updateMarker(latitude, longitude) {
+            if (marker) {
+                marker.setLatLng([latitude, longitude]);
+            } else {
+                marker = L.marker([latitude, longitude]).addTo(map)
+                    .bindPopup('Truck is here!')
+                    .openPopup();
+                map.setView([latitude, longitude], 18); // Center map on first load
+            }
+        }
+
+        // Fetch truck location from the backend and update the marker
+        async function fetchTruckLocation() {
+            try {
+                const response = await fetch('/admin/live-tracking/fetchCoords');
+                const data = await response.json();
+
+                if (data.latitude && data.longitude) {
+                    updateMarker(data.latitude, data.longitude);
+                } else {
+                    console.error('No location data found.');
+                }
+            } catch (error) {
+                console.error('Error fetching truck location:', error);
+            }
+        }
+
+        // Initial load of truck location
+        fetchTruckLocation();
+
+        // Set an interval to fetch and update location periodically
+        setInterval(fetchTruckLocation, 10000); // Update every 10 seconds
+    });
+
+</script>
 
 @endsection

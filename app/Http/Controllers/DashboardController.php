@@ -23,9 +23,54 @@ class DashboardController extends Controller
         return view('landfill.dashboard');
     }
 
-    public function driver_index() 
+    public function driver_index()
     {
-        return view('driver.dashboard');
+        // Get total metrics for each waste type
+        $totalBiodegradable = WasteComposition::where('waste_type', 'Biodegradable')->sum('metrics');
+        $totalResidual = WasteComposition::where('waste_type', 'Residual')->sum('metrics');
+
+        return view('driver.dashboard', compact('totalBiodegradable', 'totalResidual'));
+    }
+
+    public function getWasteCollectionData(Request $request)
+    {
+        $timeframe = $request->query('timeframe');
+        $data = [];
+
+        // Determine the start and end date based on the timeframe
+        if ($timeframe === 'thisweek') {
+            $startDate = Carbon::now()->startOfWeek(); // Start of the current week (Monday)
+            $endDate = Carbon::now()->endOfWeek();     // End of the current week (Sunday)
+        } elseif ($timeframe === 'lastweek') {
+            $startDate = Carbon::now()->subWeek()->startOfWeek(); // Start of the last week (Monday)
+            $endDate = Carbon::now()->subWeek()->endOfWeek();     // End of the last week (Sunday)
+        } else {
+            return response()->json(['metrics' => []]);
+        }
+
+        // Fetch and group the data by date
+        $wasteData = WasteComposition::whereBetween('collection_date', [$startDate, $endDate])
+            ->selectRaw('DATE(collection_date) as date, SUM(metrics) as total_metrics')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // Initialize an array for all days of the week
+        $daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        $metricsByDay = array_fill_keys($daysOfWeek, 0); // Set default values to 0
+
+        // Map the data to the days of the week
+        foreach ($wasteData as $data) {
+            $dayName = Carbon::parse($data->date)->format('D'); // Get the day name (e.g., 'Mon')
+            if (array_key_exists($dayName, $metricsByDay)) {
+                $metricsByDay[$dayName] = $data->total_metrics;
+            }
+        }
+
+        // Convert the metrics to an array of values
+        $metrics = array_values($metricsByDay);
+
+        return response()->json(['metrics' => $metrics]);
     }
 
     public function lfgetWeeklyWasteData()
@@ -256,10 +301,10 @@ class DashboardController extends Controller
         $endOfWeek = Carbon::now()->endOfWeek()->toDateString(); // Convert to date format (Y-m-d)
 
         // Query to get the sum of metrics per barangay for the week
-        $weeklyWasteData = WasteComposition::select('barangays.name', DB::raw('SUM(waste_compositions.metrics) as total_metrics'))
+        $weeklyWasteData = WasteComposition::select('barangays.area_name', DB::raw('SUM(waste_compositions.metrics) as total_metrics'))
             ->join('barangays', 'waste_compositions.brgy_id', '=', 'barangays.id') // Join with the barangays table
             ->whereBetween(DB::raw('DATE(waste_compositions.collection_date)'), [$startOfWeek, $endOfWeek]) // Use DATE() to compare only the date part
-            ->groupBy('barangays.id', 'barangays.name') // Group by barangay id and name
+            ->groupBy('barangays.id', 'barangays.area_name') // Group by barangay id and name
             ->orderBy('total_metrics', 'DESC') // Order by total waste generated
             ->get();
 

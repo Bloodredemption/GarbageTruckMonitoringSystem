@@ -20,7 +20,7 @@ class CollectionScheduleController extends Controller
         if (request()->ajax()) {
             $collectionSchedules = CollectionSchedule::with('driver:id,fullname')
                             ->with('dumptruck:id,brand,model')
-                            ->with('barangay:id,name')
+                            ->with('barangay:id,area_name')
                             ->orderBy('created_at', 'desc')
                             ->get();
         
@@ -29,11 +29,20 @@ class CollectionScheduleController extends Controller
 
         $collectionSchedules = CollectionSchedule::with('driver:id,fullname')
                             ->with('dumptruck:id,brand,model')
-                            ->with('barangay:id,name')
+                            ->with('barangay:id,area_name')
                             ->orderBy('created_at', 'desc')
                             ->get();
 
         return view('admin.collection-schedule.index', compact('collectionSchedules'));
+    }
+
+    public function checkConflict(Request $request)
+    {
+        $conflict = CollectionSchedule::where('scheduled_date', $request->scheduled_date)
+                    ->where('scheduled_time', $request->scheduled_time)
+                    ->exists();
+
+        return response()->json(['conflict' => $conflict]);
     }
 
     public function events()
@@ -41,17 +50,23 @@ class CollectionScheduleController extends Controller
         $collectionSchedules = CollectionSchedule::with(['barangay', 'dumpTruck.driver'])->get();
 
         $events = $collectionSchedules->map(function ($schedule) {
+            // Create a DateTime object for the start time
+            $startDateTime = new \DateTime($schedule->scheduled_date . ' ' . $schedule->scheduled_time);
+            
+            // Clone the start time and add a duration (e.g., 1 hour) for the end time
+            $endDateTime = (clone $startDateTime)->modify('+1 hour');
+
             return [
                 'id' => $schedule->id,
-                'start' => $schedule->scheduled_date . 'T' . $schedule->scheduled_time, // FullCalendar requires date and time in ISO format
-                'end' => $schedule->scheduled_date . 'T' . $schedule->scheduled_time, // Set the end to the same date/time to avoid spanning multiple days
-                'title' => '' . $schedule->barangay->area . '',
+                'start' => $startDateTime->format('Y-m-d\TH:i:s'), // Format for FullCalendar
+                'end' => $endDateTime->format('Y-m-d\TH:i:s'), // End time adjusted to 1 hour later
+                'title' => $schedule->barangay->area_name,
                 'allDay' => false,
                 'extendedProps' => [
                     'brgy_id' => $schedule->brgy_id,
                     'dumptruck_id' => $schedule->dumptruck_id,
                     'sched_id' => $schedule->id,
-                    'brgy_name' => $schedule->barangay->name,
+                    'brgy_name' => $schedule->barangay->area_name,
                     'driver_id' => $schedule->user_id,
                     'dumptruck' => $schedule->dumpTruck->brand . ' ' . $schedule->dumpTruck->model,
                 ],
@@ -117,7 +132,7 @@ class CollectionScheduleController extends Controller
     public function getBrgy()
     {
         $brgy = Barangay::where('isDeleted', '0')
-                        ->get(['id', 'name', 'area']);
+                        ->get(['id', 'area_name']);
         return response()->json(['brgy' => $brgy]);
     }
 
@@ -157,7 +172,15 @@ class CollectionScheduleController extends Controller
             'scheduled_time' => 'required|string',
         ]);
 
-        CollectionSchedule::create($request->all());
+        $today = Carbon::today()->format('Y-m-d');
+        
+        // Determine the status based on the scheduled date
+        $status = $request->input('scheduled_date') === $today ? 'Ongoing' : 'Pending';
+
+        // Create a new CollectionSchedule instance and explicitly set the status
+        $schedule = new CollectionSchedule($request->all());
+        $schedule->status = $status; // Override any default value
+        $schedule->save();
 
         return response()->json(['message' => 'Collection schedule successfully added.']);
     }
@@ -210,18 +233,24 @@ class CollectionScheduleController extends Controller
         return response()->json(['message' => 'Collection schedule successfully deleted.']);
     }
 
-    public function driver_index(Request $request) {
-        $date = $request->query('date') ?? Carbon::today()->toDateString();
-    
-        $schedules = CollectionSchedule::with('barangay:id,name')
-                    ->whereDate('scheduled_date', $date)
+    public function driver_index() {
+        $currentDate = Carbon::today()->toDateString();
+
+        $schedules = CollectionSchedule::with('barangay:id,area_name')
+                    ->whereDate('scheduled_date', $currentDate)
                     ->get();
-    
-        // Check if this is an AJAX request
-        if ($request->ajax()) {
-            return response()->json($schedules);
-        }
-    
+
         return view('driver.collection-schedule.index', compact('schedules'));
     }
+
+    public function fetchByDate(Request $request) {
+        $selectedDate = $request->input('date') ?? Carbon::today()->toDateString(); 
+    
+        $schedules = CollectionSchedule::with('barangay:id,area_name')
+                    ->whereDate('scheduled_date', $selectedDate)
+                    ->get();
+    
+        return response()->json(['schedules' => $schedules]);
+    }
+    
 }

@@ -91,7 +91,7 @@
                                                 <td>{{ $wc->waste_type }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($wc->collection_date)->format('F d, Y h:i A') }}</td>
                                                 <td>{{ $wc->metrics }} kg/s</td>
-                                                <td>{{ $wc->brgy->name }}</td>
+                                                <td>{{ $wc->brgy->brgy_name }}</td>
                                                 <td>{{ $wc->user->fullname }} | {{ $wc->user->user_type }}</td>
                                             </tr>
                                             @endforeach
@@ -249,7 +249,7 @@
                                     <td>${wasteComposition.waste_type}</td>
                                     <td>${formattedDate}</td>
                                     <td>${wasteComposition.metrics} kg/s</td>
-                                    <td>${wasteComposition.brgy.name}</td>
+                                    <td>${wasteComposition.brgy.brgy_name}</td>
                                     <td>${formattedDate2}</td>
                                     <td>${wasteComposition.user.user_type}</td>
                                 </tr>`;

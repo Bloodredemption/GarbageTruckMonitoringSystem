@@ -6,6 +6,8 @@ use App\Models\Notification;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
+use Carbon\Carbon;
+use App\Events\NotificationSent;
 
 class NotificationController extends Controller
 {
@@ -32,7 +34,31 @@ class NotificationController extends Controller
 
     public function driver_index()
     {
-        return view('driver.notifications.index');
+        if (request()->ajax()) {
+            $notifications = Notification::with('user:id,fullname')
+                                ->whereIn('status', ['sent', 'read'])
+                                ->orderBy('created_at', 'desc')
+                                ->get()
+                                ->map(function ($notification) {
+                                    $notification->time_ago = Carbon::parse($notification->created_at)->diffForHumans();
+                                    return $notification;
+                                });
+
+            return response()->json(['notifications' => $notifications]);
+        }
+
+        $notifications = Notification::with('user:id,fullname')
+                                ->whereIn('status', ['sent', 'read'])
+                                ->orderBy('created_at', 'desc')
+                                ->get()
+                                ->map(function ($notification) {
+                                    $notification->time_ago = Carbon::parse($notification->created_at)->diffForHumans();
+                                    return $notification;
+                                });
+
+        broadcast(new NotificationSent($notifications));
+
+        return view('driver.notifications.index', compact('notifications'));
     }
 
     public function getArchive()
@@ -69,9 +95,27 @@ class NotificationController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
-        Notification::create($request->all());
+        $notification = Notification::create($request->all());
+
+        // Trigger the event with the notification message
+        event(new NotificationSent($notification->notification_msg));
 
         return response()->json(['message' => 'Notification successfully added.']);
+    }
+
+    public function markAllAsRead()
+    {
+        $unreadNotifications = Notification::where('status', 'sent')->count();
+
+        if ($unreadNotifications > 0) {
+            // Update the status of all unread notifications to 'read'
+            Notification::where('status', 'sent')->update(['status' => 'read']);
+
+            return response()->json(['success' => true, 'message' => 'All notifications marked as read']);
+        } else {
+            // All notifications are already marked as read
+            return response()->json(['success' => false, 'message' => 'All notifications are already marked as read']);
+        }
     }
 
     /**

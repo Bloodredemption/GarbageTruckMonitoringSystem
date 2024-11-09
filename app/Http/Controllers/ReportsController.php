@@ -6,23 +6,13 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    public function wcoldaily()
+    public function wasteCollected()
     {
-        return view('admin.reports.waste-collected.daily.index');
+        return view('admin.reports.waste-collected');
     }
 
-    public function wcolweekly()
+    public function wasteConverted() 
     {
-        return view('admin.reports.waste-collected.weekly.index');
-    }
-
-    public function wcolmonthly()
-    {
-        return view('admin.reports.waste-collected.monthly.index');
-    }
-
-    public function wcolyearly()
-    {
-        return view('admin.reports.waste-collected.yearly.index');
+        return view('admin.reports.waste-converted');
     }
 }

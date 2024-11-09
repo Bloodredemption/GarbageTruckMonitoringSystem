@@ -49,11 +49,8 @@ class BarangayController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'municipality' => 'required|string',
-            'province' => 'required|string',
-            'area' => 'required|string',
-            'zipcode' => 'required|digits:4',
+            'area_name' => 'required|string',
+            'population' => 'required',
             'captain' => 'required|string',
         ]);
 
@@ -90,11 +87,8 @@ class BarangayController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string',
-            'municipality' => 'required|string',
-            'province' => 'required|string',
-            'area' => 'required|string',
-            'zipcode' => 'required|digits:4',
+            'area_name' => 'required|string',
+            'population' => 'required',
             'captain' => 'required|string',
         ]);
 

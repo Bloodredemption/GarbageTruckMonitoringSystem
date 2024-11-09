@@ -17,14 +17,16 @@ class WasteConversionController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $wasteConversions = WasteConversion::where('isDeleted', '0')
+            $wasteConversions = WasteConversion::whereIn('status', ['Pending', 'Ongoing', 'Finished'])
+                            ->where('isDeleted', '0')
                             ->orderBy('created_at', 'desc')
                             ->get();
         
             return response()->json(['wasteConversions' => $wasteConversions]);
         }
 
-        $wasteConversions = WasteConversion::where('isDeleted', '0')
+        $wasteConversions = WasteConversion::whereIn('status', ['Pending', 'Ongoing', 'Finished'])
+                            ->where('isDeleted', '0')
                             ->orderBy('created_at', 'desc')
                             ->get();
 
@@ -147,7 +149,6 @@ class WasteConversionController extends Controller
             'conversion_method' => 'required|string',
             'metrics' => 'required|string',
             'start_date' => 'required|date',
-            'end_date' => 'required|date',
         ]);
 
         $userId = Auth::id();
@@ -168,6 +169,15 @@ class WasteConversionController extends Controller
         ));
 
         return response()->json(['message' => 'Waste conversion successfully added.']);
+    }
+
+    public function getArchive()
+    {
+        $archWCov = WasteConversion::where('status', 'Archived')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        return response()->json(['archWCov' => $archWCov]);
     }
 
     /**
@@ -240,5 +250,23 @@ class WasteConversionController extends Controller
         $wasteConversion->save();
 
         return response()->json(['message' => 'Waste conversion finished.']);
+    }
+
+    public function restore(string $id)
+    {
+        $wasteConversion = WasteConversion::findOrFail($id);
+        $wasteConversion->status = 'Finished';
+        $wasteConversion->save();
+
+        return response()->json(['message' => 'Waste conversion successfully restored.']);
+    }
+
+    public function archive(string $id)
+    {
+        $wasteConversion = WasteConversion::findOrFail($id);
+        $wasteConversion->status = 'Archived';
+        $wasteConversion->save();
+
+        return response()->json(['message' => 'Waste conversion archived successfully.']);
     }
 }

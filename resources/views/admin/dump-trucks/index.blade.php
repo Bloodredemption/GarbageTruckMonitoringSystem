@@ -806,7 +806,7 @@
             // Use SweetAlert2 for the confirmation dialog
             Swal.fire({
                 title: 'Move to Archive?',
-                text: "Are you sure you want to remove this data?",
+                text: "Are you sure you want to archive this data?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Confirm',

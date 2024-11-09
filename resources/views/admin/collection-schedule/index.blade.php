@@ -113,7 +113,7 @@
                                                 <thead>
                                                     <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                         <th>No.</th>
-                                                        <th>Barangay</th>
+                                                        <th>Barangay Area</th>
                                                         <th>Dump Truck</th>
                                                         <th>Driver</th>
                                                         <th>Schedule</th>
@@ -124,7 +124,7 @@
                                                     @foreach ($collectionSchedules as $cs)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
-                                                        <td>{{ $cs->barangay->name }}</td>
+                                                        <td>{{ $cs->barangay->area_name }}</td>
                                                         <td>{{ $cs->dumpTruck->brand }} {{ $cs->dumpTruck->model }}</td>
                                                         <td>{{ $cs->driver->fullname }}</td>
                                                         <td>{{ $cs->scheduled_date }} {{ $cs->scheduled_time }}</td>
@@ -179,7 +179,7 @@
                         @csrf
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <label for="add_brgy" class="form-label mb-0">Barangay <span style="color: red;">*</span></label>
+                                <label for="add_brgy" class="form-label mb-0">Barangay Area <span style="color: red;">*</span></label>
                                 <a id="addbrgybtn" class="text-end" style="font-size: 15px" href="{{ route('barangays.index') }}">
                                     <i class="btn-inner">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -265,7 +265,7 @@
                         <input type="hidden" id="edit_sched_id" name="sched_id">
 
                         <div class="mb-3">
-                            <label for="edit_brgy" class="form-label">Location <span style="color: red;">*</span></label>
+                            <label for="edit_brgy" class="form-label">Barangay Area <span style="color: red;">*</span></label>
                             <select class="form-control" id="edit_brgy" name="brgy" required>
                                 <!-- Options will be populated via AJAX -->
                             </select>
@@ -406,8 +406,8 @@
 
                     // Populate both selects with the barangays
                     $.each(response.brgy, function (key, brgy) {
-                        brgySelect1.append(`<option value="${brgy.id}">${brgy.name} - ${brgy.area}</option>`);
-                        brgySelect2.append(`<option value="${brgy.id}">${brgy.name} - ${brgy.area}</option>`);
+                        brgySelect1.append(`<option value="${brgy.id}">${brgy.area_name}</option>`);
+                        brgySelect2.append(`<option value="${brgy.id}">${brgy.area_name}</option>`);
                     });
                 },
                 error: function (error) {
@@ -499,60 +499,85 @@
 
         var calendarEl = document.getElementById('calendar');
 
-        // Get today's date in YYYY-MM-DD format
-        var today = new Date().toISOString().split('T')[0];
-
         // Initialize the FullCalendar with AJAX
         var calendar = new FullCalendar.Calendar(calendarEl, {
             themeSystem: 'bootstrap5',
-            initialView: 'dayGridMonth', // Set the default view to Month
-
+            initialView: 'dayGridMonth',
             dayMaxEvents: 3,
+            timeZone: 'local',
 
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay' // Show Month, Week, Day, and List view
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-            navLinks: true, // Clickable day/week names to navigate views
+            navLinks: true,
             selectable: true,
-            events: {
-                url: "{{ route('cs.events') }}",
-                method: 'GET',
-                failure: function() {
-                    alert('There was an error while fetching events!');
-                }
+
+            events: function(fetchInfo, successCallback, failureCallback) {
+                // Fetch both user events and holidays
+                $.ajax({
+                    url: "{{ route('cs.events') }}",
+                    method: 'GET',
+                    success: function(userEvents) {
+                        // Make an API call to get the holidays
+                        $.ajax({
+                            url: "https://calendarific.com/api/v2/holidays",
+                            method: 'GET',
+                            data: {
+                                api_key: '4CaWSd2hOXKX8hLx9Q6yCFeFj7jHt5Wf',
+                                country: 'PH',
+                                year: 2024
+                            },
+                            success: function(response) {
+                                // Extract holidays and format them for FullCalendar
+                                let holidayEvents = response.response.holidays.map(holiday => {
+                                    return {
+                                        title: holiday.name,
+                                        start: holiday.date.iso,
+                                        color: 'red', // Set a color for holidays
+                                        rendering: 'background' // Optionally render holidays in the background
+                                    };
+                                });
+
+                                // Combine user events and holiday events
+                                successCallback([...userEvents, ...holidayEvents]);
+                            },
+                            error: function() {
+                                alert('There was an error while fetching holidays!');
+                                failureCallback();
+                            }
+                        });
+                    },
+                    error: function() {
+                        alert('There was an error while fetching events!');
+                        failureCallback();
+                    }
+                });
             },
+
             select: function(info) {
-                var selectedDate = new Date(info.startStr); // Get the selected date
-                var today = new Date(); // Get today's date
-                today.setHours(0, 0, 0, 0); // Clear the time part (set to midnight)
+                var selectedDate = new Date(info.startStr);
+                var today = new Date();
+                today.setHours(0, 0, 0, 0);
 
-                // Check if the selected date is before today
-                if (selectedDate < today) {
-                    return; // Exit without performing any action
-                }
+                if (selectedDate < today) return;
 
-                // For week and day views, capture both date and time
                 if (info.view.type === 'timeGridWeek' || info.view.type === 'timeGridDay') {
-                    const date = info.startStr.split('T')[0]; // Extract date part
-                    const time = info.startStr.split('T')[1].substring(0, 5); // Extract time part (HH:MM)
+                    const date = info.startStr.split('T')[0];
+                    const time = info.startStr.split('T')[1].substring(0, 5);
                     $('#add_date').val(date);
                     $('#add_time').val(time);
                 } else {
-                    // In month view, only set the date
                     $('#add_date').val(info.startStr);
-                    $('#add_time').val(''); // Clear time in month view
+                    $('#add_time').val('');
                 }
 
-                // Show the modal using Bootstrap modal and jQuery
-                var addScheduleModal = new bootstrap.Modal($('#addScheduleModal')[0], {
-                    keyboard: false
-                });
+                var addScheduleModal = new bootstrap.Modal($('#addScheduleModal')[0], { keyboard: false });
                 addScheduleModal.show();
             },
+
             eventClick: function(info) {
-                // Set the event data in the modal input fields using jQuery
                 $('#edit_sched_id').val(info.event.extendedProps.sched_id);
                 $('#edit_brgy').val(info.event.extendedProps.brgy_id);
                 $('#edit_dt').val(info.event.extendedProps.dumptruck_id);
@@ -560,52 +585,24 @@
                 $('#edit_date').val(info.event.startStr.split('T')[0]);
                 $('#edit_time').val(info.event.startStr.split('T')[1].substring(0, 5));
 
-                // Show the edit modal
-                var editScheduleModal = new bootstrap.Modal($('#editScheduleModal')[0], {
-                    keyboard: false
-                });
+                var editScheduleModal = new bootstrap.Modal($('#editScheduleModal')[0], { keyboard: false });
                 editScheduleModal.show();
             },
-            eventDidMount: function(info) {
-                // Add pointer style when hovering over events
-                info.el.style.cursor = 'pointer';
 
-                // Set the tooltip content using the event title or other extended properties
-                var tooltipContent = 'Barangay: ' + info.event.extendedProps.brgy_name + 
-                                    ', Dump Truck: ' + info.event.extendedProps.dumptruck;
-
-                // Set tooltip attributes
-                $(info.el).attr('title', tooltipContent);
-                $(info.el).tooltip({
-                    placement: 'right', // Tooltip will appear above the event
-                    trigger: 'hover', // Show tooltip on hover
-                    container: 'body' // Append tooltip to the body to avoid CSS issues
-                });
-            },
             dayCellDidMount: function(info) {
-                // Add pointer style when hovering over calendar days
                 info.el.style.cursor = 'pointer';
 
-                // Create a new date object without time for comparison
                 var calendarDate = new Date(info.date);
-                calendarDate.setHours(0, 0, 0, 0); // Clear the time part (set to midnight)
+                calendarDate.setHours(0, 0, 0, 0);
 
                 var currentDate = new Date();
-                currentDate.setHours(0, 0, 0, 0); // Clear the time part (set to midnight)
+                currentDate.setHours(0, 0, 0, 0);
 
-                // Check if the day is before today (past date)
                 if (calendarDate < currentDate) {
-                    // Add a tooltip for past dates
                     $(info.el).attr('title', 'This date is cannot be selected. Please select another date.');
-                    $(info.el).tooltip({
-                        placement: 'top', // Tooltip will appear above the day cell
-                        trigger: 'hover', // Show tooltip on hover
-                        container: 'body' // Append tooltip to the body
-                    });
-
-                    // Optionally, add a visual indication (e.g., grayed-out past dates)
-                    info.el.style.backgroundColor = '#f0f0f0'; // Light gray background
-                    info.el.style.color = '#01A94D'; // Gray text for past dates
+                    $(info.el).tooltip({ placement: 'top', trigger: 'hover', container: 'body' });
+                    info.el.style.backgroundColor = '#f0f0f0';
+                    info.el.style.color = '#01A94D';
                 }
             }
         });
@@ -645,7 +642,7 @@
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
-                                    <td>${colsched.barangay.name}</td>
+                                    <td>${colsched.barangay.area_name}</td>
                                     <td>${colsched.dumptruck.brand} ${colsched.dumptruck.model}</td>
                                     <td>${colsched.driver.fullname}</td>
                                     <td>${colsched.scheduled_date} ${colsched.scheduled_time}</td>
@@ -730,42 +727,76 @@
                 scheduled_time: $('#add_time').val(),
             };
 
+            // Check for schedule conflicts before submitting
             $.ajax({
-                url: "{{ route('cs.store') }}", // Route for storing barangay
-                type: "POST",
+                url: "{{ route('cs.checkConflict') }}", // New route to check for conflicts
+                type: "GET",
                 data: formData,
                 success: function (response) {
-                    calendar.refetchEvents();
-                    fetchColsched();
+                    if (response.conflict) {
+                        // Display error if there is a conflict
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Schedule Conflict!',
+                            text: 'This date and time are already scheduled. Please choose a different time.',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: "#01A94D"
+                        });
+                        
+                        $('#saveChangesBtn').attr('disabled', false);
+                        $('#saveChangesSpinner').addClass('d-none');
+                    } else {
+                        // No conflict; proceed with saving
+                        $.ajax({
+                            url: "{{ route('cs.store') }}", // Route for storing barangay
+                            type: "POST",
+                            data: formData,
+                            success: function (response) {
+                                calendar.refetchEvents();
+                                fetchColsched();
 
-                    $('#toastMessage').text(response.message);
+                                $('#toastMessage').text(response.message);
 
-                    // Trigger Bootstrap toast instead of SweetAlert
-                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
-                    toastEl.show(); // Show the toast
+                                // Trigger Bootstrap toast instead of SweetAlert
+                                var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                                toastEl.show(); // Show the toast
 
-                    $('#scheduleForm')[0].reset();
-                    $('#addScheduleModal').modal('hide');
-                    
-                },
-                error: function (error) {
-                    let errors = error.responseJSON.errors;
-                    let errorMessage = '';
-                    for (let field in errors) {
-                        errorMessage += errors[field][0] + '<br>';
+                                $('#scheduleForm')[0].reset();
+                                $('#addScheduleModal').modal('hide');
+                                
+                            },
+                            error: function (error) {
+                                let errors = error.responseJSON.errors;
+                                let errorMessage = '';
+                                for (let field in errors) {
+                                    errorMessage += errors[field][0] + '<br>';
+                                }
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    html: errorMessage,
+                                    confirmButtonText: 'OK',
+                                    confirmButtonColor: "#01A94D"
+                                });
+                            },
+                            complete: function() {
+                                // Re-enable the button and hide spinner after the request is complete
+                                $('#saveChangesBtn').attr('disabled', false);
+                                $('#saveChangesSpinner').addClass('d-none'); // Hide spinner
+                            }
+                        });
                     }
+                },
+                error: function () {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        html: errorMessage,
+                        text: 'Unable to check for schedule conflicts. Please try again.',
                         confirmButtonText: 'OK',
                         confirmButtonColor: "#01A94D"
                     });
-                },
-                complete: function() {
-                    // Re-enable the button and hide spinner after the request is complete
                     $('#saveChangesBtn').attr('disabled', false);
-                    $('#saveChangesSpinner').addClass('d-none'); // Hide spinner
+                    $('#saveChangesSpinner').addClass('d-none');
                 }
             });
         });

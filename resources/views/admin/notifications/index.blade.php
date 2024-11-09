@@ -165,7 +165,7 @@
                                                             @elseif ($notif->status == 'sent')
                                                                 <span class="badge bg-primary">Sent</span>
                                                             @elseif ($notif->status == 'read')
-                                                                <span class="badge bg-success">Read</span>
+                                                                <span class="badge bg-secondary">Read</span>
                                                             @else
                                                                 <span class="badge bg-secondary">Unknown</span>
                                                             @endif

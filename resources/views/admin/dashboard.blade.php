@@ -68,7 +68,7 @@
                 <!-- Highest Waste Generated Area -->
                 <div class="card flex-fill">
                     <div class="card-body">
-                        <h5 class="card-title mb-4"><strong>Highest Waste Generated Area (wkly)</strong></h5>
+                        <h5 class="card-title mb-4"><strong>High-Waste Zone (wkly)</strong></h5>
                 
                         <!-- Scrollable wrapper -->
                         <div class="scrollable-list" style="max-height: 320px; overflow-y: auto;">
@@ -247,30 +247,47 @@
                 center: 'title',
                 right: 'next'
             },
-            events: {
-                url: "{{ route('cs.events') }}",
-                method: 'GET',
-                failure: function() {
-                    alert('There was an error while fetching events!');
-                }
-            },
-            eventDidMount: function(info) {
-                // Add pointer style when hovering over events
-                info.el.style.cursor = 'pointer';
+            events: function(fetchInfo, successCallback, failureCallback) {
+                // Fetch both user events and holidays
+                $.ajax({
+                    url: "{{ route('cs.events') }}",
+                    method: 'GET',
+                    success: function(userEvents) {
+                        // Make an API call to get the holidays
+                        $.ajax({
+                            url: "https://calendarific.com/api/v2/holidays",
+                            method: 'GET',
+                            data: {
+                                api_key: '4CaWSd2hOXKX8hLx9Q6yCFeFj7jHt5Wf',
+                                country: 'PH',
+                                year: 2024
+                            },
+                            success: function(response) {
+                                // Extract holidays and format them for FullCalendar
+                                let holidayEvents = response.response.holidays.map(holiday => {
+                                    return {
+                                        title: holiday.name,
+                                        start: holiday.date.iso,
+                                        color: 'red', // Set a color for holidays
+                                        rendering: 'background' // Optionally render holidays in the background
+                                    };
+                                });
 
-                // Set the tooltip content using the event title or other extended properties
-                var tooltipContent = 'Barangay: ' + info.event.extendedProps.brgy_name + 
-                                    ', Dump Truck: ' + info.event.extendedProps.dumptruck;
-
-                // Set tooltip attributes
-                $(info.el).attr('title', tooltipContent);
-                $(info.el).tooltip({
-                    placement: 'top', // Tooltip will appear above the event
-                    trigger: 'hover', // Show tooltip on hover
-                    container: 'body' // Append tooltip to the body to avoid CSS issues
+                                // Combine user events and holiday events
+                                successCallback([...userEvents, ...holidayEvents]);
+                            },
+                            error: function() {
+                                alert('There was an error while fetching holidays!');
+                                failureCallback();
+                            }
+                        });
+                    },
+                    error: function() {
+                        alert('There was an error while fetching events!');
+                        failureCallback();
+                    }
                 });
             },
-            
         });
 
         calendar.render();
@@ -299,7 +316,7 @@
                             list += `
                                 <li class="rounded-pill mb-4 border border-${rankBadge2} list-group-item d-flex justify-content-between align-items-center">
                                     <span class="fs-5 badge ${rankBadge} rounded-pill">${index + 1}</span>
-                                    ${item.name} | ${item.total_metrics} kg/s
+                                    ${item.area_name} | ${item.total_metrics} kg/s
                                 </li>`;
                         });
                     }
