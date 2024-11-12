@@ -325,18 +325,6 @@
                                 <label class="form-check-label" for="selectCompleteDate">Complete Date</label>
                             </div>
                         </div>
-                        {{-- <div class="mb-3">
-                            <div class="form-group">
-                                <label for="add_sd" class="form-label">Start Date <span style="color: red;">*</span></label>
-                                <input type="date" class="form-control" id="add_sd" name="sd">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-group">
-                                <label for="add_ed" class="form-label">End Date <span style="color: red;">*</span></label>
-                                <input type="date" class="form-control" id="add_ed" name="ed">
-                            </div>
-                        </div> --}}
                         <div class="mb-3">
                             <div class="form-group d-none" id="completeInput">
                                 <label for="add_completeDate" class="form-label">Conversion Date <span style="color: red;">*</span></label>

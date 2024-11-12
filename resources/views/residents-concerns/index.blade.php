@@ -123,8 +123,8 @@
                     <input type="date" class="form-control" id="add_incidentDate" name="incidentDate" required>
                 </div>
                 <div class="mb-3">
-                    <label for="add_attachments" class="form-label">Attachments (optional)</label>
-                    <input class="form-control" type="file" id="add_attachments" name="attachments" multiple>
+                    <label for="add_attachments" class="form-label">Attachments</label>
+                    <input class="form-control" type="file" id="add_attachments" name="attachments" multiple required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100" id="submitComplaint">
                     <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="submitComplaintSpinner">
