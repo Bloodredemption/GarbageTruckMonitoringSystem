@@ -178,7 +178,7 @@ Route::prefix('landfill')->middleware('auth')->group(function () {
 Route::prefix('landfill')->middleware('auth')->group(function () {
     Route::get('/waste-composition', [WasteCollectionController::class, 'index'])->name('lwc.index');
     Route::get('/waste-composition/getBarangay', [WasteCompositionController::class, 'getBarangay'])->name('lwc.getBrgy');
-    Route::post('/waste-composition', [WasteCompositionController::class, 'store'])->name('lwc.store');
+    Route::post('/waste-composition/store', [WasteCollectionController::class, 'store'])->name('lwc.store');
     Route::get('/waste-composition/{id}/edit', [WasteCompositionController::class, 'edit']);
     Route::put('/waste-composition/{id}/update', [WasteCompositionController::class, 'update']);
     Route::put('/waste-composition/{id}/delete', [WasteCompositionController::class, 'destroy']);

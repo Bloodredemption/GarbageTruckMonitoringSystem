@@ -140,9 +140,9 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $wc->waste_type }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($wc->collection_date)->format('Y-m-d') }}</td>
+                                                <td>{{ $wc->collection_date }}</td>
                                                 <td>{{ $wc->metrics }} kg/s</td>
-                                                <td>{{ $wc->brgy->name }}</td>
+                                                <td>{{ $wc->brgy->area_name }}</td>
                                                 <td>
                                                     <div class="flex align-items-center list-user-action">
                                                         <a class="btn btn-sm btn-icon btn-warning edit-wc-btn" data-id="{{ $wc->id }}">
@@ -197,12 +197,6 @@
                             <input type="number" class="form-control" id="add_metrics" name="metrics" required aria-label="Recipient's username" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <span class="input-group-text" id="basic-addon2">kg/s</span>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-group">
-                                <label for="add_cd" class="form-label">Collection Date <span style="color: red;">*</span></label>
-                                <input type="datetime-local" class="form-control" id="add_cd" name="cd" required>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -353,8 +347,8 @@
 
                     // Populate both selects with the drivers
                     $.each(response.barangays, function (key, barangay) {
-                        driverSelect1.append(`<option value="${barangay.id}">${barangay.name} | ${barangay.area}</option>`);
-                        driverSelect2.append(`<option value="${barangay.id}">${barangay.name} | ${barangay.area}</option>`);
+                        driverSelect1.append(`<option value="${barangay.id}">${barangay.area_name}</option>`);
+                        driverSelect2.append(`<option value="${barangay.id}">${barangay.area_name}</option>`);
                     });
                 },
                 error: function (error) {
@@ -386,24 +380,13 @@
                         if ((role === '' || wasteComposition.waste_type === role) &&
                             (created_date === '' || tableDate === created_date)) { 
 
-                            // Convert the date to the desired format
-                            let updatedMetrics = '';
-
-                            if (wasteComposition.waste_type == 'Biodegradable') {
-                                updatedMetrics = `${wasteComposition.metrics} kg/s`;
-                            } else {
-                                updatedMetrics = `${wasteComposition.metrics} sack/s`;
-                            }
-
-                            let formatteddate = tableDate;
-
                             rows += `
                                 <tr>
                                     <td>${counter}</td>
                                     <td>${wasteComposition.waste_type}</td>
-                                    <td>${formatteddate}</td>
-                                    <td>${updatedMetrics}</td>
-                                    <td>${wasteComposition.brgy.name}</td>
+                                    <td>${wasteComposition.collection_date}</td>
+                                    <td>${wasteComposition.metrics} kg/s</td>
+                                    <td>${wasteComposition.brgy.area_name}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
                                             <a class="btn btn-sm btn-icon btn-warning edit-wc-btn" data-id="${wasteComposition.id}">
@@ -511,7 +494,6 @@
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
                 waste_type: $('#add_wt').val(),
                 metrics: $('#add_metrics').val(),
-                collection_date: $('#add_cd').val(),
                 brgy_id: $('#add_brgy').val(),
             };
 

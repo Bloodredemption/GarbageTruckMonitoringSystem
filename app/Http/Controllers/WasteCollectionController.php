@@ -16,7 +16,7 @@ class WasteCollectionController extends Controller
         if (request()->ajax()) {
             $userId = Auth::id();
             
-            $wasteCompositions = WasteComposition::with('brgy:id,name')
+            $wasteCompositions = WasteComposition::with('brgy:id,area_name')
                             ->where('user_id', $userId)
                             ->where('isDeleted', 0)
                             ->orderBy('created_at', 'desc')
@@ -27,7 +27,7 @@ class WasteCollectionController extends Controller
 
         $userId = Auth::id();
             
-        $wasteCompositions = WasteComposition::with('brgy:id,name')
+        $wasteCompositions = WasteComposition::with('brgy:id,area_name')
                         ->where('user_id', $userId)
                         ->orderBy('created_at', 'desc')
                         ->get();
@@ -48,7 +48,23 @@ class WasteCollectionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'brgy_id' => 'required|exists:barangays,id',
+            'waste_type' => 'required|string',
+            'metrics' => 'required|string',
+        ]);
+
+        $userId = Auth::id();
+        $currentDate = now();
+
+        // Create the WasteComposition record
+        WasteComposition::create(array_merge(
+            $request->all(),
+            ['user_id' => $userId],
+            ['collection_date' => $currentDate]
+        ));
+
+        return response()->json(['message' => 'Waste composition successfully.']);
     }
 
     /**
