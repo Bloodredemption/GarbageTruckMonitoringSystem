@@ -87,21 +87,22 @@
                 <div class="card mb-3 flex-fill">
                     <div class="card-body">
                         <h5><strong>Total waste converted (kg/day)</strong></h5>
-                        <h1 class="mt-2 mb-3 display-2 fw-bold">0 kg</h1>
+                        <h1 class="mt-2 mb-3 display-2 fw-bold" id="totalThisDay">99 kg</h1>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span>0 vs last week</span>
-                            <div class="text-success rounded-pill p-1 border border-success">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: currentColor;transform: ;msFilter:;"><path d="m18.707 12.707-1.414-1.414L13 15.586V6h-2v9.586l-4.293-4.293-1.414 1.414L12 19.414z"></path></svg>
-                                0%
+                            <span id="wasteDiff">0 vs last week</span>
+                            <div id="percentageContainer" class="text-success rounded-pill p-1 border border-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: currentColor;transform: ;msFilter:;">
+                                    <path d="m18.707 12.707-1.414-1.414L13 15.586V6h-2v9.586l-4.293-4.293-1.414 1.414L12 19.414z"></path>
+                                </svg>
+                                <span>0%</span>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
         
                 <div class="card flex-fill">
                     <div class="card-body">
-                        <h5><strong>Total waste (kg/week)</strong></h5>
+                        <h5><strong>Total waste collected (kg/week)</strong></h5>
                         <h1 class="mt-2 mb-3 display-2 fw-bold" id="currentTotal">0 kg</h1>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="waste-difference">0 vs last week</span>
@@ -180,7 +181,39 @@
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
 
 <script>
+    function fetchTodayWasteConverted() {
+        $.ajax({
+            url: "{{ route('getTodayWasteConverted') }}",
+            method: 'GET',
+            success: function(response) {
+                // Update total waste converted today
+                $('#totalThisDay').text(response.totalWasteToday + ' kg');
+
+                // Update waste difference compared to last week
+                let diffText = response.wasteDifference + ' kg vs last week';
+                $('#wasteDiff').text(diffText);
+
+                // Update percentage difference
+                let percentageText = response.percentageDifference + '%';
+                $('#percentageContainer span').text(percentageText);
+
+                // Apply a class based on whether the difference is positive or negative
+                if (response.percentageDifference >= 0) {
+                    $('#percentageContainer').removeClass('text-danger').addClass('text-success');
+                } else {
+                    $('#percentageContainer').removeClass('text-success').addClass('text-danger');
+                }
+            },
+            error: function() {
+                $('#totalThisDay').text('Error loading data');
+                $('#wasteDiff').text('Error');
+                $('#percentageContainer span').text('Error');
+            }
+        });
+    }
+
     $(document).ready(function() {
+        fetchTodayWasteConverted();
 
         function fetchWasteDataForInfo() {
             $.ajax({

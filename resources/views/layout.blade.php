@@ -62,7 +62,9 @@
         <script src="{{ asset('assets/js/hope-ui.js') }}" defer></script>
         
         <script src="{{ asset('assets/js/sweetalert.js') }}"></script>
-
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+        
         <!-- Fullcalender CSS -->
         <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/core/main.css')}}' />
         <link rel='stylesheet' href='{{ asset('assets/vendor/fullcalendar/daygrid/main.css')}}' />
@@ -229,5 +231,23 @@
         <!-- Wrapper End-->
 
         <!-- Fullcalender Javascript -->
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+        <script>
+            Pusher.logToConsole = true;
+
+            var pusher = new Pusher('6067e4f4c5d9c44a0efa', {
+                cluster: 'ap1'
+            });
+
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('complaint-submitted', function(data) {
+                Swal.fire({
+                    title: 'New Complaint Submitted',
+                    text: `A new complaint has been submitted.`,
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
     </body>
 </html> 

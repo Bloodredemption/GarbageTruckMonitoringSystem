@@ -45,6 +45,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dashboard/highest-weekly', [DashboardController::class, 'getHighestWeeklyWaste']);
     Route::get('/dashboard/getWasteData', [DashboardController::class, 'getWasteData']);
     Route::get('/dashboard/fetchWasteDataForInfo', [DashboardController::class, 'fetchWasteDataForInfo']);
+    Route::get('/dashboard/getTodayWasteConverted', [DashboardController::class, 'getTodayWasteConverted'])->name('getTodayWasteConverted');
 });
 
 // Live Tracking

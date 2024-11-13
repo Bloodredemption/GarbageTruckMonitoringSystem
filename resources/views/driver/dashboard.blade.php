@@ -4,6 +4,20 @@
 
 <main class="main-content">
     <div class="container">
+        <div class="row">
+            <h4 class="fw-semibold mb-3">Map Location</h4>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="map" style="height: 250px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row mb-4">
             <div class="col-lg-12">
                 <div class="card">
@@ -34,7 +48,7 @@
             <h4 class="fw-semibold mb-3">Total Waste Collected</h4>
         </div>
 
-        <div class="row">
+        <div class="row mb-4">
             <!-- First Box -->
             <div class="col-6 col-md-6 col-lg-3 mb-3">
                 <div class="card p-3 justify-content-between" style="background-color: #01A94D; color: white; border-radius: 10px; height: 150px;">
@@ -73,47 +87,74 @@
 {{-- <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script> --}}
 
 <script>
-    // async function fetchGeolocationData() {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.watchPosition(async function (position) {
-    //             const latitude = position.coords.latitude;
-    //             const longitude = position.coords.longitude;
+    // Initialize the map globally
+    let map;
+    let marker;
 
-    //             console.log('Geolocation data: ', { latitude, longitude });
-    //             try {
-    //                 // Get CSRF token from the meta tag
-    //                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    // Function to initialize the map
+    function initializeMap(latitude, longitude) {
+        if (map) {
+            // Map already initialized, just update the marker
+            marker.setLatLng([latitude, longitude]);
+        } else {
+            // Create the map if it's not initialized
+            map = L.map('map').setView([latitude, longitude], 15); // Zoom level 13 is a good starting point
 
-    //                 const response = await fetch('/geolocation', {
-    //                     method: 'POST',
-    //                     headers: {
-    //                         'Content-Type': 'application/json',
-    //                         'X-CSRF-TOKEN': csrfToken // Add CSRF token to headers
-    //                     },
-    //                     body: JSON.stringify({ latitude, longitude })
-    //                 });
+            // Set the tile layer (OSM tiles in this case)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
 
-    //                 const data = await response.json();
+            // Add a marker to the map
+            marker = L.marker([latitude, longitude]).addTo(map);
+        }
+    }
 
-    //                 // Display the entire JSON response
-    //                 document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
+    async function fetchGeolocationData() {
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(async function (position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
 
-    //             } catch (error) {
-    //                 console.error('Error fetching geolocation data:', error);
-    //                 document.getElementById('json-output').textContent = 'Error fetching geolocation data';
-    //             }
-    //         }, function (error) {
-    //             console.error('Geolocation error:', error);
-    //             document.getElementById('json-output').textContent = 'Error getting geolocation from browser';
-    //         }, {
-    //             enableHighAccuracy: true, // Use GPS for accurate location if available
-    //             timeout: 5000,            // Timeout for getting the location
-    //             maximumAge: 0             // Do not use cached location data
-    //         });
-    //     } else {
-    //         document.getElementById('json-output').textContent = 'Geolocation is not supported by this browser.';
-    //     }
-    // }
+                console.log('Geolocation data: ', { latitude, longitude });
+
+                try {
+                    // Get CSRF token from the meta tag
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    const response = await fetch('/geolocation', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken // Add CSRF token to headers
+                        },
+                        body: JSON.stringify({ latitude, longitude })
+                    });
+
+                    const data = await response.json();
+
+                    // Display the entire JSON response in a <pre> tag
+                    document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
+
+                    // Initialize or update the map with the new coordinates
+                    initializeMap(latitude, longitude);
+
+                } catch (error) {
+                    console.error('Error fetching geolocation data:', error);
+                    document.getElementById('json-output').textContent = 'Error fetching geolocation data';
+                }
+            }, function (error) {
+                console.error('Geolocation error:', error);
+                document.getElementById('json-output').textContent = 'Error getting geolocation from browser';
+            }, {
+                enableHighAccuracy: true, // Use GPS for accurate location if available
+                timeout: 5000,            // Timeout for getting the location
+                maximumAge: 0             // Do not use cached location data
+            });
+        } else {
+            document.getElementById('json-output').textContent = 'Geolocation is not supported by this browser.';
+        }
+    }
 
     // Pusher.logToConsole = true;
 
@@ -133,7 +174,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
 
-        // fetchGeolocationData();
+        fetchGeolocationData();
         
         const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         

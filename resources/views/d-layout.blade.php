@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/col-sched.css') }}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
 
@@ -411,7 +413,28 @@
 </head>
 <body>
 
-    @include('partials.d-header')
+    {{-- @include('partials.d-header') --}}
+    <!-- Sticky Header -->
+    <header class="sticky-header d-flex justify-content-between align-items-center p-3">
+        <img src="{{ asset('assets/images/logo.png')}}" alt="GTMS Logo" class="logo-img">
+        
+        <div class="d-flex align-items-center">
+            <!-- Notification Icon with Dropdown -->
+            <div class="notification-icon-container me-3 position-relative">
+                <a href="{{ route('notif.index') }}" id="notificationIcon" style="cursor: pointer;">
+                    <!-- Notification Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: #01A94D;transform: ;msFilter:;">
+                        <path d="M12 22a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22zm7-7.414V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v4.586l-1.707 1.707A.996.996 0 0 0 3 17v1a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-1a.996.996 0 0 0-.293-.707L19 14.586z"></path>
+                    </svg>
+        
+                    <!-- Red Notification Badge -->
+                    <span id="notificationBadge" class="d-none position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 5px; width: 10px; height: 10px; line-height: 10px; text-align: center;">
+                        <!-- Example notification count -->
+                    </span>
+                </a>
+            </div>
+        </div>
+    </header>
 
     @yield('main-content')
 
@@ -440,53 +463,54 @@
                 icon: 'info',
                 confirmButtonText: 'OK'
             });
-        }); 
-
-        async function fetchGeolocationData() {
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(async function (position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-
-                    console.log('Geolocation data: ', { latitude, longitude });
-                    try {
-                        // Get CSRF token from the meta tag
-                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                        const response = await fetch('/geolocation', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': csrfToken // Add CSRF token to headers
-                            },
-                            body: JSON.stringify({ latitude, longitude })
-                        });
-
-                        const data = await response.json();
-
-                        // Display the entire JSON response
-                        document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
-
-                    } catch (error) {
-                        console.error('Error fetching geolocation data:', error);
-                        document.getElementById('json-output').textContent = 'Error fetching geolocation data';
-                    }
-                }, function (error) {
-                    console.error('Geolocation error:', error);
-                    document.getElementById('json-output').textContent = 'Error getting geolocation from browser';
-                }, {
-                    enableHighAccuracy: true, // Use GPS for accurate location if available
-                    timeout: 5000,            // Timeout for getting the location
-                    maximumAge: 0             // Do not use cached location data
-                });
-            } else {
-                document.getElementById('json-output').textContent = 'Geolocation is not supported by this browser.';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            fetchGeolocationData();
+            $('#notificationBadge').removeClass('d-none');
         });
+
+        // async function fetchGeolocationData() {
+        //     if (navigator.geolocation) {
+        //         navigator.geolocation.watchPosition(async function (position) {
+        //             const latitude = position.coords.latitude;
+        //             const longitude = position.coords.longitude;
+
+        //             console.log('Geolocation data: ', { latitude, longitude });
+        //             try {
+        //                 // Get CSRF token from the meta tag
+        //                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        //                 const response = await fetch('/geolocation', {
+        //                     method: 'POST',
+        //                     headers: {
+        //                         'Content-Type': 'application/json',
+        //                         'X-CSRF-TOKEN': csrfToken // Add CSRF token to headers
+        //                     },
+        //                     body: JSON.stringify({ latitude, longitude })
+        //                 });
+
+        //                 const data = await response.json();
+
+        //                 // Display the entire JSON response
+        //                 document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
+
+        //             } catch (error) {
+        //                 console.error('Error fetching geolocation data:', error);
+        //                 document.getElementById('json-output').textContent = 'Error fetching geolocation data';
+        //             }
+        //         }, function (error) {
+        //             console.error('Geolocation error:', error);
+        //             document.getElementById('json-output').textContent = 'Error getting geolocation from browser';
+        //         }, {
+        //             enableHighAccuracy: true, // Use GPS for accurate location if available
+        //             timeout: 5000,            // Timeout for getting the location
+        //             maximumAge: 0             // Do not use cached location data
+        //         });
+        //     } else {
+        //         document.getElementById('json-output').textContent = 'Geolocation is not supported by this browser.';
+        //     }
+        // }
+
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     fetchGeolocationData();
+        // });
     </script>
 </body>
 </html>

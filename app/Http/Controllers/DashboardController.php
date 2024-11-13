@@ -411,6 +411,39 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function getTodayWasteConverted(Request $request)
+    {
+        // Get today's date and the date of the same day last week
+        $today = Carbon::today()->format('Y-m-d');
+        $lastWeek = Carbon::today()->subWeek()->format('Y-m-d');
+        
+        // Calculate total waste for today
+        $totalWasteToday = WasteConversion::where('status', 'Finished')
+            ->whereDate('start_date', '<=', $today)
+            ->whereDate('end_date', '>=', $today)
+            ->sum('metrics');
+        
+        // Calculate total waste for the same day last week
+        $totalWasteLastWeek = WasteConversion::where('status', 'Finished')
+            ->whereDate('start_date', '<=', $lastWeek)
+            ->whereDate('end_date', '>=', $lastWeek)
+            ->sum('metrics');
+        
+        // Calculate the waste difference
+        $wasteDifference = $totalWasteToday - $totalWasteLastWeek;
+
+        // Calculate the percentage difference, handling division by zero
+        $percentageDifference = $totalWasteLastWeek > 0 
+            ? round(($wasteDifference / $totalWasteLastWeek) * 100, 2)
+            : 0;
+
+        return response()->json([
+            'totalWasteToday' => $totalWasteToday,
+            'wasteDifference' => $wasteDifference,
+            'percentageDifference' => $percentageDifference
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

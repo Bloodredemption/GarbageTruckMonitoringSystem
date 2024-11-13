@@ -104,6 +104,38 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        markAllNotificationsAsRead();  // Trigger the function on page load
+    });
+    
+    function markAllNotificationsAsRead() {
+        $.ajax({
+            url: '{{ route("notifications.markAllAsRead") }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Hide icons for unread notifications
+                    $('.notification-status').each(function() {
+                        $(this).find('svg').addClass('d-none'); 
+                    });
+                }
+
+                // Set the toast message based on the response
+                $('#toastMessage').text(response.message);
+
+                // Trigger Bootstrap toast
+                var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                toastEl.show();
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
     $('#markAllAsRead').click(function() {
         $.ajax({
             url: '{{ route("notifications.markAllAsRead") }}',

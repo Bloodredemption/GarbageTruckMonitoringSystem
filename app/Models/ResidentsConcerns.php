@@ -22,4 +22,7 @@ class ResidentsConcerns extends Model
         'attachments',
     ];
 
+    protected $casts = [
+        'attachments' => 'array', // Automatically cast attachments to an array
+    ];
 }

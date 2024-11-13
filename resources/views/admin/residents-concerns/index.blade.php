@@ -21,7 +21,18 @@
                                     </ol>
                                 </nav>
                             </div>
-                            <div>
+                            <div class="d-flex">
+                                <div>
+                                    <a target="_blank" href="{{ route('rc.index') }}" class="btn btn-soft-light text-white me-2" type="button">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-external-link">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
+                                            <path d="M11 13l9 -9" />
+                                            <path d="M15 4h5v5" />
+                                        </svg>
+                                        Complaint Form
+                                    </a>
+                                </div>
                                 <div class="dropdown">
                                     <button class="btn btn-soft-light text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-settings">
@@ -77,10 +88,9 @@
                                         <thead>
                                             <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                 <th>No.</th>
-                                                <th>Subject</th>
+                                                <th>Complainant</th>
                                                 <th>Complaint Type</th>
                                                 <th>Area</th>
-                                                <th>Complainant</th>
                                                 <th>Date of Incident</th>
                                                 {{-- <th>Action</th> --}}
                                             </tr>
@@ -89,10 +99,9 @@
                                             @foreach ($concerns as $concerns)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><a href="#" class="view-concerns" data-id="{{ $concerns->id }}">{{ $concerns->complaint_subject }}</a></td>
+                                                <td><a href="#" class="view-concerns" data-id="{{ $concerns->id }}">{{ $concerns->fullname }}</a></td>
                                                 <td>{{ $concerns->complaint_type }}</td>
                                                 <td>{{ $concerns->brgy_location }}</td>
-                                                <td>{{ $concerns->fullname }}</td>
                                                 <td>{{ $concerns->dateOfIncident }}</td>
                                                 {{-- <td>
                                                     <div class="flex align-items-center list-user-action">
@@ -136,9 +145,15 @@
                                 <li>Contact No. - <span id="contact_num"></span></li>
                             </ul>
                         </li>
-                        <li><strong>Subject - </strong> <span id="complaint_subject"></span></li>
-                        <li><strong>Details - </strong> <span id="complaint_details"></span></li>
+                        <li><strong>Description:</strong>
+                            <ul>
+                                <li><span id="complaint_details"></span></li>
+                            </ul>
+                        </li>
                         <li><strong>Location - </strong> <span id="brgy_location"></span></li>
+                        <li><strong>Attachments: </strong>
+                            <ul id="attachments" class="list-unstyled d-flex flex-wrap"></ul>
+                        </li>
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -221,12 +236,40 @@
                 url: `/admin/residents-concerns/${concernId}/show`, // Adjust route as needed
                 type: "GET",
                 success: function (response) {
-                    // Populate modal with user data using direct ID selectors
+                    // Populate modal with user data
                     $('#fullname').text(response.concern.fullname);
                     $('#contact_num').text(response.concern.contact_num);
-                    $('#complaint_subject').text(response.concern.complaint_subject);
                     $('#complaint_details').text(response.concern.complaint_details);
                     $('#brgy_location').text(response.concern.brgy_location);
+
+                    // Clear previous attachments
+                    const attachmentsList = $('#attachments');
+                    attachmentsList.empty();
+
+                    // Check if attachments exist and populate them
+                    if (response.concern.attachments && response.concern.attachments.length > 0) {
+                        response.concern.attachments.forEach(function(attachment) {
+                            // Create an anchor with Lightbox attributes for each attachment
+                            let listItem = $('<li>');
+                            let link = $('<a>', {
+                                href: `/storage/${attachment}`, // Adjust path as needed
+                                'data-lightbox': 'attachments', // Group all images in a lightbox
+                                'data-title': attachment.split('/').pop() // Display filename as title
+                            });
+                            let image = $('<img>', {
+                                src: `/storage/${attachment}`, // Thumbnail preview
+                                alt: 'Attachment',
+                                class: 'img-thumbnail',
+                                style: 'max-width: 100px; max-height: 100px; margin-right: 10px; cursor: pointer;' // Styling for thumbnails
+                            });
+                            link.append(image);
+                            listItem.append(link);
+                            attachmentsList.append(listItem);
+                        });
+                    } else {
+                        // Show a message if there are no attachments
+                        attachmentsList.append('<li>No attachments available.</li>');
+                    }
 
                     // Show the modal
                     $('#viewConcernModal').modal('show');
@@ -237,6 +280,7 @@
                 }
             });
         });
+
     });
 </script>
 

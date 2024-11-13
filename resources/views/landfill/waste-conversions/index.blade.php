@@ -591,7 +591,7 @@
                                             </button>
                                             <ul class="dropdown-menu border-1">
                                                 <li>
-                                                    <a class="btn btn-sm btn-icon btn-warning edit-wcov-btn" data-id="${wasteConversions.id}">
+                                                    <a class="dropdown-item edit-wcov-btn" data-id="${wasteConversions.id}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
                                                             <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
                                                             <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
@@ -600,14 +600,14 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="btn btn-sm btn-icon btn-secondary archive-wcov-btn" data-id="${wasteConversions.id}">
+                                                    <a class="dropdown-item archive-wcov-btn" data-id="${wasteConversions.id}">
                                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
                                                         Archive
                                                     </a>
                                                 </li>
                                                 ${wasteConversions.status !== 'Finished' ? `
                                                 <li>
-                                                    <a class="btn btn-sm btn-icon btn-primary finish-wc-btn" data-id="${wasteConversions.id}" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Finish" data-bs-original-title="Finish">
+                                                    <a class="dropdown-item finish-wc-btn" data-id="${wasteConversions.id}" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Finish" data-bs-original-title="Finish">
                                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-square-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" /><path d="M9 12l2 2l4 -4" /></svg>
                                                         Finish
                                                     </a>

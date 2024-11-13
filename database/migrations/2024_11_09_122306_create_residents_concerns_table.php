@@ -15,12 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('complaint_type');
             $table->string('fullname');
-            $table->bigInteger('contact_num');
+            $table->string('contact_num');
             $table->string('brgy_location');
-            $table->string('complaint_subject');
             $table->string('complaint_details');
             $table->string('dateOfIncident');
-            $table->string('attachments')->nullable();
+            $table->json('attachments');
             $table->timestamps();
         });
     }
