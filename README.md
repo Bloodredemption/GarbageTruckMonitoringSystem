@@ -19,4 +19,9 @@ php artisan key:generate
 php artisan serve
 ```
 
+For storing the images
+```
+php artisan storage:link
+```
+
 That's all. You can use the project now.
