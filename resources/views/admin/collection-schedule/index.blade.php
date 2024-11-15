@@ -113,7 +113,7 @@
                                                 <thead>
                                                     <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                         <th>No.</th>
-                                                        <th>Barangay Area</th>
+                                                        <th>Location</th>
                                                         <th>Dump Truck</th>
                                                         <th>Driver</th>
                                                         <th>Schedule</th>
@@ -179,7 +179,7 @@
                         @csrf
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <label for="add_brgy" class="form-label mb-0">Barangay Area <span style="color: red;">*</span></label>
+                                <label for="add_brgy" class="form-label mb-0">Location <span style="color: red;">*</span></label>
                                 <a id="addbrgybtn" class="text-end" style="font-size: 15px" href="{{ route('barangays.index') }}">
                                     <i class="btn-inner">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -265,7 +265,7 @@
                         <input type="hidden" id="edit_sched_id" name="sched_id">
 
                         <div class="mb-3">
-                            <label for="edit_brgy" class="form-label">Barangay Area <span style="color: red;">*</span></label>
+                            <label for="edit_brgy" class="form-label">Location <span style="color: red;">*</span></label>
                             <select class="form-control" id="edit_brgy" name="brgy" required>
                                 <!-- Options will be populated via AJAX -->
                             </select>

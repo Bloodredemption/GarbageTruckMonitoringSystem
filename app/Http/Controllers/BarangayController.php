@@ -50,7 +50,6 @@ class BarangayController extends Controller
     {
         $request->validate([
             'area_name' => 'required|string',
-            'population' => 'required',
             'captain' => 'required|string',
         ]);
 
@@ -88,7 +87,6 @@ class BarangayController extends Controller
     {
         $request->validate([
             'area_name' => 'required|string',
-            'population' => 'required',
             'captain' => 'required|string',
         ]);
 

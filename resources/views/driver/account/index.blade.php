@@ -42,7 +42,7 @@
                             <path fill-rule="evenodd" d="M6.854 4.646a.5.5 0 0 0-.708.708L9.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5z"/>
                         </svg>
                     </a>
-                    <a href="{{ route('driver.help') }}" class="menu-item d-flex align-items-center">
+                    {{-- <a href="{{ route('driver.help') }}" class="menu-item d-flex align-items-center">
                         <div class="icon-circle">
                             <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-help"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 17l0 .01" /><path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4" /></svg>
                         </div>
@@ -50,7 +50,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M6.854 4.646a.5.5 0 0 0-.708.708L9.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5z"/>
                         </svg>
-                    </a>
+                    </a> --}}
 
                     {{-- <a href="#" class="menu-item d-flex align-items-center">
                         <div class="icon-circle">
@@ -76,10 +76,10 @@
         </div>
 
         <!-- Original Home Page Content -->
-        <div class="container text-center">
+        {{-- <div class="container text-center">
             <span style="font-size: 0.8rem;">v1.0</span><br>
             <p class="mt-4" style="font-size: 0.8rem;">DVELOPED BY: Kilaton Group</p>
-        </div>
+        </div> --}}
     </div>
 </main>
 

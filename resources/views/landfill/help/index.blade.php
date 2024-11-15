@@ -14,17 +14,13 @@
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
                                 <h1><strong>Help Page</strong></h1>
-                                <p>Contains guides to help you how to use the system properly.</p>
+                                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{ route('lf.dashboard')}}">Dashboard</a></li>
+                                        <li class="breadcrumb-item active text-white" aria-current="page">Help</li>
+                                    </ol>
+                                </nav>
                             </div>
-                            {{-- <div>
-                                <a href="" class="btn btn-link btn-soft-light">
-                                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M11.8251 15.2171H12.1748C14.0987 15.2171 15.731 13.985 16.3054 12.2764C16.3887 12.0276 16.1979 11.7713 15.9334 11.7713H14.8562C14.5133 11.7713 14.2362 11.4977 14.2362 11.16C14.2362 10.8213 14.5133 10.5467 14.8562 10.5467H15.9005C16.2463 10.5467 16.5263 10.2703 16.5263 9.92875C16.5263 9.58722 16.2463 9.31075 15.9005 9.31075H14.8562C14.5133 9.31075 14.2362 9.03619 14.2362 8.69849C14.2362 8.35984 14.5133 8.08528 14.8562 8.08528H15.9005C16.2463 8.08528 16.5263 7.8088 16.5263 7.46728C16.5263 7.12575 16.2463 6.84928 15.9005 6.84928H14.8562C14.5133 6.84928 14.2362 6.57472 14.2362 6.23606C14.2362 5.89837 14.5133 5.62381 14.8562 5.62381H15.9886C16.2483 5.62381 16.4343 5.3789 16.3645 5.13113C15.8501 3.32401 14.1694 2 12.1748 2H11.8251C9.42172 2 7.47363 3.92287 7.47363 6.29729V10.9198C7.47363 13.2933 9.42172 15.2171 11.8251 15.2171Z" fill="currentColor"></path>
-                                        <path opacity="0.4" d="M19.5313 9.82568C18.9966 9.82568 18.5626 10.2533 18.5626 10.7823C18.5626 14.3554 15.6186 17.2627 12.0005 17.2627C8.38136 17.2627 5.43743 14.3554 5.43743 10.7823C5.43743 10.2533 5.00345 9.82568 4.46872 9.82568C3.93398 9.82568 3.5 10.2533 3.5 10.7823C3.5 15.0873 6.79945 18.6413 11.0318 19.1186V21.0434C11.0318 21.5715 11.4648 22.0001 12.0005 22.0001C12.5352 22.0001 12.9692 21.5715 12.9692 21.0434V19.1186C17.2006 18.6413 20.5 15.0873 20.5 10.7823C20.5 10.2533 20.066 9.82568 19.5313 9.82568Z" fill="currentColor"></path>
-                                    </svg>
-                                    Announcements
-                                </a>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -45,13 +41,78 @@
                         <div class="card" data-aos="fade-up" data-aos-delay="800">
                             <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
                                 <div class="header-title">
-                                    <h4 class="card-title">Some Text Here</h4>
-                                    <p class="mb-0">Sub Title Here</p>          
+                                    <h4 class="card-title">Got a question about waste management?</h4>
+                                    <p class="mb-0">Check out our FAQs.</p>          
                                 </div>
                                 
                             </div>
                             <div class="card-body">
-                                {{-- <div id="d-main" class="d-main"></div> --}}
+                                <div class="bd-example">
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingZero">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
+                                                    How to add waste composition?
+                                                </button>
+                                            </h4>
+                                            <div id="collapseZero" class="accordion-collapse collapse" aria-labelledby="headingZero" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div>
+                                                        <h5 class="mb-3">Step 1. Click on Waste Composition</h5>
+                                                        <img src="https://images.tango.us/workflows/5e92f430-5eeb-4459-901f-2bd3f42ea935/steps/9425801b-915d-4029-acdd-816f294803fe/6feb9b07-3f38-4639-9a33-cb6c644fd472.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.0934&fp-y=0.2980&fp-z=2.1217&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=20&mark-y=335&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz00MzYmaD03OSZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw" style="border-radius: 8px; border: 1px solid #F4F2F7;" width="600" alt="Click on Waste Composition" />
+                                                    </div>
+
+                                                    <div>
+                                                        <h5 class="mb-3">Step 2. Click on Create</h5>
+                                                        <img src="https://images.tango.us/workflows/5e92f430-5eeb-4459-901f-2bd3f42ea935/steps/af306fde-0bc6-4426-bb7d-048e4ed46ca2/ccf4adef-e8d2-4c68-94dd-ed8ae015ff88.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.9186&fp-y=0.2856&fp-z=2.8928&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=799&mark-y=325&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0yMzcmaD05OSZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw" style="border-radius: 8px; border: 1px solid #F4F2F7;" width="600" alt="Click on Create" />
+                                                    </div>
+
+                                                    <div>
+                                                        <h5 class="mb-3">Step 3. Fill out the form</h5>
+                                                        <img src="https://images.tango.us/workflows/5e92f430-5eeb-4459-901f-2bd3f42ea935/steps/622120ef-eb16-44a7-a83e-46ff56fd38a7/fef9fc22-bbe9-4ec3-829e-dfef393a4c29.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.5003&fp-y=0.4984&fp-z=1.5914&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=286&mark-y=183&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz02MjcmaD0zODQmZml0PWNyb3AmY29ybmVyLXJhZGl1cz0xMA%3D%3D" style="border-radius: 8px; border: 1px solid #F4F2F7;" width="600" alt="Fill out the form" />
+                                                    </div>
+
+                                                    <div>
+                                                        <h5 class="mb-3">Step 4. Click on Save changes</h5>
+                                                        <img src="https://images.tango.us/workflows/5e92f430-5eeb-4459-901f-2bd3f42ea935/steps/f6151fdc-3a06-42b2-ab60-6f4bd11b9894/34ce70b8-f9e3-4f50-ae8a-6263242361a5.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.6029&fp-y=0.6906&fp-z=2.4605&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=443&mark-y=327&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0zMTQmaD05NiZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw" style="border-radius: 8px; border: 1px solid #F4F2F7;" width="600" alt="Click on Save changes" />
+                                                    </div>
+
+                                                    <br/>
+                                                    <hr/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                    How to add waste conversion record?
+                                                </button>
+                                            </h4>
+                                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div>
+                                                        <h5 class="mb-3">Step 1. Click on Waste Conversions</h5>
+                                                        <img src="https://images.tango.us/workflows/371204ef-1042-4653-b466-21c3387b1fe3/steps/193b6466-22a3-436a-aef9-85fab3965ade/d14c6e4a-3688-4f3c-80d9-d1f5ea954c53.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.0934&fp-y=0.3416&fp-z=2.1217&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=20&mark-y=335&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz00MzYmaD03OSZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw" style="border-radius: 8px; border: 1px solid #F4F2F7;" width="600" alt="Click on Waste Conversions" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="mb-3">Step 2. Click on Create</h5>
+                                                        <img src="https://images.tango.us/workflows/371204ef-1042-4653-b466-21c3387b1fe3/steps/0b032c1d-8378-4feb-a661-2c5ac38eceec/8f364a71-eda8-42c4-8608-3aace197c797.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.9186&fp-y=0.2908&fp-z=2.8928&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=799&mark-y=325&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0yMzcmaD05OSZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw" style="border-radius: 8px; border: 1px solid #F4F2F7;" width="600" alt="Click on Create" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="mb-3">Step 3. Fill out the form</h5>
+                                                        <img src="https://images.tango.us/workflows/371204ef-1042-4653-b466-21c3387b1fe3/steps/89318bfd-b6fb-4cb2-a8ac-f986694b1593/52ee8cf6-31df-4833-b073-ae30b4dbcbd6.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.5003&fp-y=0.4984&fp-z=1.5026&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=304&mark-y=169&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz01OTImaD00MTImZml0PWNyb3AmY29ybmVyLXJhZGl1cz0xMA%3D%3D" style="border-radius: 8px; border: 1px solid #F4F2F7;" width="600" alt="Fill out the form" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 class="mb-3">Step 4. Click on Save changes</h5>
+                                                        <img src="https://images.tango.us/workflows/371204ef-1042-4653-b466-21c3387b1fe3/steps/769d0482-eb6e-4920-ab7b-fd282821d5e1/f4296bb7-8b4e-41be-8a0a-ef3f6693de69.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.6029&fp-y=0.7124&fp-z=2.4605&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=443&mark-y=327&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0zMTQmaD05NiZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw" style="border-radius: 8px; border: 1px solid #F4F2F7;" width="600" alt="Click on Save changes" />
+                                                    </div>
+                                                    <br/>
+                                                    <hr/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

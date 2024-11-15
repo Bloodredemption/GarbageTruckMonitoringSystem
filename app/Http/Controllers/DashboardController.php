@@ -150,10 +150,7 @@ class DashboardController extends Controller
 
         return response()->json([
             'data' => [
-                'biodegradable' => $wasteData->get('Biodegradable', 0),
-                'residual' => $wasteData->get('Residual', 0),
                 'recyclable' => $wasteData->get('Recyclable', 0),
-                'hazard' => $wasteData->get('Hazard', 0),
             ],
             'displayDate' => $displayDate,
             'breakdown' => $breakdown,
@@ -354,12 +351,16 @@ class DashboardController extends Controller
                 break;
         }
 
-        // Count biodegradable and residual records and sum metrics
+        // Count biodegradable, residual, and recyclable records and sum metrics
         $biodegradable = WasteComposition::where('waste_type', 'Biodegradable')
             ->whereBetween(DB::raw('DATE(collection_date)'), [$start->format('Y-m-d'), $end->format('Y-m-d')])
             ->sum('metrics');
 
         $residual = WasteComposition::where('waste_type', 'Residual')
+            ->whereBetween(DB::raw('DATE(collection_date)'), [$start->format('Y-m-d'), $end->format('Y-m-d')])
+            ->sum('metrics');
+        
+        $recyclable = WasteComposition::where('waste_type', 'Recyclable')
             ->whereBetween(DB::raw('DATE(collection_date)'), [$start->format('Y-m-d'), $end->format('Y-m-d')])
             ->sum('metrics');
 
@@ -372,12 +373,18 @@ class DashboardController extends Controller
             ->whereBetween(DB::raw('DATE(collection_date)'), [$start->format('Y-m-d'), $end->format('Y-m-d')])
             ->count();
 
+        $recyclableCount = WasteComposition::where('waste_type', 'Recyclable')
+            ->whereBetween(DB::raw('DATE(collection_date)'), [$start->format('Y-m-d'), $end->format('Y-m-d')])
+            ->count();
+
         return response()->json([
             'dateLabel' => $dateLabel,
             'biodegradable' => $biodegradable,
             'residual' => $residual,
+            'recyclable' => $recyclable,
             'biodegradableCount' => $biodegradableCount, // optional if needed
             'residualCount' => $residualCount,           // optional if needed
+            'recyclableCount' => $recyclableCount,       // optional if needed
         ]);
     }
 

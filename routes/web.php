@@ -49,13 +49,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 });
 
 // Live Tracking
-// Route::get('/admin/live-tracking', function () {
-//     return view('admin.live-tracking.index');
-// })->name('live-tracking');
-
 Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/live-tracking', [TruckLocationController::class, 'index'])->name('live-tracking');
-    Route::get('/live-tracking/fetchCoords', [TruckLocationController::class, 'getLatestLocation']);
+    Route::get('/vehicle-tracking', [TruckLocationController::class, 'index'])->name('live-tracking');
+    Route::get('/vehicle-tracking/fetchCoords', [TruckLocationController::class, 'getLatestLocation']);
 });
 
 // Collection Schedule
@@ -89,7 +85,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 // Reports
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/reports/waste-collected', [ReportsController::class, 'wasteCollected'])->name('reports.wCol');
+    Route::get('/reports/waste-collected/fetch', [ReportsController::class, 'fetchWasteCollectedData'])->name('fetchWcol');
     Route::get('/reports/waste-converted', [ReportsController::class, 'wasteConverted'])->name('reports.wCov');
+    Route::get('/reports/waste-converted/wasteDataByTimeframe', [ReportsController::class, 'getWasteDataByTimeframe'])->name('wasteDataByTimeframe');
 });
 
 // Dump Trucks
@@ -154,14 +152,16 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 });
 
 // Help
-Route::get('/admin/help', function () {
-    return view('admin.help.index');
-})->name('help');
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/help', [ProfileController::class, 'admin_help'])->name('help');
+});
 
 // Profile
-Route::get('/admin/profile', function () {
-    return view('admin.profile.index');
-})->name('profile');
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'admin_index'])->name('profile');
+    Route::put('/profile/{id}/update', [ProfileController::class, 'admprofileUpdate'])->name('admprofileUpdate');
+    Route::put('/profile/{id}/changePassword', [ProfileController::class, 'admchangePassword'])->name('admchangePassword');
+});
 
 // End Admin Side //
 

@@ -8,6 +8,7 @@ use App\Models\WasteComposition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 class WasteCompositionController extends Controller
@@ -268,5 +269,18 @@ class WasteCompositionController extends Controller
         $wasteComposition->save();
 
         return response()->json(['message' => 'Waste composition successfully deleted.']);
+    }
+
+    public function getWasteData(): JsonResponse
+    {
+        $wasteData = WasteComposition::select('collection_date', 'waste_type', 'metrics')
+            ->orderBy('collection_date')
+            ->get()
+            ->map(function ($item) {
+                $item->collection_date = Carbon::parse($item->collection_date)->format('d/m/Y');
+                return $item;
+            });
+
+        return response()->json($wasteData);
     }
 }

@@ -13,11 +13,11 @@
                     <div class="col-md-12">
                         <div class="flex-wrap d-flex justify-content-between align-items-center">
                             <div>
-                                <h1><strong>Live Tracking</strong></h1>
+                                <h1><strong>Vehicle Tracking</strong></h1>
                                 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Dashboard</a></li>
-                                        <li class="breadcrumb-item active text-white" aria-current="page">Live Tracking</li>
+                                        <li class="breadcrumb-item active text-white" aria-current="page">Vehicle Tracking</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -58,6 +58,8 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-8">
+                                        <button id="satelliteView">Satellite View</button>
+                                        <button id="defaultView">Default View</button>
                                         <div id="map" style="height: 500px;"></div>
                                     </div>
                                     <div class="col-md-4" style="padding-left: 0; padding-right: 0;">
@@ -128,52 +130,83 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Initialize the map
-        var map = L.map('map').setView([0, 0], 18); // Initial placeholder coordinates
+    // Coordinates of Balingasag, Misamis Oriental, Philippines
+    const balingasagLat = 8.7387667;
+    const balingasagLon = 124.7837565;
 
-        // Add the OpenStreetMap tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+    // Initialize the map centered on Balingasag with an appropriate zoom level
+    var map = L.map('map').setView([balingasagLat, balingasagLon], 13); // Zoom level set to 13 for a good view of Balingasag
 
-        // Marker placeholder (this will be updated with the truck's location)
-        var marker;
+    // Add OpenStreetMap tile layer (Default view)
+    var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-        // Function to update marker position
-        function updateMarker(latitude, longitude) {
-            if (marker) {
-                marker.setLatLng([latitude, longitude]);
-            } else {
-                marker = L.marker([latitude, longitude]).addTo(map)
-                    .bindPopup('Truck is here!')
-                    .openPopup();
-                map.setView([latitude, longitude], 18); // Center map on first load
-            }
-        }
-
-        // Fetch truck location from the backend and update the marker
-        async function fetchTruckLocation() {
-            try {
-                const response = await fetch('/admin/live-tracking/fetchCoords');
-                const data = await response.json();
-
-                if (data.latitude && data.longitude) {
-                    updateMarker(data.latitude, data.longitude);
-                } else {
-                    console.error('No location data found.');
-                }
-            } catch (error) {
-                console.error('Error fetching truck location:', error);
-            }
-        }
-
-        // Initial load of truck location
-        fetchTruckLocation();
-
-        // Set an interval to fetch and update location periodically
-        setInterval(fetchTruckLocation, 10000); // Update every 10 seconds
+    // Add Satellite tile layer (Using Esri Satellite)
+    var satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.esri.com/en-us/arcgis/products/arcgis-online">Esri</a>'
     });
+
+    // Create a custom map pane for Balingasag
+    var balingasagPane = map.createPane('balingasagPane');
+    balingasagPane.style.zIndex = 500; // Set z-index to ensure it's on top of other panes
+
+    // Set the map view to focus on Balingasag, Misamis Oriental (specific to this location)
+    map.setView([balingasagLat, balingasagLon], 13);
+
+    // Marker placeholder (this will be updated with the truck's location)
+    var marker;
+
+    // Function to update marker position
+    function updateMarker(latitude, longitude) {
+        if (marker) {
+            marker.setLatLng([latitude, longitude]);
+        } else {
+            marker = L.marker([latitude, longitude], { pane: 'balingasagPane' }).addTo(map)
+                .bindPopup('Truck is here!')
+                .openPopup();
+            map.setView([latitude, longitude], 18); // Center map on first load
+        }
+    }
+
+    // Fetch truck location from the backend and update the marker
+    async function fetchTruckLocation() {
+        try {
+            const response = await fetch('/admin/vehicle-tracking/fetchCoords');
+            const data = await response.json();
+
+            if (data.latitude && data.longitude) {
+                updateMarker(data.latitude, data.longitude);
+            } else {
+                console.error('No location data found.');
+            }
+        } catch (error) {
+            console.error('Error fetching truck location:', error);
+        }
+    }
+
+    // Initial load of truck location
+    fetchTruckLocation();
+
+    // Set an interval to fetch and update location periodically
+    setInterval(fetchTruckLocation, 10000); // Update every 10 seconds
+
+    // Add buttons to switch between map layers
+    const satelliteBtn = document.getElementById('satelliteView');
+    const defaultBtn = document.getElementById('defaultView');
+
+    satelliteBtn.addEventListener('click', function () {
+        map.removeLayer(osmLayer); // Remove default layer
+        satelliteLayer.addTo(map); // Add satellite layer
+    });
+
+    defaultBtn.addEventListener('click', function () {
+        map.removeLayer(satelliteLayer); // Remove satellite layer
+        osmLayer.addTo(map); // Add default layer
+    });
+});
 
 </script>
 

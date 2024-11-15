@@ -112,20 +112,8 @@
                                 <p id="displayDate" class="text-start mb-0">October 25, 2024</p> <!-- This will be updated dynamically -->
                                 <hr>
                                 <p class="mb-1 d-flex justify-content-between">
-                                    <span>Biodegradables</span> 
-                                    <span id="biodegradableCount">0 kg/s</span> <!-- Dynamic biodegradable count -->
-                                </p>
-                                <p class="mb-1 d-flex justify-content-between">
-                                    <span>Residuals</span> 
-                                    <span id="residualCount">0 kg/s</span> <!-- Dynamic residual count -->
-                                </p>
-                                <p class="mb-1 d-flex justify-content-between">
                                     <span>Recyclables</span> 
                                     <span id="recyclableCount">0 kg/s</span> <!-- Dynamic residual count -->
-                                </p>
-                                <p class="mb-1 d-flex justify-content-between">
-                                    <span>Hazards</span> 
-                                    <span id="hazardCount">0 kg/s</span> <!-- Dynamic residual count -->
                                 </p>
                             </div>
                         </div>
@@ -274,7 +262,7 @@
         // Call the function to fetch and display data
         fetchWasteData();
       
-        var colors = ['#01A94D', '#3B8AFF', '#FFC107', '#FF5722'];
+        var colors = ['#01A94D'];
         
         var options2 = {
             series: [{
@@ -304,10 +292,7 @@
             },
             xaxis: {
             categories: [
-                'Biodegradable',
-                'Residuals',
                 'Recyclables',
-                'Hazards',
             ],
             labels: {
                 style: {
@@ -337,18 +322,12 @@
                     document.getElementById('wgbreak').textContent = data.breakdown;
                     document.getElementById('displayDate').textContent = data.displayDate;
 
-                    document.getElementById('biodegradableCount').textContent = `${data.data.biodegradable} kg/s`;
-                    document.getElementById('residualCount').textContent = `${data.data.residual} kg/s`;
                     document.getElementById('recyclableCount').textContent = `${data.data.recyclable} kg/s`;
-                    document.getElementById('hazardCount').textContent = `${data.data.hazard} kg/s`;
 
                     // Update chart with new data
                     chart2.updateSeries([{
                         data: [
-                            data.data.biodegradable,
-                            data.data.residual,
                             data.data.recyclable,
-                            data.data.hazard
                         ]
                     }]);
                 })

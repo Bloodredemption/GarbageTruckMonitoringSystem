@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->Integer('user_id');
             $table->string('area_name');
-            $table->string('population');
+            $table->string('population')->nullable();
             $table->string('captain');
             $table->Integer('isDeleted')->default(0);
             $table->timestamps();

@@ -56,10 +56,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/live-tracking') ? 'active' : '' }}" href="{{ route('live-tracking') }}">
+                        <a class="nav-link {{ request()->is('admin/vehicle-tracking') ? 'active' : '' }}" href="{{ route('live-tracking') }}">
                             <i class="icon">
                                 <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                    @if(request()->is('admin/live-tracking'))
+                                    @if(request()->is('admin/vehicle-tracking'))
                                         <rect width="30" height="30" fill="url(#pattern0_35_537)"/>
                                         <defs>
                                             <pattern id="pattern0_35_537" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -78,7 +78,7 @@
                                     @endif
                                 </svg>
                             </i>
-                            <span class="item-name">Live Tracking</span>
+                            <span class="item-name">Vehicle Tracking</span>
                         </a>
                     </li>
                     <li class="nav-item">

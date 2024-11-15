@@ -138,7 +138,7 @@
                                                 <thead>
                                                     <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                         <th>No.</th>
-                                                        <th>Area Name</th>
+                                                        <th>Location</th>
                                                         <th>Population</th>
                                                         <th>Captain</th>
                                                         <th>Date Created</th>
@@ -191,7 +191,7 @@
                                                 <thead>
                                                     <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                         <th>No.</th>
-                                                        <th>Area Name</th>
+                                                        <th>Location</th>
                                                         <th>Population</th>
                                                         <th>Captain</th>
                                                         <th>Date Archived</th>
@@ -229,7 +229,7 @@
                             <label for="add_name" class="form-label">Area Name <span style="color: red;">*</span></label>
                             <select class="form-control" id="add_name" name="name" required>
                                 <option value=""></option>
-                                <option value="custom">Add Custom Area</option>
+                                <option value="custom">Custom Area</option>
                                 <option value="Brgy. 1">Brgy. 1</option>
                                 <option value="Brgy. 2">Brgy. 2</option>
                                 <option value="Brgy. 3">Brgy. 3</option>
@@ -311,6 +311,7 @@
                             <label for="edit_name" class="form-label">Area Name <span style="color: red;">*</span></label>
                             <select class="form-control" id="edit_name" name="name" required>
                                 <option value=""></option>
+                                <option value="custom">Custom Area</option>
                                 <option value="Brgy. 1">Brgy. 1</option>
                                 <option value="Brgy. 2">Brgy. 2</option>
                                 <option value="Brgy. 3">Brgy. 3</option>
@@ -343,6 +344,10 @@
                                 <option value="Brgy. Samay">Brgy. Samay</option>
                                 <option value="Brgy. San Juan">Brgy. San Juan</option>
                             </select>
+                        </div>
+                        <div class="mb-3 d-none" id="edit_custom_area_input">
+                            <label for="edit_custom_area_name" class="form-label">Custom Area Name <span style="color: red;">*</span></label>
+                            <input type="text" id="edit_custom_area_name" name="custom_name" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="edit_population" class="form-label">Population <span style="color: red;">*</span></label>
@@ -386,21 +391,32 @@
 <script>
     $(document).ready(function () {
 
-        const areaSelect = document.getElementById('add_name');
-        const customAreaInput = document.getElementById('custom_area_input');
-        const customAreaName = document.getElementById('custom_area_name');
+        // Select the elements for add and edit forms
+        const addAreaSelect = document.getElementById('add_name');
+        const editAreaSelect = document.getElementById('edit_name');
+        const addCustomAreaInput = document.getElementById('custom_area_input');
+        const editCustomAreaInput = document.getElementById('edit_custom_area_input');
+        const addCustomAreaName = document.getElementById('custom_area_name');
+        const editCustomAreaName = document.getElementById('edit_custom_area_name');
 
-        // Listen for changes on the select dropdown
-        areaSelect.addEventListener('change', function() {
-            if (areaSelect.value === 'custom') {
-                customAreaInput.classList.remove('d-none'); // Show custom area input
-                customAreaName.required = true; // Make custom input required
-            } else {
-                customAreaInput.classList.add('d-none'); // Hide custom area input
-                customAreaName.value = ''; // Clear custom input value
-                customAreaName.required = false; // Remove required from custom input
-            }
-        });
+        // Function to handle the area select logic for add and edit forms
+        function handleAreaSelect(areaSelect, customAreaInput, customAreaName) {
+            areaSelect.addEventListener('change', function() {
+                if (areaSelect.value === 'custom') {
+                    customAreaInput.classList.remove('d-none'); // Show custom area input
+                    customAreaName.required = true; // Make custom input required
+                } else {
+                    customAreaInput.classList.add('d-none'); // Hide custom area input
+                    customAreaName.value = ''; // Clear custom input value
+                    customAreaName.required = false; // Remove required from custom input
+                }
+            });
+        }
+
+        // Initialize the handlers for both add and edit forms
+        handleAreaSelect(addAreaSelect, addCustomAreaInput, addCustomAreaName);
+        handleAreaSelect(editAreaSelect, editCustomAreaInput, editCustomAreaName);
+
         
         let table = $('#user-list-table').DataTable({
             bSort: true,
@@ -798,6 +814,33 @@
                     $('#edit_population').val(response.barangay.population);
                     $('#edit_captain').val(response.barangay.captain);
 
+                    // Check if area_name is 'custom' or exists in the predefined options
+                    let areaName = response.barangay.area_name;
+                    let areaNameExists = false;
+
+                    // Loop through the options and check if the area_name matches any option
+                    $('#edit_name option').each(function() {
+                        if ($(this).val() === areaName) {
+                            areaNameExists = true;
+                            return false; // Exit the loop once we find a match
+                        }
+                    });
+
+                    // If area_name doesn't match any predefined area, set it to 'custom'
+                    if (!areaNameExists) {
+                        $('#edit_name').val('custom');
+                        $('#edit_custom_area_input').removeClass('d-none');
+                        $('#edit_custom_area_name').val(areaName);
+                    } else {
+                        // If it exists in predefined options, just set the value normally
+                        $('#edit_name').val(areaName);
+                        $('#edit_custom_area_input').addClass('d-none'); // Hide custom input
+                        $('#edit_population').val(response.barangay.population);
+                    }
+
+                    // Populate other fields
+                    $('#edit_captain').val(response.barangay.captain);
+                    
                     $('#editBarangayModal').modal('show');
 
                 },
@@ -809,15 +852,15 @@
 
         // Update Barangay
         // Store original values when the form is loaded
-        let originalValues = {};
+        // let originalValues = {};
 
-        function storeOriginalValues() {
-            originalValues = {
-                area_name: $('#edit_name').val(),
-                population: $('#edit_population').val(),
-                captain: $('#edit_captain').val(),
-            };
-        }
+        // function storeOriginalValues() {
+        //     originalValues = {
+        //         area_name: $('#edit_name').val(),
+        //         population: $('#edit_population').val(),
+        //         captain: $('#edit_captain').val(),
+        //     };
+        // }
 
         // Call this function when the form is displayed
         $('#editBarangayModal').on('shown.bs.modal', function () {
@@ -829,29 +872,36 @@
             let barangayId = $('#edit_brgy_id').val();
 
             // Check for changes
-            const currentValues = {
-                area_name: $('#edit_name').val(),
-                population: $('#edit_population').val(),
-                captain: $('#edit_captain').val(),
-            };
+            // const currentValues = {
+            //     area_name: $('#edit_name').val(),
+            //     population: $('#edit_population').val(),
+            //     captain: $('#edit_captain').val(),
+            // };
 
-            const hasChanges = Object.keys(originalValues).some(key => originalValues[key] !== currentValues[key]);
+            // const hasChanges = Object.keys(originalValues).some(key => originalValues[key] !== currentValues[key]);
 
-            if (!hasChanges) {
-                // No changes made
-                Swal.fire({
-                    icon: 'info',
-                    title: 'No Changes Made!',
-                    text: 'You have not made any changes to the barangay details.',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#007bff'
-                });
-                return; // Exit the function
+            // if (!hasChanges) {
+            //     // No changes made
+            //     Swal.fire({
+            //         icon: 'info',
+            //         title: 'No Changes Made!',
+            //         text: 'You have not made any changes to the barangay details.',
+            //         confirmButtonText: 'OK',
+            //         confirmButtonColor: '#007bff'
+            //     });
+            //     return; // Exit the function
+            // }
+
+            let areaName = $('#edit_name').val();
+
+            // Check if the selected area name is 'custom' and use the custom input value instead
+            if (areaName === 'custom') {
+                areaName = $('#edit_custom_area_name').val(); // Replace with the value from the custom input field
             }
 
             let formData = {
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
-                area_name: $('#edit_name').val(),
+                area_name: areaName,
                 population: $('#edit_population').val(),
                 captain: $('#edit_captain').val(),
             };

@@ -87,7 +87,7 @@
                 <div class="card mb-3 flex-fill">
                     <div class="card-body">
                         <h5><strong>Total waste converted (kg/day)</strong></h5>
-                        <h1 class="mt-2 mb-3 display-2 fw-bold" id="totalThisDay">99 kg</h1>
+                        <h1 class="mt-2 mb-3 display-2 fw-bold" id="totalThisDay">0 kg</h1>
                         <div class="d-flex justify-content-between align-items-center">
                             <span id="wasteDiff">0 vs last week</span>
                             <div id="percentageContainer" class="text-success rounded-pill p-1 border border-success">
@@ -155,14 +155,32 @@
                                     <span>Residuals</span> 
                                     <span id="residualCount"></span> <!-- Dynamic residual count -->
                                 </p>
+                                <p class="mb-1 d-flex justify-content-between">
+                                    <span>Recyclables</span> 
+                                    <span id="recyclableCount"></span> <!-- Dynamic residual count -->
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
     
-            <!-- Calendar -->
             <div class="col-lg-6">
+                <div class="card flex-fill">
+                    <div class="card-header">
+                        <div class="header-title">
+                            <h5 class="card-title" id="wgbreak"><strong>Waste Generation Forecasting</strong></h5>            
+                        </div> 
+                    </div>
+                    <div class="card-body">
+                        <canvas id="wastePredictionChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Calendar -->
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <!-- Insert calendar here -->
@@ -179,8 +197,77 @@
 </main>
 
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+    async function fetchPredictionData() {
+        try {
+            const response = await fetch("http://127.0.0.1:8000/predict-next-month");
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            updateChart(data); // Call function to update chart with fetched data
+        } catch (error) {
+            console.error("Error fetching prediction data:", error);
+        }
+    }
+
+    const ctx = document.getElementById('wastePredictionChart').getContext('2d');
+    const wastePredictionChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [], // Will be updated with fetched data
+            datasets: [
+                {
+                    label: 'Biodegradable Waste',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                },
+                {
+                    label: 'Residual Waste',
+                    data: [],
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                },
+                {
+                    label: 'Recyclable Waste', // New dataset for recyclable waste
+                    data: [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Waste Metrics (kg)' }
+                },
+                x: {
+                    title: { display: true, text: 'Prediction Period' }
+                }
+            }
+        }
+    });
+
+    // Function to update the chart with data from FastAPI
+    function updateChart(data) {
+        // Set labels to show the prediction period
+        wastePredictionChart.data.labels = [`${data.start_date} - ${data.end_date}`];
+        
+        // Update the dataset values
+        wastePredictionChart.data.datasets[0].data = [data.biodegradable];
+        wastePredictionChart.data.datasets[1].data = [data.residual];
+        wastePredictionChart.data.datasets[2].data = [data.recyclable]; // Update recyclable dataset
+        
+        // Refresh the chart to display updated data
+        wastePredictionChart.update();
+    }
+
+    // Fetch data from FastAPI when the page loads
+    window.onload = fetchPredictionData;
+
+
     function fetchTodayWasteConverted() {
         $.ajax({
             url: "{{ route('getTodayWasteConverted') }}",
@@ -454,7 +541,7 @@
             chart.render();
         }
 
-        var colors = ['#01A94D', '#3B8AFF'];
+        var colors = ['#01A94D', '#3B8AFF', '#FFC107'];
 
         // Initial chart options
         var options2 = {
@@ -485,7 +572,7 @@
                 show: false
             },
             xaxis: {
-                categories: ['Biodegradables', 'Residuals'],
+                categories: ['Biodegradables', 'Residuals', 'Recyclables'],
                 labels: {
                     style: {
                         colors: colors,
@@ -511,10 +598,11 @@
                     $('#displayDate').text(response.dateLabel); // Update the date display
                     $('#biodegradableCount').text(response.biodegradable + ' kg/s');
                     $('#residualCount').text(response.residual + ' kg/s');
+                    $('#recyclableCount').text(response.recyclable + ' kg/s');
 
                     // Update the chart with new data
                     chart2.updateSeries([{
-                        data: [response.biodegradable, response.residual]
+                        data: [response.biodegradable, response.residual, response.recyclable]
                     }]);
 
                     // Update the card-title based on the selected timeframe

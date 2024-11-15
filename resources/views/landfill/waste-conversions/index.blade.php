@@ -160,6 +160,7 @@
                                                         <th>Waste Type</th>
                                                         <th>Conversion Method</th>
                                                         <th>Metrics</th>
+                                                        <th>Total Converted</th>
                                                         <th>Conversion Date</th>
                                                         <th>Status</th>
                                                         <th>Date Created</th>
@@ -173,6 +174,7 @@
                                                             <td>{{ $wc->waste_type }}</td>
                                                             <td>{{ $wc->conversion_method }}</td>
                                                             <td>{{ $wc->metrics }} kg/s</td>
+                                                            <td>{{ $wc->total_converted }} pcs</td>
                                                             <td>
                                                                 {!! $wc->start_date !!}{!! $wc->end_date ? ' to ' . $wc->end_date : ' to <span style="color: red;">[End date not set]</span>' !!}
                                                             </td>
@@ -196,51 +198,35 @@
                                                             </td>
                                                             <td>{{ \Carbon\Carbon::parse($wc->created_at)->format('Y-m-d') }}</td>
                                                             <td>
-                                                                <div class="dropdown">
-                                                                    <button class="btn btn-sm btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots">
+                                                                <div class="flex align-items-center list-user-action">
+                                                                    <a class="btn btn-sm btn-icon btn-primary edit-wcov-btn" style="cursor: pointer;" data-id="{{ $wc->id }}">
+                                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
                                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                                            <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                                            <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                            <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                                            <path d="M16 5l3 3" />
                                                                         </svg>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu border-1">
-                                                                        <li>
-                                                                            <a class="dropdown-item edit-wcov-btn" style="cursor: pointer;" data-id="{{ $wc->id }}">
-                                                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
-                                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                                                    <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                                                                    <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
-                                                                                    <path d="M16 5l3 3" />
-                                                                                </svg>
-                                                                                Edit
-                                                                            </a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a class="dropdown-item archive-wcov-btn" style="cursor: pointer;" data-id="{{ $wc->id }}">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-restore">
-                                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                                                    <path d="M3.06 13a9 9 0 1 0 .49 -4.087" />
-                                                                                    <path d="M3 4.001v5h5" />
-                                                                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                                                </svg>
-                                                                                Archive
-                                                                            </a>
-                                                                        </li>
-                                                                        @if ($wc->status !== 'Finished')
-                                                                        <li>
-                                                                            <a class="dropdown-item finish-wc-btn" style="cursor: pointer;" data-id="{{ $wc->id }}">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-square-check">
-                                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                                                    <path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
-                                                                                    <path d="M9 12l2 2l4 -4" />
-                                                                                </svg>
-                                                                                Finish
-                                                                            </a>
-                                                                        </li>
-                                                                        @endif
-                                                                    </ul>
+                                                                        Edit
+                                                                    </a>
+                                                                    <a class="btn btn-sm btn-icon btn-secondary archive-wcov-btn" style="cursor: pointer;" data-id="{{ $wc->id }}">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-restore">
+                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                            <path d="M3.06 13a9 9 0 1 0 .49 -4.087" />
+                                                                            <path d="M3 4.001v5h5" />
+                                                                            <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                                        </svg>
+                                                                        Archive
+                                                                    </a>
+                                                                    @if ($wc->status !== 'Finished')
+                                                                    <a class="btn btn-sm btn-icon btn-primary finish-wc-btn" style="cursor: pointer;" data-id="{{ $wc->id }}">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-square-check">
+                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                            <path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+                                                                            <path d="M9 12l2 2l4 -4" />
+                                                                        </svg>
+                                                                        Finish
+                                                                    </a>
+                                                                    @endif
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -261,6 +247,7 @@
                                                         <th>Waste Type</th>
                                                         <th>Conversion Method</th>
                                                         <th>Metrics</th>
+                                                        <th>Total Converted</th>
                                                         <th>Conversion Date</th>
                                                         <th style="min-width: 100px">Action</th>
                                                     </tr>
@@ -298,10 +285,7 @@
                             <label for="add_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
                             <select class="form-control" id="add_wt" name="wt" required>
                                 <option></option>
-                                <option value="Biodegradable">Biodegradable</option>
-                                <option value="Residual">Residual</option>
                                 <option value="Recyclable">Recyclable</option>
-                                <option value="Hazard">Hazard</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -310,9 +294,16 @@
                         </div>
                         <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
                         <div class="input-group mb-3">
-                            <input type="number" class="form-control" id="add_metrics" name="metrics" required aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <input type="number" class="form-control" id="add_metrics" name="metrics">
                             <div class="input-group-append">
                                 <span class="input-group-text" id="basic-addon2">kg/s</span>
+                            </div>
+                        </div>
+                        <label for="add_ttlconv" id="add_ttlconv_label" class="form-label">Total Converted <span style="color: red;">*</span></label>
+                        <div class="input-group mb-3">
+                            <input type="number" class="form-control" id="add_ttlconv" name="ttlconv">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">pcs</span>
                             </div>
                         </div>
                         <div class="d-flex mb-3">
@@ -368,10 +359,7 @@
                             <label for="edit_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
                             <select class="form-control" id="edit_wt" name="wt" required>
                                 <option></option>
-                                <option value="Biodegradable">Biodegradable</option>
-                                <option value="Residual">Residual</option>
                                 <option value="Recyclable">Recyclable</option>
-                                <option value="Hazard">Hazard</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -385,18 +373,13 @@
                                 <span class="input-group-text" id="editbasic-addon2">kg/s</span>
                             </div>
                         </div>
-                        {{-- <div class="mb-3">
-                            <div class="form-group">
-                                <label for="edit_sd" class="form-label">Start Date <span style="color: red;">*</span></label>
-                                <input type="date" class="form-control" id="edit_sd" name="sd">
+                        <label for="edit_ttlconv" id="edit_ttlconv_label" class="form-label">Total Converted <span style="color: red;">*</span></label>
+                        <div class="input-group mb-3">
+                            <input type="number" class="form-control" id="edit_ttlconv" name="ttlconv">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">pcs</span>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <div class="form-group">
-                                <label for="edit_ed" class="form-label">End Date <span style="color: red;">*</span></label>
-                                <input type="date" class="form-control" id="edit_ed" name="ed">
-                            </div>
-                        </div> --}}
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -574,47 +557,35 @@
                                     <td>${wasteConversions.waste_type}</td>
                                     <td>${wasteConversions.conversion_method}</td>
                                     <td>${wasteConversions.metrics} kg/s</td>
+                                    <td>${wasteConversions.total_converted} pcs</td>
                                     <td>
                                         ${wasteConversions.end_date ? `${wasteConversions.start_date} to ${wasteConversions.end_date}` : `${wasteConversions.start_date} <span style="color: red;">[End date not set]</span>`}
                                     </td>
                                     <td>${status}</td>
                                     <td>${formatteddate}</td>
                                     <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dots">
+                                        <div class="flex align-items-center list-user-action">
+                                            <a class="btn btn-sm btn-icon btn-primary edit-wcov-btn" data-id="${wasteConversions.id}">
+                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                    <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                                    <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                                    <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                    <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                    <path d="M16 5l3 3" />
                                                 </svg>
-                                            </button>
-                                            <ul class="dropdown-menu border-1">
-                                                <li>
-                                                    <a class="dropdown-item edit-wcov-btn" data-id="${wasteConversions.id}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1); transform: ; msFilter:;">
-                                                            <path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path>
-                                                            <path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path>
-                                                        </svg>
-                                                        Edit
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item archive-wcov-btn" data-id="${wasteConversions.id}">
-                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
-                                                        Archive
-                                                    </a>
-                                                </li>
-                                                ${wasteConversions.status !== 'Finished' ? `
-                                                <li>
-                                                    <a class="dropdown-item finish-wc-btn" data-id="${wasteConversions.id}" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Finish" data-bs-original-title="Finish">
-                                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-square-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" /><path d="M9 12l2 2l4 -4" /></svg>
-                                                        Finish
-                                                    </a>
-                                                </li>
-                                                ` : ''}
-                                            </ul>
+                                                Edit
+                                            </a>
+                                            <a class="btn btn-sm btn-icon btn-secondary archive-wcov-btn" data-id="${wasteConversions.id}">
+                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+                                                Archive
+                                            </a>
+                                            ${wasteConversions.status !== 'Finished' ? `
+                                                <a class="btn btn-sm btn-icon btn-primary finish-wc-btn" data-id="${wasteConversions.id}" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Finish" data-bs-original-title="Finish">
+                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-square-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" /><path d="M9 12l2 2l4 -4" /></svg>
+                                                    Finish
+                                                </a>
+                                            ` : ''}
                                         </div>
+
                                     </td>
                                 </tr>`;
                             counter++;
@@ -715,6 +686,7 @@
                                     <td>${archWCov.waste_type}</td>
                                     <td>${archWCov.conversion_method}</td>
                                     <td>${archWCov.metrics} kg/s</td>
+                                    <td>${archWCov.total_converted} pcs</td>
                                     <td>${archWCov.start_date} to ${archWCov.end_date}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
@@ -793,6 +765,7 @@
                 waste_type: $('#add_wt').val(),
                 conversion_method: $('#add_cm').val(),
                 metrics: $('#add_metrics').val(),
+                total_converted: $('#add_ttlconv').val(),
                 start_date: startDate,
                 end_date: endDate,
             };
@@ -849,6 +822,7 @@
                     $('#edit_cm').val(wcov.conversion_method);
                     $('#edit_metrics').val(wcov.metrics.match(/\d+/)[0]);
                     $('#edit_wcov_id').val(wcov.id);
+                    $('#edit_ttlconv').val(wcov.total_converted);
                     $('#edit_sd').val(wcov.start_date);
                     $('#edit_ed').val(wcov.end_date);
 
@@ -868,6 +842,7 @@
                 waste_type: $('#edit_wt').val(),
                 conversion_method: $('#edit_cm').val(),
                 metrics: $('#edit_metrics').val(),
+                total_converted: $('#edit_ttlconv').val(),
                 start_date: $('#edit_sd').val(),
                 end_date: $('#edit_ed').val(),
             };
@@ -887,6 +862,7 @@
                 waste_type: $('#edit_wt').val(),
                 conversion_method: $('#edit_cm').val(),
                 metrics: $('#edit_metrics').val(),
+                total_converted: $('#edit_ttlconv').val(),
                 start_date: $('#edit_sd').val(),
                 end_date: $('#edit_ed').val(),
             };
@@ -910,6 +886,7 @@
                 waste_type: $('#edit_wt').val(),
                 conversion_method: $('#edit_cm').val(),
                 metrics: $('#edit_metrics').val(),
+                total_converted: $('#edit_ttlconv').val(),
                 start_date: $('#edit_sd').val(),
                 end_date: $('#edit_ed').val(),
             };

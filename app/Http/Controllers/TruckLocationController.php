@@ -55,7 +55,23 @@ class TruckLocationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate the incoming request
+        $validated = $request->validate([
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+
+        // Create a new TruckLocation record
+        $truckLocation = TruckLocation::create([
+            'latitude' => $validated['latitude'],
+            'longitude' => $validated['longitude'],
+        ]);
+
+        // Return a response
+        return response()->json([
+            'message' => 'Truck location stored successfully!',
+            'data' => $truckLocation,
+        ], 201);
     }
 
     /**

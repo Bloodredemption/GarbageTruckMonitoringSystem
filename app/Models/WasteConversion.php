@@ -16,6 +16,7 @@ class WasteConversion extends Model
         'waste_type',
         'conversion_method',
         'metrics',
+        'total_converted',
         'start_date',
         'end_date',
         'status',

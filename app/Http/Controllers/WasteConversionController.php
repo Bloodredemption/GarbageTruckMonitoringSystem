@@ -148,6 +148,7 @@ class WasteConversionController extends Controller
             'waste_type' => 'required|string',
             'conversion_method' => 'required|string',
             'metrics' => 'required|string',
+            'total_converted' => 'required|string',
             'start_date' => 'required|date',
         ]);
 
@@ -206,8 +207,8 @@ class WasteConversionController extends Controller
             'waste_type' => 'required|string',
             'conversion_method' => 'required|string',
             'metrics' => 'required|string',
+            'total_converted' => 'required|string',
             'start_date' => 'required|date',
-            'end_date' => 'required|date',
         ]);
 
         $wasteConversion = WasteConversion::findOrFail($id);

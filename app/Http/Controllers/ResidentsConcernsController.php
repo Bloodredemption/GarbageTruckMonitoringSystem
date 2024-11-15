@@ -79,7 +79,7 @@ class ResidentsConcernsController extends Controller
                 'x-api-key' => '60fb227e-604a-4ca9-a8a4-000febc38bae', // Your API Key
             ])->post('https://api.textbee.dev/api/v1/gateway/devices/6732ba5a58ae3b6550860fd2/sendSMS', [
                 'recipients' => [$complaint->contact_num],
-                'message' => "Hello {$complaint->fullname}, the system has received your complaint. Rest assured, MENRO Balingasag will take best measures to comply with your complaint. Thank you!\n\n(This is a system-generated message. Please do not reply.)"
+                'message' => "Hello {$complaint->fullname}, this is to inform you that your complaint has been received by the system. Rest assured, MENRO Balingasag will take best measures to comply with your complaint. Thank you!\n\n(This is a system-generated message. Please do not reply.)"
             ]);
 
             // Check for SMS API response success

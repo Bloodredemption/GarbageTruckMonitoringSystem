@@ -237,7 +237,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             flatpickr("#dateOfIncident", {
                 dateFormat: "Y-m-d", // Set the format to match your requirements
-                minDate: "today"     // Optional: restrict to past dates only
             });
             
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
