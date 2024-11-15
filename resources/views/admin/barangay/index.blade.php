@@ -226,7 +226,7 @@
                     <form id="addBarangayForm" action="{{ route('barangays.store') }}" method="POST" class="text-black">
                         @csrf
                         <div class="mb-3">
-                            <label for="add_name" class="form-label">Area Name <span style="color: red;">*</span></label>
+                            <label for="add_name" class="form-label">Location <span style="color: red;">*</span></label>
                             <select class="form-control" id="add_name" name="name" required>
                                 <option value=""></option>
                                 <option value="custom">Custom Area</option>
@@ -308,7 +308,7 @@
                         <input type="hidden" id="edit_brgy_id" name="brgy_id">
         
                         <div class="mb-3">
-                            <label for="edit_name" class="form-label">Area Name <span style="color: red;">*</span></label>
+                            <label for="edit_name" class="form-label">Location <span style="color: red;">*</span></label>
                             <select class="form-control" id="edit_name" name="name" required>
                                 <option value=""></option>
                                 <option value="custom">Custom Area</option>
