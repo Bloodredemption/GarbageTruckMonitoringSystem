@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('waste_type');
             $table->string('conversion_method');
             $table->string('metrics');
-            $table->string('total_converted');
             $table->string('start_date')->nullable();
             $table->string('end_date')->nullable();
             $table->string('status')->default('Pending');

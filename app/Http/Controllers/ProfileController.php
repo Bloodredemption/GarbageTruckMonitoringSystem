@@ -120,6 +120,17 @@ class ProfileController extends Controller
         return view('admin.profile.index', compact('user'));
     }
 
+    public function landfill_index() {
+        $userId = Auth::id();
+
+        // Fetch the currently authenticated user's data by ID
+        $user = Users::select('id' ,'fullname', 'contact_num', 'user_type', 'username')
+                    ->where('id', $userId)
+                    ->first();
+
+        return view('landfill.profile.index', compact('user'));
+    }
+    
     public function admprofileUpdate(Request $request, string $id) {
         $userId = Auth::id();
         $user = Users::find($userId);

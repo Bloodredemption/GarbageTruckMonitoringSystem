@@ -64,7 +64,7 @@
             </div>
         
             <!-- Highest Waste Generated Area and Total waste info -->
-            <div class="col-lg-3 d-flex flex-column justify-content-between">
+            <div class="col-lg-6 d-flex flex-column justify-content-between">
                 <!-- Highest Waste Generated Area -->
                 <div class="card flex-fill">
                     <div class="card-body">
@@ -81,8 +81,75 @@
                     </div>
                 </div>
             </div>
-        
-            <div class="col-lg-3 d-flex flex-column justify-content-between">
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-lg-12">
+                <div class="card mb-3 flex-fill">
+                    <div class="flex-wrap card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h5 class="card-title"><strong>Highest Waste Zone Diagnostic Analytics</strong></h5>            
+                        </div>   
+                    </div>
+                    <div class="card-body" style="padding-top: 0;">
+                        <div class="flex-wrap d-flex align-items-center justify-content-between">
+                            <div id="diagnosticChart" class="col-md-6 col-sm-6 diagnosticChart p-2" style="min-height: 208.7px;">
+                                    {{-- Chart Here --}}
+                            </div>
+                            <div class="col-md-6 p-2 ml-6">
+                                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                            <th scope="col">Barangay</th>
+                                            <th scope="col">Factors</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Brgy Waterfall</td>
+                                                <td>Festival Celebration</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Brgy 6</td>
+                                                <td>High Population</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Brgy 5</td>
+                                                <td>High Commercial Industrial Waste</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Brgy 3</td>
+                                                <td>Festival Celebration</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Brgy Waterfall</td>
+                                                <td>Festival Celebration</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Brgy 6</td>
+                                                <td>High Population</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Brgy 5</td>
+                                                <td>High Commercial Industrial Waste</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Brgy 3</td>
+                                                <td>Festival Celebration</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
                 <!-- Total Waste Converted and Total Waste -->
                 <div class="card mb-3 flex-fill">
                     <div class="card-body">
@@ -99,7 +166,9 @@
                         </div>
                     </div>
                 </div>
-        
+            </div>
+
+            <div class="col-lg-6">
                 <div class="card flex-fill">
                     <div class="card-body">
                         <h5><strong>Total waste collected (kg/week)</strong></h5>
@@ -115,7 +184,6 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
 
@@ -641,6 +709,52 @@
             fetchWasteData(selectedTimeframe);
         });
 
+        var colors11 = ['#ff0d0c', '#f95800', '#ffcc00', '#5b8201'];
+
+        var options11 = {
+          series: [{
+          data: [30, 25, 20, 15]
+        }],
+          chart: {
+          height: 350,
+          type: 'bar',
+          events: {
+            click: function(chart, w, e) {
+              // console.log(chart, w, e)
+            }
+          }
+        },
+        colors: colors11,
+        plotOptions: {
+          bar: {
+            columnWidth: '45%',
+            distributed: true,
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        legend: {
+          show: false
+        },
+        xaxis: {
+          categories: [
+            ['Brgy', 'Waterfall'], 
+            ['Brgy', '6'], 
+            ['Brgy', '5'], 
+            ['Brgy', '3'], 
+          ],
+          labels: {
+            style: {
+              colors: colors11,
+              fontSize: '12px'
+            }
+          }
+        }
+        };
+
+        var chart11 = new ApexCharts(document.querySelector("#diagnosticChart"), options11);
+        chart11.render();
     });
     
 </script>

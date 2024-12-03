@@ -42,38 +42,9 @@
 
     <ul class="navbar-nav ms-auto align-items-center navbar-list mb-lg-0 p-2">
       <li class="nav-item dropdown">
-        @if (session('user_role') == 'Driver Account')
-          <a href="#" class="nav-link" id="notification-drop" data-bs-toggle="dropdown" style="color: var(--bs-gray); position: relative;">
-            <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19.7695 11.6453C19.039 10.7923 18.7071 10.0531 18.7071 8.79716V8.37013C18.7071 6.73354 18.3304 5.67907 17.5115 4.62459C16.2493 2.98699 14.1244 2 12.0442 2H11.9558C9.91935 2 7.86106 2.94167 6.577 4.5128C5.71333 5.58842 5.29293 6.68822 5.29293 8.37013V8.79716C5.29293 10.0531 4.98284 10.7923 4.23049 11.6453C3.67691 12.2738 3.5 13.0815 3.5 13.9557C3.5 14.8309 3.78723 15.6598 4.36367 16.3336C5.11602 17.1413 6.17846 17.6569 7.26375 17.7466C8.83505 17.9258 10.4063 17.9933 12.0005 17.9933C13.5937 17.9933 15.165 17.8805 16.7372 17.7466C17.8215 17.6569 18.884 17.1413 19.6363 16.3336C20.2118 15.6598 20.5 14.8309 20.5 13.9557C20.5 13.0815 20.3231 12.2738 19.7695 11.6453Z" fill="currentColor"></path>
-                <path opacity="0.4" d="M14.0088 19.2283C13.5088 19.1215 10.4627 19.1215 9.96275 19.2283C9.53539 19.327 9.07324 19.5566 9.07324 20.0602C9.09809 20.5406 9.37935 20.9646 9.76895 21.2335L9.76795 21.2345C10.2718 21.6273 10.8632 21.877 11.4824 21.9667C11.8123 22.012 12.1482 22.01 12.4901 21.9667C13.1083 21.877 13.6997 21.6273 14.2036 21.2345L14.2026 21.2335C14.5922 20.9646 14.8734 20.5406 14.8983 20.0602C14.8983 19.5566 14.4361 19.327 14.0088 19.2283Z" fill="currentColor"></path>
-            </svg>
-            <span class="bg-danger dots" style="position: absolute; top: 0; right: 0; width: 8px; height: 8px; border-radius: 50%;"></span>
-          </a>
-        @endif
-        <div class="p-0 sub-drop dropdown-menu dropdown-menu-end" aria-labelledby="notification-drop">
-          <div class="m-0 shadow-none card">
-            <div class="py-3 card-header d-flex justify-content-between bg-primary">
-                <div class="header-title">
-                  <h5 class="mb-0 text-white">All Notifications</h5>
-                </div>
-            </div>
-            <div class="p-0 card-body">
-              <a href="#" class="iq-sub-card">
-                <div class="d-flex align-items-center">
-                    <img class="p-1 avatar-40 rounded-pill bg-soft-primary" src="{{ asset('assets/images/shapes/01.png')}}" alt="">
-                    <div class="ms-3 w-100">
-                      <h6 class="mb-0 ">Sample Notification</h6>
-                      <div class="d-flex justify-content-between align-items-center">
-                          {{-- <p class="mb-0">from Admin 1</p> --}}
-                          <small class="float-end font-size-12">Just Now</small>
-                      </div>
-                    </div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
+        <a href="#" class="nav-link" id="notification-drop" style="color: var(--bs-gray); position: relative;" data-bs-toggle="offcanvas" data-bs-target="#messagesOffcanvas" aria-controls="messagesOffcanvas">
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-message"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 3a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-4.724l-4.762 2.857a1 1 0 0 1 -1.508 -.743l-.006 -.114v-2h-1a4 4 0 0 1 -3.995 -3.8l-.005 -.2v-8a4 4 0 0 1 4 -4zm-4 9h-6a1 1 0 0 0 0 2h6a1 1 0 0 0 0 -2m2 -4h-8a1 1 0 1 0 0 2h8a1 1 0 0 0 0 -2" /></svg>
+        </a>
       </li>
     </ul>
     <ul class="navbar-nav align-items-center navbar-list mb-lg-0">
@@ -92,7 +63,13 @@
           </div>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="{{ route('profile') }}">Profile</a></li>
+          <li>
+            @if (session('user_type') == 'landfill')
+              <a class="dropdown-item" href="{{ route('lf.profile') }}">Profile</a>
+            @else
+              <a class="dropdown-item" href="{{ route('profile') }}">Profile</a>
+            @endif
+          </li>
           <li><hr class="dropdown-divider"></li>
           <li>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -107,3 +84,195 @@
     </ul>
   </div>
 </nav>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="messagesOffcanvas" aria-labelledby="messagesOffcanvasLabel">
+  <div class="offcanvas-header">
+    <h5 id="messagesOffcanvasLabel">Messages</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div id="mainBlock">
+      <!-- New Message Button -->
+      <div class="mb-3">
+        <a href="#" class="btn btn-outline-primary w-100" id="newMessageButton">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 5l0 14" />
+            <path d="M5 12l14 0" />
+          </svg>
+          New Message
+        </a>
+      </div>
+  
+      <!-- Messages Section -->
+      <div id="messagesBlock" class="list-group">
+        <!-- Message Template -->
+        <!-- Dynamic placeholder for messages; replace dynamically with server-rendered messages -->
+        <a href="#" class="list-group-item list-group-item-action d-flex align-items-start border-0">
+          <img src="https://placehold.jp/3d4070/ffffff/50x50.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" alt="User" class="rounded-circle me-3" style="width: 50px; height: 50px;">
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>Jeremy Dough</strong>
+            </div>
+            <p class="text-truncate text-muted mb-0" style="max-width: 100%;">Hey there! How've you been?</p>
+          </div>
+        </a>
+  
+        <!-- Repeat for other messages dynamically -->
+      </div>
+  
+      <!-- No Messages Found -->
+      <div id="noMessages" class="d-flex flex-column align-items-center justify-content-center d-none" style="height: 80vh;">
+        <img src="{{ asset('assets/images/messages.svg') }}" class="img-fluid mb-4" width="75%" alt="No Data Found">
+        <h3 class="fw-bold">No messages found</h3>
+        <p style="color: #525356; font-size: 15px;">All of your messages will be displayed here</p>
+      </div>
+    </div>
+  
+    <!-- New Message Form -->
+    <div id="newMessageBlock" class="d-none">
+      <div class="d-flex gap-4 mb-3">
+        <a href="#" id="backToMessages">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M5 12l14 0" />
+            <path d="M5 12l6 6" />
+            <path d="M5 12l6 -6" />
+          </svg>
+        </a>
+        <h5>New Message</h5>
+      </div>
+      <form id="newMessageForm" method="POST">
+        @csrf
+        <div class="mb-3">
+          <label for="add_recipient" class="form-label">Recipient <span style="color: red;">*</span></label>
+          <select class="form-control" id="add_recipient" name="recipient" required>
+            <option value="">Select recipient</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="add_msg" class="form-label">Message <span style="color: red;">*</span></label>
+          <textarea class="form-control" id="add_msg" name="msg" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100" id="submitBtn">
+          <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="submitSpinner"></div>
+          Submit
+        </button>
+      </form>
+    </div>
+  
+    <!-- Chat View -->
+    <div id="chatContainer" class="d-flex flex-column d-none" style="height: 100%;">
+      <!-- Chat Header -->
+      <div class="d-flex align-items-center p-3 sticky-top bg-white pt-0">
+        <a href="#" id="backToMessagesFromChat" class="me-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M5 12l14 0" />
+            <path d="M5 12l6 6" />
+            <path d="M5 12l6 -6" />
+          </svg>
+        </a>
+        <img src="https://placehold.jp/3d4070/ffffff/40x40.png" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px;">
+        <h5 class="mb-0">Jeremy Dough</h5>
+      </div>
+  
+      <!-- Timestamp -->
+      <div class="text-center text-muted small my-2">13 SEPT AT 10:24</div>
+
+      <!-- Chat Messages -->
+      <div class="overflow-auto p-3 flex-grow-1">
+        <!-- Message Received -->
+        <div class="d-flex mb-3 align-items-start">
+          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px; flex-shrink: 0;">
+          <div class="bg-light text-dark p-2 rounded">
+            <p class="mb-1">Hey there! It's been ages since we caught up.</p>
+            <p class="mb-0">How've you been?</p>
+          </div>
+        </div>
+        
+        <!-- Message Sent -->
+        <div class="d-flex flex-row-reverse mb-3 align-items-start">
+          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px; flex-shrink: 0;">
+          <div class="bg-primary text-white p-2 rounded">
+            <p class="mb-0">Hey! I know, right? I've been good, just busy with work and life. What about you?</p>
+          </div>
+        </div>
+    
+        <!-- Message Received -->
+        <div class="d-flex mb-3 align-items-start mb-2">
+          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px; flex-shrink: 0;">
+          <div class="bg-light text-dark p-2 rounded">
+            <p class="mb-1">Same here, the usual grind.</p>
+            <p class="mb-0">But guess what? I finally started that painting class I've been talking about forever.</p>
+          </div>
+        </div>
+    
+        <div class="d-flex mb-3 align-items-start mb-2">
+          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px; flex-shrink: 0;">
+          <div class="bg-light text-dark p-2 rounded">
+            <p class="mb-1">Same here, the usual grind.</p>
+            <p class="mb-0">But guess what? I finally started that painting class I've been talking about forever.</p>
+          </div>
+        </div>
+
+        <div class="d-flex mb-3 align-items-start mb-2">
+          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px; flex-shrink: 0;">
+          <div class="bg-light text-dark p-2 rounded">
+            <p class="mb-1">Same here, the usual grind.</p>
+            <p class="mb-0">But guess what? I finally started that painting class I've been talking about forever.</p>
+          </div>
+        </div>
+        
+        <div class="d-flex mb-3 align-items-start mb-2">
+          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px; flex-shrink: 0;">
+          <div class="bg-light text-dark p-2 rounded">
+            <p class="mb-1">Same here, the usual grind.</p>
+            <p class="mb-0">But guess what? I finally started that painting class I've been talking about forever.</p>
+          </div>
+        </div>
+        <!-- Message Sent -->
+        <div class="d-flex flex-row-reverse align-items-start mb-2">
+          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px; flex-shrink: 0;">
+          <div class="bg-primary text-white p-2 rounded">
+            <p class="mb-0">No way! That's awesome.</p>
+          </div>
+        </div>
+
+        <div class="d-flex flex-row-reverse align-items-start mb-2">
+          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px; flex-shrink: 0;">
+          <div class="bg-primary text-white p-2 rounded">
+            <p class="mb-0">No way! That's awesome.</p>
+          </div>
+        </div>
+
+        <div class="d-flex flex-row-reverse align-items-start mb-2">
+          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px; flex-shrink: 0;">
+          <div class="bg-primary text-white p-2 rounded">
+            <p class="mb-0">No way! That's awesome.</p>
+          </div>
+        </div>
+
+        <div class="d-flex flex-row-reverse align-items-start mb-2">
+          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px; flex-shrink: 0;">
+          <div class="bg-primary text-white p-2 rounded">
+            <p class="mb-0">No way! That's awesome.</p>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Chat Input -->
+      <div class="d-flex p-3 sticky-bottom bg-white">
+        <input type="text" class="form-control me-2" placeholder="Write a message...">
+        <button class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-send-2">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M4.698 4.034l16.302 7.966l-16.302 7.966a.503 .503 0 0 1 -.546 -.124a.555 .555 0 0 1 -.12 -.568l2.468 -7.274l-2.468 -7.274a.555 .555 0 0 1 .12 -.568a.503 .503 0 0 1 .546 -.124z" />
+            <path d="M6.5 12h14.5" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+</div>

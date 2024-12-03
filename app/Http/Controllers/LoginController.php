@@ -31,7 +31,8 @@ class LoginController extends Controller
             // Store user name and role in session
             session([
                 'user_name' => $user->fullname,
-                'user_role' => $role
+                'user_role' => $role,
+                'user_type' => $user->user_type
             ]);
             
             if ($user->status == 'inactive') {

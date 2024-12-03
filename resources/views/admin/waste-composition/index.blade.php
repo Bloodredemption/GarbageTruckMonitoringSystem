@@ -21,7 +21,17 @@
                                     </ol>
                                 </nav>
                             </div>
-                            <div>
+                            <div class="d-flex">
+                                <div>
+                                    <a href="#" class="btn btn-soft-light text-white me-2" type="button" data-bs-toggle="modal" data-bs-target="#importModal">
+                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-import">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                            <path d="M5 13v-8a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5.5m-9.5 -2h7m-3 -3l3 3l-3 3" />
+                                        </svg>
+                                        Import Data
+                                    </a>
+                                </div>
                                 <div class="dropdown">
                                     <button class="btn btn-soft-light text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-settings">
@@ -160,6 +170,48 @@
     <!-- Footer Section End -->    
 </main>
 
+<!-- Import Data Modal -->
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importModalLabel">Import Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="importData" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="importFile" class="form-label">Choose file</label>
+                        <input type="file" class="form-control" id="importFile" name="importFile" accept=".csv">
+                        <div class="form-text">Only <span class="fw-bold">.CSV</span> file format are accepted.</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" form="importData" class="btn btn-primary" id="importBtn">
+                    <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="importBtnSpinner">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    Import
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="userSuccessToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div id="toastMessage" class="toast-body">
+                <!-- Success message will be dynamically inserted here -->
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
 <script>
     document.querySelector('#timeframeSelect').addEventListener('change', function() {
         const selectedTimeframe = this.value; // Get selected value
@@ -250,8 +302,7 @@
                                     <td>${formattedDate}</td>
                                     <td>${wasteComposition.metrics} kg/s</td>
                                     <td>${wasteComposition.brgy.area_name}</td>
-                                    <td>${formattedDate2}</td>
-                                    <td>${wasteComposition.user.user_type}</td>
+                                    <td>${wasteComposition.user.fullname} | ${wasteComposition.user.user_type}</td>
                                 </tr>`;
                             counter++;
                         }
@@ -315,6 +366,59 @@
                 }
             });
         }
+
+        $('#importData').on('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission
+
+            let fileInput = $('#importFile')[0]; // Get the file input element
+            let file = fileInput.files[0]; // Get the selected file
+
+            // Check if a file is selected and is a CSV
+            if (!file || file.type !== 'text/csv' && file.name.split('.').pop() !== 'csv') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid File',
+                    text: 'Please upload a valid CSV file.',
+                });
+                return; // Stop the form submission
+            }
+            
+            let formData = new FormData(this);
+
+            $('#importBtn').attr('disabled', true); 
+            $('#importBtnSpinner').removeClass('d-none');
+
+            $.ajax({
+                url: '/admin/waste-composition/importData', // Route URL
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+
+                    $('#toastMessage').text(response.message);
+
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
+                },
+                error: function (xhr) {
+                    alert('An error occurred. Please check the file and try again.');
+                    console.log(xhr.responseText);
+                },
+                complete: function () {
+                    $('#importBtn').attr('disabled', false);
+                    $('#importBtnSpinner').addClass('d-none');
+                    $('#importModal').modal('hide');
+                    fetchWC();
+                    updateBarChart();
+                    updateChart('day');
+                }
+            });
+        });
     });
 
     // Function to fetch and update chart based on timeframe
@@ -327,12 +431,12 @@
             .then(data => {
                 // Chart options with the new data
                 var options = {
-                    series: [data.residual, data.biodegradable],
+                    series: [data.residual, data.biodegradable, data.recyclable],
                     chart: {
                         type: 'donut',
                         
                     },
-                    labels: ['Residual', 'Biodegradable'],
+                    labels: ['Residual', 'Biodegradable', 'Recyclable'],
                     legend: {
                         formatter: function(val, opts) {
                             return val + " - " + opts.w.globals.series[opts.seriesIndex];
@@ -370,11 +474,14 @@
                 // Prepare the options for the bar chart
                 var options2 = {
                     series: [{
-                        name: 'Residual (sacks)', // Labeling the series
+                        name: 'Residual (kg)', // Labeling the series
                         data: data.residual // Data from the controller
                     }, {
                         name: 'Biodegradable (kg)', // Labeling the series
                         data: data.biodegradable // Data from the controller
+                    }, {
+                        name: 'Recyclable (kg)', // Labeling the series
+                        data: data.recyclable // Data from the controller
                     }],
                     chart: {
                         type: 'bar',
@@ -410,7 +517,7 @@
                         y: {
                             formatter: function(val, { seriesIndex }) {
                                 // Dynamic label based on the series
-                                return seriesIndex === 0 ? val + " sacks" : val + " kg";
+                                return seriesIndex === 0 ? val + " kg" : val + " kg";
                             }
                         }
                     }

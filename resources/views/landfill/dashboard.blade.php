@@ -67,7 +67,7 @@
                 <div class="card flex-fill">
                     <div class="flex-wrap card-header d-flex justify-content-between">
                         <div class="header-title">
-                            <h5 class="card-title"><strong>Waste Converted Composition <span id="totalConverted">(Total: 0 kg /Weekly)</span></strong></h5>            
+                            <h5 class="card-title"><strong>Waste Converted <span id="totalConverted">(Total: 0 kg /Weekly)</span></strong></h5>            
                         </div>   
                         
                     </div>

@@ -15,6 +15,5 @@ class Barangay extends Model
         'user_id',
         'area_name',
         'population',
-        'captain',
     ];
 }

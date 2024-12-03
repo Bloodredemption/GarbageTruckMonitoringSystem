@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('barangays', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->Integer('user_id');
-            $table->string('area_name');
-            $table->string('population')->nullable();
-            $table->Integer('isDeleted')->default(0);
+            $table->integer('user_id');
+            $table->integer('receiver_id');
+            $table->string('message');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('barangays');
+        Schema::dropIfExists('messages');
     }
 };

@@ -160,7 +160,6 @@
                                                         <th>Waste Type</th>
                                                         <th>Conversion Method</th>
                                                         <th>Metrics</th>
-                                                        <th>Total Converted</th>
                                                         <th>Conversion Date</th>
                                                         <th>Status</th>
                                                         <th>Date Created</th>
@@ -174,7 +173,6 @@
                                                             <td>{{ $wc->waste_type }}</td>
                                                             <td>{{ $wc->conversion_method }}</td>
                                                             <td>{{ $wc->metrics }} kg/s</td>
-                                                            <td>{{ $wc->total_converted }} pcs</td>
                                                             <td>
                                                                 {!! $wc->start_date !!}{!! $wc->end_date ? ' to ' . $wc->end_date : ' to <span style="color: red;">[End date not set]</span>' !!}
                                                             </td>
@@ -247,7 +245,6 @@
                                                         <th>Waste Type</th>
                                                         <th>Conversion Method</th>
                                                         <th>Metrics</th>
-                                                        <th>Total Converted</th>
                                                         <th>Conversion Date</th>
                                                         <th style="min-width: 100px">Action</th>
                                                     </tr>
@@ -299,13 +296,7 @@
                                 <span class="input-group-text" id="basic-addon2">kg/s</span>
                             </div>
                         </div>
-                        <label for="add_ttlconv" id="add_ttlconv_label" class="form-label">Total Converted <span style="color: red;">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="number" class="form-control" id="add_ttlconv" name="ttlconv">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">pcs</span>
-                            </div>
-                        </div>
+                        
                         <div class="d-flex mb-3">
                             <div class="form-check me-2">
                                 <input type="radio" name="selectRadiobtn" class="form-check-input" id="selectSingleDate">
@@ -373,13 +364,7 @@
                                 <span class="input-group-text" id="editbasic-addon2">kg/s</span>
                             </div>
                         </div>
-                        <label for="edit_ttlconv" id="edit_ttlconv_label" class="form-label">Total Converted <span style="color: red;">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="number" class="form-control" id="edit_ttlconv" name="ttlconv">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">pcs</span>
-                            </div>
-                        </div>
+                        
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -557,7 +542,6 @@
                                     <td>${wasteConversions.waste_type}</td>
                                     <td>${wasteConversions.conversion_method}</td>
                                     <td>${wasteConversions.metrics} kg/s</td>
-                                    <td>${wasteConversions.total_converted} pcs</td>
                                     <td>
                                         ${wasteConversions.end_date ? `${wasteConversions.start_date} to ${wasteConversions.end_date}` : `${wasteConversions.start_date} <span style="color: red;">[End date not set]</span>`}
                                     </td>
@@ -686,7 +670,6 @@
                                     <td>${archWCov.waste_type}</td>
                                     <td>${archWCov.conversion_method}</td>
                                     <td>${archWCov.metrics} kg/s</td>
-                                    <td>${archWCov.total_converted} pcs</td>
                                     <td>${archWCov.start_date} to ${archWCov.end_date}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
@@ -765,7 +748,6 @@
                 waste_type: $('#add_wt').val(),
                 conversion_method: $('#add_cm').val(),
                 metrics: $('#add_metrics').val(),
-                total_converted: $('#add_ttlconv').val(),
                 start_date: startDate,
                 end_date: endDate,
             };
@@ -822,7 +804,6 @@
                     $('#edit_cm').val(wcov.conversion_method);
                     $('#edit_metrics').val(wcov.metrics.match(/\d+/)[0]);
                     $('#edit_wcov_id').val(wcov.id);
-                    $('#edit_ttlconv').val(wcov.total_converted);
                     $('#edit_sd').val(wcov.start_date);
                     $('#edit_ed').val(wcov.end_date);
 
@@ -842,7 +823,6 @@
                 waste_type: $('#edit_wt').val(),
                 conversion_method: $('#edit_cm').val(),
                 metrics: $('#edit_metrics').val(),
-                total_converted: $('#edit_ttlconv').val(),
                 start_date: $('#edit_sd').val(),
                 end_date: $('#edit_ed').val(),
             };
@@ -862,7 +842,6 @@
                 waste_type: $('#edit_wt').val(),
                 conversion_method: $('#edit_cm').val(),
                 metrics: $('#edit_metrics').val(),
-                total_converted: $('#edit_ttlconv').val(),
                 start_date: $('#edit_sd').val(),
                 end_date: $('#edit_ed').val(),
             };
@@ -886,7 +865,6 @@
                 waste_type: $('#edit_wt').val(),
                 conversion_method: $('#edit_cm').val(),
                 metrics: $('#edit_metrics').val(),
-                total_converted: $('#edit_ttlconv').val(),
                 start_date: $('#edit_sd').val(),
                 end_date: $('#edit_ed').val(),
             };

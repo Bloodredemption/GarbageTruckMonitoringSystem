@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class WasteConversionController extends Controller
 {
@@ -82,11 +83,15 @@ class WasteConversionController extends Controller
             ->whereBetween(DB::raw('DATE(start_date)'), [$start->format('Y-m-d'), $end->format('Y-m-d')])
             ->count();
 
+        $recyclableCount = WasteConversion::where('waste_type', 'Recyclable')
+            ->whereBetween(DB::raw('DATE(start_date)'), [$start->format('Y-m-d'), $end->format('Y-m-d')])
+            ->count();
 
         // Return the counts as a JSON response
         return response()->json([
             'biodegradable' => $biodegradableCount,
             'residual' => $residualCount,
+            'recyclable' => $recyclableCount,
         ]);
     }
 
@@ -108,13 +113,15 @@ class WasteConversionController extends Controller
                 ->whereYear('end_date', $currentYear) // Ensure to use collection_date here
                 ->selectRaw("
                     SUM(CASE WHEN waste_type = 'Residual' THEN metrics ELSE 0 END) as residual,
-                    SUM(CASE WHEN waste_type = 'Biodegradable' THEN metrics ELSE 0 END) as biodegradable
+                    SUM(CASE WHEN waste_type = 'Biodegradable' THEN metrics ELSE 0 END) as biodegradable,
+                    SUM(CASE WHEN waste_type = 'Recyclable' THEN metrics ELSE 0 END) as recyclable
                 ")
                 ->first();
 
             // Append the data to the arrays (default to 0 if no data exists)
             $residualData[] = $dataForMonth->residual ?? 0;
             $biodegradableData[] = $dataForMonth->biodegradable ?? 0;
+            $recyclableData[] = $dataForMonth->recyclable ?? 0;
         }
 
         // Return the data as a JSON response for the chart
@@ -122,6 +129,7 @@ class WasteConversionController extends Controller
             'months' => $months, // Months in MM/YY format
             'residual' => $residualData,
             'biodegradable' => $biodegradableData,
+            'recyclable' => $recyclableData,
         ]);
     }
 
@@ -148,7 +156,6 @@ class WasteConversionController extends Controller
             'waste_type' => 'required|string',
             'conversion_method' => 'required|string',
             'metrics' => 'required|string',
-            'total_converted' => 'required|string',
             'start_date' => 'required|date',
         ]);
 
@@ -207,7 +214,6 @@ class WasteConversionController extends Controller
             'waste_type' => 'required|string',
             'conversion_method' => 'required|string',
             'metrics' => 'required|string',
-            'total_converted' => 'required|string',
             'start_date' => 'required|date',
         ]);
 
@@ -269,5 +275,60 @@ class WasteConversionController extends Controller
         $wasteConversion->save();
 
         return response()->json(['message' => 'Waste conversion archived successfully.']);
+    }
+
+    public function importData(Request $request)
+    {
+        // Validate the file
+        $validator = Validator::make($request->all(), [
+            'importFile' => 'required|file|mimes:csv,txt|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Handle the uploaded file
+        $file = $request->file('importFile');
+        $data = [];
+
+        // Open the file and parse its content
+        if (($handle = fopen($file->getPathname(), 'r')) !== false) {
+            $header = null; // To store the header row
+
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                if (!$header) {
+                    // First row as the header
+                    $header = $row;
+                } else {
+                    // Combine header and row into an associative array
+                    $data[] = array_combine($header, $row);
+                }
+            }
+            fclose($handle);
+        }
+
+        // Process the data as needed (e.g., save to the database)
+        foreach ($data as $item) {
+            // Ignore rows with null values
+            if (empty($item['Waste Type']) || empty($item['Conversion Method']) || empty($item['Metrics (kg)']) || empty($item['Start Date']) || empty($item['End Date']) || empty($item['Status'])) {
+                continue;
+            }
+
+            // Insert into `waste_conversions` table
+            WasteConversion::create([
+                'waste_type' => $item['Waste Type'], // Replace with your CSV headers
+                'conversion_method' => $item['Conversion Method'], // Replace with your CSV headers
+                'metrics' => $item['Metrics (kg)'], // Replace with your CSV headers
+                'start_date' => Carbon::createFromFormat('m/d/Y', $item['Start Date'])->format('Y-m-d'),
+                'end_date' => Carbon::createFromFormat('m/d/Y', $item['End Date'])->format('Y-m-d'),
+                'status' => $item['Status'], // Replace with your CSV headers
+                'user_id' => Auth::id(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return response()->json(['message' => 'Data Imported Successfully.']);
     }
 }

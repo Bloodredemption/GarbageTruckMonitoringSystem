@@ -140,7 +140,6 @@
                                                         <th>No.</th>
                                                         <th>Location</th>
                                                         <th>Population</th>
-                                                        <th>Captain</th>
                                                         <th>Date Created</th>
                                                         <th style="min-width: 100px">Action</th>
                                                     </tr>
@@ -151,7 +150,6 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $br->area_name }}</td>
                                                         <td>{{ $br->population }}</td>
-                                                        <td>{{ $br->captain }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($br->created_at)->format('Y-m-d') }}</td>
                                                         <td>
                                                             <div class="flex align-items-center list-user-action">
@@ -193,7 +191,6 @@
                                                         <th>No.</th>
                                                         <th>Location</th>
                                                         <th>Population</th>
-                                                        <th>Captain</th>
                                                         <th>Date Archived</th>
                                                         <th style="min-width: 100px">Action</th>
                                                     </tr>
@@ -274,10 +271,6 @@
                             <input type="number" class="form-control" id="add_population" name="population" required>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="add_captain" class="form-label">Captain <span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="add_captain" name="captain" required>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -352,10 +345,6 @@
                         <div class="mb-3">
                             <label for="edit_population" class="form-label">Population <span style="color: red;">*</span></label>
                             <input type="number" class="form-control" id="edit_population" name="population" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_captain" class="form-label">Captain <span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="edit_captain" name="captain" required>
                         </div>
                     </form>
                 </div>
@@ -517,7 +506,6 @@
                                     <td>${counter}</td>
                                     <td>${barangay.area_name}</td>
                                     <td>${barangay.population}</td>
-                                    <td>${barangay.captain}</td>
                                     <td>${formatteddate}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
@@ -645,7 +633,6 @@
                                     <td>${counter}</td>
                                     <td>${abarangay.area_name}</td>
                                     <td>${abarangay.population}</td>
-                                    <td>${abarangay.captain}</td>
                                     <td>${formatteddate}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
@@ -759,7 +746,6 @@
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
                 area_name: areaName,
                 population: $('#add_population').val(),
-                captain: $('#add_captain').val(),
             };
 
             $.ajax({
@@ -812,7 +798,6 @@
                     $('#edit_brgy_id').val(response.barangay.id);
                     $('#edit_name').val(response.barangay.area_name);
                     $('#edit_population').val(response.barangay.population);
-                    $('#edit_captain').val(response.barangay.captain);
 
                     // Check if area_name is 'custom' or exists in the predefined options
                     let areaName = response.barangay.area_name;
@@ -839,7 +824,6 @@
                     }
 
                     // Populate other fields
-                    $('#edit_captain').val(response.barangay.captain);
                     
                     $('#editBarangayModal').modal('show');
 
@@ -903,7 +887,6 @@
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
                 area_name: areaName,
                 population: $('#edit_population').val(),
-                captain: $('#edit_captain').val(),
             };
 
             $('#editsaveChangesBtn').attr('disabled', true); 

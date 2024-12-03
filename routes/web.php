@@ -73,6 +73,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/waste-composition', [WasteCompositionController::class, 'admin_index'])->name('awc.index');
     Route::get('/waste-composition/chartsData', [WasteCompositionController::class, 'chartsData']);
     Route::get('/waste-composition/barData', [WasteCompositionController::class, 'barData']);
+    Route::post('/waste-composition/importData', [WasteCompositionController::class, 'importData']);
 });
 
 // Waste Conversion
@@ -80,6 +81,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/waste-conversion', [WasteConversionController::class, 'admin_index'])->name('awcov.index');
     Route::get('/waste-conversion/chartsData', [WasteConversionController::class, 'chartsData']);
     Route::get('/waste-conversion/barData', [WasteConversionController::class, 'barData']);
+    Route::post('/waste-conversion/importData', [WasteConversionController::class, 'importData']);
 });
 
 // Reports
@@ -204,6 +206,13 @@ Route::prefix('landfill')->middleware('auth')->group(function () {
 Route::get('/landfill/help', function () {
     return view('landfill.help.index');
 })->name('lf.help');
+
+// Profile
+Route::prefix('landfill')->middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'landfill_index'])->name('lf.profile');
+    Route::put('/profile/{id}/update', [ProfileController::class, 'admprofileUpdate'])->name('lf.profileUpdate');
+    Route::put('/profile/{id}/changePassword', [ProfileController::class, 'admchangePassword'])->name('lf.changePassword');
+});
 
 // End Landfill Side //
 

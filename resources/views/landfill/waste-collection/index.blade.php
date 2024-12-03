@@ -209,7 +209,12 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" form="addWCForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="addWCForm" class="btn btn-primary" id="saveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="saveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
             </div>
         </div>
@@ -234,6 +239,7 @@
                                 <option></option>
                                 <option value="Biodegradable">Biodegradable</option>
                                 <option value="Residual">Residual</option>
+                                <option value="Recyclable">Recyclable</option>
                             </select>
                         </div>
                         <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
@@ -252,8 +258,24 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" form="editWCForm" class="btn btn-primary">Save changes</button>
+                    <button type="submit" form="editWCForm" class="btn btn-primary" id="editsaveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="editsaveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Save changes
+                    </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="userSuccessToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div id="toastMessage" class="toast-body">
+                    <!-- Success message will be dynamically inserted here -->
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
@@ -481,6 +503,9 @@
         $('#addWCForm').on('submit', function (e) {
             e.preventDefault();
 
+            $('#saveChangesBtn').attr('disabled', true); 
+            $('#saveChangesSpinner').removeClass('d-none');
+
             let formData = {
                 _token: "{{ csrf_token() }}", // Laravel CSRF token
                 waste_type: $('#add_wt').val(),
@@ -495,17 +520,14 @@
                 success: function (response) {
                     fetchWC();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Waste Composition Added!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        $('#addWCForm')[0].reset();
-                        
-                        $('#addWasteModal').modal('hide');
-                    });
+                    $('#toastMessage').text(response.message);
+
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
+
+                    $('#addWCForm')[0].reset();
+                    $('#addWasteModal').modal('hide');
                 },
                 error: function (error) {
                     let errors = error.responseJSON.errors;
@@ -520,6 +542,11 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: "#01A94D"
                     });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#saveChangesBtn').attr('disabled', false);
+                    $('#saveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });
@@ -598,6 +625,9 @@
                 brgy_id: $('#edit_brgy').val(),
             };
 
+            $('#editsaveChangesBtn').attr('disabled', true); 
+            $('#editsaveChangesSpinner').removeClass('d-none');
+
             $.ajax({
                 url: `/landfill/waste-composition/${id}/update`,
                 type: "PUT",
@@ -605,15 +635,13 @@
                 success: function (response) {
                     fetchWC();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Waste Composition Updated!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        $('#editWasteModal').modal('hide');
-                    });
+                    $('#toastMessage').text(response.message);
+
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
+                    
+                    $('#editWasteModal').modal('hide');
                 },
                 error: function (error) {
                     console.log("Error updating waste composition: ", error);
@@ -624,6 +652,11 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#d33'
                     });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#editsaveChangesBtn').attr('disabled', false);
+                    $('#editsaveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });

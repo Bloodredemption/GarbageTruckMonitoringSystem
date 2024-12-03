@@ -75,28 +75,24 @@ class DashboardController extends Controller
 
     public function lfgetWeeklyWasteData()
     {
-        // Define the start and end dates for the week (you can customize this logic)
-        $startDate = Carbon::now()->startOfWeek(); // Start of current week
-        $endDate = Carbon::now()->endOfWeek();     // End of current week
+        $startDate = Carbon::now()->startOfWeek();
+        $endDate = Carbon::now()->endOfWeek();
 
-        // Fetch the waste conversions for the specified week and Finished status
         $wasteConversions = WasteConversion::where('status', 'Finished')
             ->whereBetween('start_date', [$startDate, $endDate])
             ->get();
 
-        // Calculate total metrics for that week
         $totalMetrics = $wasteConversions->sum('metrics');
 
-        // Group by waste_type and calculate percentage for each type
         $data = $wasteConversions->groupBy('waste_type')->map(function ($group) use ($totalMetrics) {
             $wasteTypeTotal = $group->sum('metrics');
             $percentage = ($totalMetrics > 0) ? ($wasteTypeTotal / $totalMetrics) * 100 : 0;
             return [
                 'waste_type' => $group->first()->waste_type,
                 'metrics' => $wasteTypeTotal,
-                'percentage' => round($percentage, 1), // rounded to 1 decimal
+                'percentage' => round($percentage, 1),
             ];
-        })->values(); // Get values as an array
+        })->values();
 
         return response()->json($data);
     }

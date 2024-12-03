@@ -807,6 +807,11 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#d33'
                     });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#editsaveChangesBtn').attr('disabled', false);
+                    $('#editsaveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });

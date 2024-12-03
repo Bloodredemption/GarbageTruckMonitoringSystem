@@ -50,7 +50,6 @@ class BarangayController extends Controller
     {
         $request->validate([
             'area_name' => 'required|string',
-            'captain' => 'required|string',
         ]);
 
         // Get the ID of the currently logged-in user
@@ -87,7 +86,6 @@ class BarangayController extends Controller
     {
         $request->validate([
             'area_name' => 'required|string',
-            'captain' => 'required|string',
         ]);
 
         $barangay = Barangay::findOrFail($id);

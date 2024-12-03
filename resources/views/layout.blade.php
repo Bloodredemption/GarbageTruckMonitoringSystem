@@ -82,6 +82,23 @@
 
 
         <style>
+            .custom-scrollbar {
+                scrollbar-width: thin; /* For Firefox */
+            }
+
+            .custom-scrollbar::-webkit-scrollbar {
+                height: 6px; /* Set the height of the horizontal scrollbar */
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #ccc; /* Color of the scrollbar thumb */
+                border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+            }
+
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #f1f1f1; /* Color of the scrollbar track */
+            }
+            
             :root {
                 --bs-primary: #01A94D;
                 --bs-primary-tint-40: #01A94D;
@@ -213,6 +230,10 @@
             .bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
                 box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
             }
+
+            .list-group-item-action:hover {
+                background-color: #f0f0f0; /* Light gray background */
+            }
         </style>
     </head>
     <body class="">
@@ -248,6 +269,53 @@
                     confirmButtonText: 'OK'
                 });
             });
+
+            document.addEventListener('DOMContentLoaded', function () {
+    const newMessageButton = document.getElementById('newMessageButton');
+    const backToMessages = document.getElementById('backToMessages');
+    const mainBlock = document.getElementById('mainBlock');
+    const newMessageBlock = document.getElementById('newMessageBlock');
+    const chatContainer = document.getElementById('chatContainer');
+    const backToMessagesFromChat = document.getElementById('backToMessagesFromChat');
+    const messageConversations = document.querySelectorAll('.list-group-item');
+
+    // Show the new message block and hide the main block
+    if (newMessageButton) {
+        newMessageButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            mainBlock.classList.add('d-none');
+            newMessageBlock.classList.remove('d-none');
+        });
+    }
+
+    // Back to the main block and hide the new message block
+    if (backToMessages) {
+        backToMessages.addEventListener('click', function (e) {
+            e.preventDefault();
+            newMessageBlock.classList.add('d-none');
+            mainBlock.classList.remove('d-none');
+        });
+    }
+
+    // Show chatContainer when clicking a message conversation
+    messageConversations.forEach(function (conversation) {
+        conversation.addEventListener('click', function (e) {
+            e.preventDefault();
+            mainBlock.classList.add('d-none');
+            chatContainer.classList.remove('d-none');
+        });
+    });
+
+    // Back to main block from chatContainer
+    if (backToMessagesFromChat) {
+        backToMessagesFromChat.addEventListener('click', function (e) {
+            e.preventDefault();
+            chatContainer.classList.add('d-none');
+            mainBlock.classList.remove('d-none');
+        });
+    }
+});
+
         </script>
     </body>
 </html> 

@@ -45,8 +45,8 @@
                             <img src="../../assets/images/avatars/01.png" alt="User-Profile" class="img-fluid rounded-pill avatar-100">
                         </div>
                         <div class="d-flex flex-column justify-content-center align-items-center mt-3">
-                            <h4 class="h4">MENRO Admin</h4>
-                            <span>System Administrator</span>
+                            <h4 class="h4">{{ $user->fullname }}</h4>
+                            <span>{{ $user->user_type }}</span>
                         </div>
                     </div>
                 </div>
