@@ -211,7 +211,7 @@
                             <span class="item-name">Barangay</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link {{ request()->is('admin/notifications') ? 'active' : '' }}"  href="{{ route('notifications.index') }}">
                             <i class="icon">
                                 <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -236,7 +236,59 @@
                             </i>
                             <span class="item-name">Notifications</span>
                         </a>
+                    </li> --}}
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('admin/events') ? 'active' : '' }}"  href="{{ route('events.index') }}">
+                            <i class="icon">
+                                <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    @if(request()->is('admin/events'))
+                                        <rect width="30" height="30" fill="url(#pattern0_18_1461)"/>
+                                        <defs>
+                                            <pattern id="pattern0_18_1461" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                            <use xlink:href="#image0_18_1461" transform="scale(0.0333333)"/>
+                                            </pattern>
+                                            <image id="image0_18_1461" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABKUlEQVR4nO3VPUoDQRgG4K1SaWnEQmMrsRMPIYhXCyoeQLyFgohCIsFCFLXRgIpeIKKN8sjIFmtg3d8Ei7zd7gzz8O03OxNF00yTErSxjRu84QO32MUqtvCKZ2xEVYMG9vAlPWHsPfH8VBWdwYnieamCzuKsBBoq3yyLzqOrXD6xUgZdDz1SLZ0i4DIOMjZR3lxlYae4QBNLeFBPhllwP554XTM+zILnwmeJJ99hAYu4rwhf5ultM664zso7mfAY8PA7tXPBNeM7udEa8XC8NsrALZwnFiqCh+N1pjAaknIh5MG7pdGQ+J6VgQ9Gxh7DWFQlOBpZtJfS80FiB69VQhM9PowrP46R5h/4fjTOSMdbY4XTjtdoUvG78v7E4AQertLez4tp/lu+Ael7Q+NPJQTiAAAAAElFTkSuQmCC"/>
+                                        </defs>
+                                    @else
+                                        <rect width="30" height="30" fill="url(#pattern0_18_1484)"/>
+                                        <defs>
+                                            <pattern id="pattern0_18_1484" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                            <use xlink:href="#image0_18_1484" transform="scale(0.0333333)"/>
+                                            </pattern>
+                                            <image id="image0_18_1484" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABmUlEQVR4nO3VvUrDUBQH8Ds56ajioHWVuokPIYiv1KnYc1PanNPUyUXbeyJ5BAUpFlRKB1HURQUVfQFFF4ty+6GtJGm+LA79wx2SDL+ce05uhBhnHI/kLE4DKgTiSyB+lcjvktSVRC4Z5t4ylHgDiJ8l8aNB9pqIm0zGmZDIZUncksSfHqsFpN5614DqIR5qOZOSuOYDui9UT5FRgO0pSVwPi+rKoVRdj4RmTZ4F5OPQlXa2+SNXtJdCo4ZZWdU9ioL2VV0MDG4W7UVAVRkyRAF7zOe+mER1BMRNY2t3Jmc6C5L4NjbaGa4XXxhINbpbc5EojkPgLDrTels6Q8HXhUJlLl+254HUTUz4bGhvdaW64iQrDzxcSeLtz8nidCA4SRxIUWA0Qbymz/bwsFVNAanTvrcPg9f12S6iRLr8EILg+niNjOq0/7PuffvGAflu8Lm6189EnADywS/0xK3nPVxPcB7Viogbw6qmJKr9buWHGvEaOI0D8k5s1C9euH5R8dfJuhyvYlQxBitvjAz+wbmpB699Y5z/li/25Y4ksrHaBAAAAABJRU5ErkJggg=="/>
+                                        </defs>
+                                    @endif
+                                </svg>
+                            </i>
+                            <span class="item-name">Events</span>
+                        </a>
                     </li>
+                    {{-- <li class="nav-item">
+                        <a class="nav-link {{ request()->is('admin/notifications') ? 'active' : '' }}"  href="{{ route('notifications.index') }}">
+                            <i class="icon">
+                                <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    @if(request()->is('admin/notifications'))
+                                        <rect width="30" height="30" fill="url(#pattern0_18_1461)"/>
+                                        <defs>
+                                            <pattern id="pattern0_18_1461" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                            <use xlink:href="#image0_18_1461" transform="scale(0.0333333)"/>
+                                            </pattern>
+                                            <image id="image0_18_1461" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABKUlEQVR4nO3VPUoDQRgG4K1SaWnEQmMrsRMPIYhXCyoeQLyFgohCIsFCFLXRgIpeIKKN8sjIFmtg3d8Ei7zd7gzz8O03OxNF00yTErSxjRu84QO32MUqtvCKZ2xEVYMG9vAlPWHsPfH8VBWdwYnieamCzuKsBBoq3yyLzqOrXD6xUgZdDz1SLZ0i4DIOMjZR3lxlYae4QBNLeFBPhllwP554XTM+zILnwmeJJ99hAYu4rwhf5ultM664zso7mfAY8PA7tXPBNeM7udEa8XC8NsrALZwnFiqCh+N1pjAaknIh5MG7pdGQ+J6VgQ9Gxh7DWFQlOBpZtJfS80FiB69VQhM9PowrP46R5h/4fjTOSMdbY4XTjtdoUvG78v7E4AQertLez4tp/lu+Ael7Q+NPJQTiAAAAAElFTkSuQmCC"/>
+                                        </defs>
+                                    @else
+                                        <rect width="30" height="30" fill="url(#pattern0_18_1484)"/>
+                                        <defs>
+                                            <pattern id="pattern0_18_1484" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                            <use xlink:href="#image0_18_1484" transform="scale(0.0333333)"/>
+                                            </pattern>
+                                            <image id="image0_18_1484" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABmUlEQVR4nO3VvUrDUBQH8Ds56ajioHWVuokPIYiv1KnYc1PanNPUyUXbeyJ5BAUpFlRKB1HURQUVfQFFF4ty+6GtJGm+LA79wx2SDL+ce05uhBhnHI/kLE4DKgTiSyB+lcjvktSVRC4Z5t4ylHgDiJ8l8aNB9pqIm0zGmZDIZUncksSfHqsFpN5614DqIR5qOZOSuOYDui9UT5FRgO0pSVwPi+rKoVRdj4RmTZ4F5OPQlXa2+SNXtJdCo4ZZWdU9ioL2VV0MDG4W7UVAVRkyRAF7zOe+mER1BMRNY2t3Jmc6C5L4NjbaGa4XXxhINbpbc5EojkPgLDrTels6Q8HXhUJlLl+254HUTUz4bGhvdaW64iQrDzxcSeLtz8nidCA4SRxIUWA0Qbymz/bwsFVNAanTvrcPg9f12S6iRLr8EILg+niNjOq0/7PuffvGAflu8Lm6189EnADywS/0xK3nPVxPcB7Viogbw6qmJKr9buWHGvEaOI0D8k5s1C9euH5R8dfJuhyvYlQxBitvjAz+wbmpB699Y5z/li/25Y4ksrHaBAAAAABJRU5ErkJggg=="/>
+                                        </defs>
+                                    @endif
+                                </svg>
+                            </i>
+                            <span class="item-name">Notifications</span>
+                        </a>
+                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('admin/residents-concerns') ? 'active' : '' }}"  href="{{ route('residents-concerns') }}">
                             <i class="icon">

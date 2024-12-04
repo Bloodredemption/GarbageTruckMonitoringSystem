@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barangay;
+use App\Models\Event;
 use App\Models\CollectionSchedule;
 use App\Models\WasteComposition;
 use Illuminate\Http\Request;
@@ -176,6 +177,12 @@ class WasteCompositionController extends Controller
         return response()->json(['barangays' => $barangays]);
     }
 
+    public function getEvent()
+    {
+        $events = Event::get(['id', 'name']);
+        return response()->json(['events' => $events]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -191,6 +198,7 @@ class WasteCompositionController extends Controller
     {
         $request->validate([
             'brgy_id' => 'required|exists:barangays,id',
+            'event_id' => 'required|exists:events,id',
             'waste_type' => 'required|string',
             'metrics' => 'required|string',
         ]);
@@ -239,6 +247,7 @@ class WasteCompositionController extends Controller
     {
         $request->validate([
             'brgy_id' => 'required|exists:barangays,id',
+            'event_id' => 'required|exists:events,id',
             'waste_type' => 'required|string',
             'metrics' => 'required|string',
         ]);

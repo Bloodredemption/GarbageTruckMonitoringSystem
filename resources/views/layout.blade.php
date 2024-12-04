@@ -234,6 +234,14 @@
             .list-group-item-action:hover {
                 background-color: #f0f0f0; /* Light gray background */
             }
+
+            .message-time {
+                display: block;
+                margin-top: 5px;
+                font-size: 0.9em;
+                color: #888;
+            }
+
         </style>
     </head>
     <body class="">
@@ -271,51 +279,274 @@
             });
 
             document.addEventListener('DOMContentLoaded', function () {
-    const newMessageButton = document.getElementById('newMessageButton');
-    const backToMessages = document.getElementById('backToMessages');
-    const mainBlock = document.getElementById('mainBlock');
-    const newMessageBlock = document.getElementById('newMessageBlock');
-    const chatContainer = document.getElementById('chatContainer');
-    const backToMessagesFromChat = document.getElementById('backToMessagesFromChat');
-    const messageConversations = document.querySelectorAll('.list-group-item');
+                const newMessageButton = document.getElementById('newMessageButton');
+                const backToMessages = document.getElementById('backToMessages');
+                const mainBlock = document.getElementById('mainBlock');
+                const newMessageBlock = document.getElementById('newMessageBlock');
+                const chatContainer = document.getElementById('chatContainer');
+                const backToMessagesFromChat = document.getElementById('backToMessagesFromChat');
+                const messageConversations = document.querySelectorAll('.list-group-item');
 
-    // Show the new message block and hide the main block
-    if (newMessageButton) {
-        newMessageButton.addEventListener('click', function (e) {
-            e.preventDefault();
-            mainBlock.classList.add('d-none');
-            newMessageBlock.classList.remove('d-none');
-        });
-    }
+                // Show the new message block and hide the main block
+                if (newMessageButton) {
+                    newMessageButton.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        mainBlock.classList.add('d-none');
+                        newMessageBlock.classList.remove('d-none');
+                    });
+                }
 
-    // Back to the main block and hide the new message block
-    if (backToMessages) {
-        backToMessages.addEventListener('click', function (e) {
-            e.preventDefault();
-            newMessageBlock.classList.add('d-none');
-            mainBlock.classList.remove('d-none');
-        });
-    }
+                // Back to the main block and hide the new message block
+                if (backToMessages) {
+                    backToMessages.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        newMessageBlock.classList.add('d-none');
+                        mainBlock.classList.remove('d-none');
+                    });
+                }
 
-    // Show chatContainer when clicking a message conversation
-    messageConversations.forEach(function (conversation) {
-        conversation.addEventListener('click', function (e) {
-            e.preventDefault();
-            mainBlock.classList.add('d-none');
-            chatContainer.classList.remove('d-none');
-        });
-    });
+                // Show chatContainer when clicking a message conversation
+                messageConversations.forEach(function (conversation) {
+                    conversation.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        mainBlock.classList.add('d-none');
+                        chatContainer.classList.remove('d-none');
+                    });
+                });
 
-    // Back to main block from chatContainer
-    if (backToMessagesFromChat) {
-        backToMessagesFromChat.addEventListener('click', function (e) {
-            e.preventDefault();
-            chatContainer.classList.add('d-none');
-            mainBlock.classList.remove('d-none');
-        });
-    }
-});
+                // Back to main block from chatContainer
+                if (backToMessagesFromChat) {
+                    backToMessagesFromChat.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        chatContainer.classList.add('d-none');
+                        mainBlock.classList.remove('d-none');
+                    });
+                }
 
+                var receiverId;
+                $('.message-item').on('click', function(event) {
+                    event.preventDefault();
+                    
+                    // Get receiver details from the data attributes
+                    receiverId = $(this).data('receiver-id');
+                    var receiverName = $(this).data('receiver-name');
+
+                    // Update the chat header with receiver's information
+                    $('#chatContainer .bg-white h5').text(receiverName);
+                    
+                    // Show the chat container
+                    $('#chatContainer').removeClass('d-none');
+
+                    // Example: Fetch conversation history based on the receiver ID (you can adjust this as needed)
+                    $.ajax({
+                        url: '/get-conversation/' + receiverId,  // Add your endpoint here
+                        method: 'GET',
+                        success: function(data) {
+                            // Clear previous messages
+                            $('#chatContainer .overflow-auto').html('');
+                            
+                            // Append new messages to the chat container
+                            data.messages.forEach(function(message) {
+                                var messageHtml = '';
+                                
+                                if (message.user_id === receiverId) {
+                                    messageHtml = `
+                                        <div class="d-flex mb-3 align-items-start">
+                                            <img src="../assets/images/avatars/01.png" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px;">
+                                            <div class="bg-light text-dark p-2 rounded">
+                                                <p class="mb-1">${message.message}</p>
+                                            </div>
+                                        </div>
+                                    `;
+                                } else {
+                                    messageHtml = `
+                                        <div class="d-flex flex-row-reverse mb-3 align-items-start">
+                                            <img src="../assets/images/avatars/01.png" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px;">
+                                            <div class="bg-primary text-white p-2 rounded">
+                                                <p class="mb-0">${message.message}</p>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+
+                                // Append the message to the chat container
+                                $('#chatContainer .overflow-auto').append(messageHtml);
+                            });
+                        },
+                        error: function() {
+                            alert('Failed to load conversation.');
+                        }
+                    });
+                });
+
+                $('#sendMessageBtn').on('click', function() {
+                    // Get the message from the input field
+                    var message = $('#messageBox').val().trim();
+
+                    // Check if message is not empty
+                    if (message !== '') {
+                        // Check if receiverId exists (make sure it's properly set)
+                        if (!receiverId) {
+                            alert('Receiver ID is missing');
+                            return;
+                        }
+
+                        // Send message via AJAX
+                        $.ajax({
+                            url: '/send-message',  // Your backend endpoint for sending message
+                            method: 'POST',
+                            data: {
+                                message: message,
+                                receiver_id: receiverId,  // Ensure receiver_id is included in the data
+                                _token: $('meta[name="csrf-token"]').attr('content')  // Include CSRF token for security
+                            },
+                            success: function(response) {
+                                // If message is successfully sent, append it to the conversation
+                                var messageHtml = `
+                                    <div class="d-flex flex-row-reverse mb-3 align-items-start">
+                                        <img src="../assets/images/avatars/01.png" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px;">
+                                        <div class="bg-primary text-white p-2 rounded">
+                                            <p class="mb-0">${message}</p>
+                                        </div>
+                                    </div>
+                                `;
+                                $('#chatContainer .overflow-auto').append(messageHtml);
+
+                                // Clear the input field
+                                $('#messageBox').val('');
+
+                                // Scroll to the latest message
+                                $('#chatContainer .overflow-auto').scrollTop($('#chatContainer .overflow-auto')[0].scrollHeight);
+                            },
+                            error: function() {
+                                alert('Failed to send message');
+                            }
+                        });
+                    } else {
+                        alert('Please enter a message');
+                    }
+                });
+
+                // Optional: Allow pressing Enter to send the message
+                $('#messageBox').on('keypress', function(event) {
+                    if (event.which === 13) {  // Enter key
+                        $('#sendMessageBtn').click();
+                    }
+                });
+
+                function refreshMessages() {
+                    $.ajax({
+                        url: '{{ route('messages.get') }}',  // Use Laravel's route helper to dynamically get the URL
+                        type: 'GET',
+                        success: function(response) {
+                            if(response.messages.length > 0) {
+                                let messagesHtml = '';
+                                $.each(response.messages, function(index, message) {
+                                    messagesHtml += `
+                                        <div id="messagesBlock" class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action d-flex align-items-start border-0 message-item" data-receiver-id="${message.receiver_id}" data-receiver-name="${message.receiver.fullname}">
+                                                <img src="../assets/images/avatars/01.png" 
+                                                    alt="User" 
+                                                    class="rounded-circle me-3" 
+                                                    style="width: 50px; height: 50px;">
+                                                <div class="flex-grow-1">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span>${message.receiver.fullname}</span>
+                                                    </div>
+                                                    <p class="text-muted mb-0">
+                                                        ${message.message}
+                                                    </p>
+                                                    <span class="message-time">${message.formatted_time}</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    `;
+                                });
+                                $('#messagesContainer').html(messagesHtml);
+
+                                rebindMessageClickHandler();
+                            } else {
+                                $('#messagesContainer').html(`
+                                    <div id="noMessages" class="d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
+                                        <img src="../assets/images/messages.svg" class="img-fluid mb-4" width="75%" alt="No Data Found">
+                                        <h3 class="fw-bold">No messages found</h3>
+                                        <p style="color: #525356; font-size: 15px;">All of your messages will be displayed here</p>
+                                    </div>
+                                `);
+                            }
+                        },
+                        error: function() {
+                            alert('An error occurred while refreshing messages.');
+                        }
+                    });
+                }
+
+                setInterval(refreshMessages, 5000);
+
+                function rebindMessageClickHandler() {
+                    const mainBlock = document.getElementById('mainBlock');
+                    const chatContainer = document.getElementById('chatContainer');
+
+                    // Unbind previous click events and bind new ones
+                    $('.message-item').off('click').on('click', function(event) {
+                        event.preventDefault();
+
+                        // Get receiver details from the data attributes
+                        const receiverName = $(this).data('receiver-name');
+                        receiverId = $(this).data('receiver-id');
+
+                        // Update the chat header with receiver's information
+                        $('#chatContainer .bg-white h5').text(receiverName);
+
+                        // Hide main block and show chat container
+                        mainBlock.classList.add('d-none');
+                        chatContainer.classList.remove('d-none');
+
+                        // Fetch conversation history based on the receiver ID
+                        $.ajax({
+                            url: '/get-conversation/' + receiverId, // Add your endpoint here
+                            method: 'GET',
+                            success: function(data) {
+                                // Clear previous messages
+                                $('#chatContainer .overflow-auto').html('');
+
+                                // Append new messages to the chat container
+                                data.messages.forEach(function(message) {
+                                    let messageHtml = '';
+
+                                    // Determine whether the message is from the receiver or the sender
+                                    if (message.user_id === receiverId) {
+                                        messageHtml = `
+                                            <div class="d-flex mb-3 align-items-start">
+                                                <img src="../assets/images/avatars/01.png" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px;">
+                                                <div class="bg-light text-dark p-2 rounded">
+                                                    <p class="mb-1">${message.message}</p>
+                                                </div>
+                                            </div>
+                                        `;
+                                    } else {
+                                        messageHtml = `
+                                            <div class="d-flex flex-row-reverse mb-3 align-items-start">
+                                                <img src="../assets/images/avatars/01.png" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px;">
+                                                <div class="bg-primary text-white p-2 rounded">
+                                                    <p class="mb-0">${message.message}</p>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }
+
+                                    // Append the message to the chat container
+                                    $('#chatContainer .overflow-auto').append(messageHtml);
+                                });
+                            },
+                            error: function() {
+                                alert('Failed to load conversation.');
+                            }
+                        });
+                    });
+                }
+
+            });
         </script>
     </body>
 </html> 

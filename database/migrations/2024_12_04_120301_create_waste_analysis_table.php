@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('waste_compositions', function (Blueprint $table) {
+        Schema::create('waste_analysis', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
             $table->integer('brgy_id');
-            $table->String('waste_type');
-            $table->string('collection_date');
-            $table->String('metrics');
-            $table->integer('event_id')->nullable();
-            $table->integer('isDeleted')->default(0);
+            $table->integer('event_id');
             $table->timestamps();
         });
     }
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('waste_compositions');
+        Schema::dropIfExists('waste_analysis');
     }
 };

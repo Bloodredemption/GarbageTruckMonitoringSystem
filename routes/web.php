@@ -1,8 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangayController;
 use App\Http\Controllers\CollectionScheduleController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
@@ -16,6 +16,8 @@ use App\Http\Controllers\GeolocationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidentsConcernsController;
 use App\Http\Controllers\TruckLocationController;
+use App\Http\Controllers\MessagesController;
+use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -38,6 +40,12 @@ Route::get('/residents-concerns', [ResidentsConcernsController::class, 'index'])
 Route::post('/residents-concerns/submit', [ResidentsConcernsController::class, 'store'])->name('rc.store');
 
 Route::post('/geolocation', [GeolocationController::class, 'storeCoordinates']);
+
+Route::get('/get-conversation/{receiver_id}', [MessagesController::class, 'getConversation']);
+
+Route::post('/send-message', [MessagesController::class, 'sendMessage'])->name('send.message');
+
+Route::get('/messages', [MessagesController::class, 'getMessages'])->name('messages.get');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -165,6 +173,12 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::put('/profile/{id}/changePassword', [ProfileController::class, 'admchangePassword'])->name('admchangePassword');
 });
 
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::post('/events/store', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{id}/update', [EventController::class, 'update'])->name('events.update');
+});
 // End Admin Side //
 
 // Start Landfill Side //
@@ -228,6 +242,7 @@ Route::prefix('driver')->middleware('auth')->group(function () {
 Route::prefix('driver')->middleware('auth')->group(function () {
     Route::get('/waste-composition', [WasteCompositionController::class, 'index'])->name('wc.index');
     Route::get('/waste-composition/getBarangay', [WasteCompositionController::class, 'getBarangay'])->name('wc.getBrgy');
+    Route::get('/waste-composition/getEvent', [WasteCompositionController::class, 'getEvent'])->name('wc.getEvent');
     Route::post('/waste-composition', [WasteCompositionController::class, 'store'])->name('wc.store');
     Route::get('/waste-composition/{id}/edit', [WasteCompositionController::class, 'edit']);
     Route::put('/waste-composition/{id}/update', [WasteCompositionController::class, 'update']);

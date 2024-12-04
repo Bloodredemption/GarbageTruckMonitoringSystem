@@ -205,6 +205,8 @@
                                     <option></option>
                                     <option value="Biodegradable">Biodegradable</option>
                                     <option value="Residual">Residual</option>
+                                    <option value="Recyclable">Recyclable</option>
+                                    <option value="Industrial Waste">Industrial Waste</option>
                                 </select>
                             </div>
                             <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
@@ -217,6 +219,12 @@
                             <div class="mb-3">
                                 <label for="add_brgy" class="form-label">Barangay <span style="color: red;">*</span></label>
                                 <select class="form-control" id="add_brgy" name="brgy" required>
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="add_event" class="form-label">Event <span style="color: red;">*</span></label>
+                                <select class="form-control" id="add_event" name="event" required>
                                     <option></option>
                                 </select>
                             </div>
@@ -267,6 +275,12 @@
                             <div class="mb-3">
                                 <label for="edit_brgy" class="form-label">Barangay <span style="color: red;">*</span></label>
                                 <select class="form-control" id="edit_brgy" name="brgy" required>
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_event" class="form-label">Event <span style="color: red;">*</span></label>
+                                <select class="form-control" id="edit_event" name="event" required>
                                     <option></option>
                                 </select>
                             </div>
@@ -447,6 +461,37 @@
         // Call the fetch function when the page loads
         fetchBrgy();
 
+        function fetchEvent() {
+            $.ajax({
+                url: "{{ route('wc.getEvent') }}", // Your route for fetching drivers
+                type: "GET",
+                success: function (response) {
+                    let driverSelect1 = $('#add_event'); // First driver select
+                    let driverSelect2 = $('#edit_event'); // Second driver select (new)
+
+                    // Clear the select options for both select elements
+                    driverSelect1.empty();
+                    driverSelect2.empty();
+
+                    // Add default options for both selects
+                    driverSelect1.append('<option></option>');
+                    driverSelect2.append('<option></option>');
+
+                    // Populate both selects with the drivers
+                    $.each(response.events, function (key, event) {
+                        driverSelect1.append(`<option value="${event.id}">${event.name}</option>`);
+                        driverSelect2.append(`<option value="${event.id}">${event.name}</option>`);
+                    });
+                },
+                error: function (error) {
+                    console.log("Error fetching event: ", error);
+                }
+            });
+        }
+
+        // Call the fetch function when the page loads
+        fetchEvent();
+
         function fetchGridnListData() {
             $.ajax({
                 url: "{{ route('wc.index') }}",
@@ -492,6 +537,7 @@
                 waste_type: $('#add_wt').val(),
                 metrics: $('#add_metrics').val(),
                 brgy_id: $('#add_brgy').val(),
+                event_id: $('#add_event').val(),
             };
 
             $.ajax({
@@ -545,6 +591,7 @@
                     $('#edit_metrics').val(wc.metrics);
                     $('#edit_cd').val(wc.collection_date);
                     $('#edit_brgy').val(wc.brgy_id);
+                    $('#edit_event').val(wc.event_id);
                     $('#edit_wc_id').val(wc.id);
 
                     $('#editWasteModal').modal('show'); // Display the modal after populating the form
@@ -564,6 +611,7 @@
                 waste_type: $('#edit_wt').val(),
                 metrics: $('#edit_metrics').val(),
                 brgy_id: $('#edit_brgy').val(),
+                event_id: $('#edit_event').val(),
             };
         }
 
@@ -581,6 +629,7 @@
                 waste_type: $('#edit_wt').val(),
                 metrics: $('#edit_metrics').val(),
                 brgy_id: $('#edit_brgy').val(),
+                event_id: $('#edit_event').val(),
             };
 
             const hasChanges = Object.keys(originalValues).some(key => originalValues[key] !== currentValues[key]);
@@ -602,6 +651,7 @@
                 waste_type: $('#edit_wt').val(),
                 metrics: $('#edit_metrics').val(),
                 brgy_id: $('#edit_brgy').val(),
+                event_id: $('#edit_event').val(),
             };
 
             $.ajax({

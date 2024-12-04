@@ -29,8 +29,6 @@
               </svg>
             </div>
         </div>
-        <!--logo End-->
-        {{-- <h4 class="logo-title">Hope UI</h4> --}}
     </a>
     <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
         <i class="icon">
@@ -92,40 +90,51 @@
   </div>
   <div class="offcanvas-body">
     <div id="mainBlock">
-      <!-- New Message Button -->
-      <div class="mb-3">
-        <a href="#" class="btn btn-outline-primary w-100" id="newMessageButton">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M12 5l0 14" />
-            <path d="M5 12l14 0" />
-          </svg>
-          New Message
-        </a>
-      </div>
-  
-      <!-- Messages Section -->
-      <div id="messagesBlock" class="list-group">
-        <!-- Message Template -->
-        <!-- Dynamic placeholder for messages; replace dynamically with server-rendered messages -->
-        <a href="#" class="list-group-item list-group-item-action d-flex align-items-start border-0">
-          <img src="https://placehold.jp/3d4070/ffffff/50x50.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" alt="User" class="rounded-circle me-3" style="width: 50px; height: 50px;">
-          <div class="flex-grow-1">
-            <div class="d-flex justify-content-between align-items-center">
-              <strong>Jeremy Dough</strong>
+      <div class="d-flex overflow-auto custom-scrollbar mb-3">
+        @foreach($users as $user)
+        <a href="#" class="list-group-item message-item" data-receiver-id="{{ $user->id }}" data-receiver-name="{{ $user->fullname }}">
+          <div class="text-center me-3">
+            <div class="position-relative">
+              <img src="../assets/images/avatars/01.png" alt="User" class="rounded-circle" style="width: 50px; height: 50px;">
             </div>
-            <p class="text-truncate text-muted mb-0" style="max-width: 100%;">Hey there! How've you been?</p>
+            <div style="width: 60px; font-size: 10px; white-space: normal; word-wrap: break-word;">{{ $user->fullname }}</div>
           </div>
         </a>
-  
-        <!-- Repeat for other messages dynamically -->
+        @endforeach
       </div>
-  
-      <!-- No Messages Found -->
-      <div id="noMessages" class="d-flex flex-column align-items-center justify-content-center d-none" style="height: 80vh;">
-        <img src="{{ asset('assets/images/messages.svg') }}" class="img-fluid mb-4" width="75%" alt="No Data Found">
-        <h3 class="fw-bold">No messages found</h3>
-        <p style="color: #525356; font-size: 15px;">All of your messages will be displayed here</p>
+
+      <!-- Messages Section -->
+      <div id="messagesContainer">
+        @forelse($users as $user)
+          <div id="messagesBlock" class="list-group">
+            @if($user->latest_message)
+            <a href="#" 
+              class="list-group-item list-group-item-action d-flex align-items-start border-0 message-item" 
+              data-receiver-id="{{ $user->id }}" 
+              data-receiver-name="{{ $user->fullname }}">
+              <img src="../assets/images/avatars/01.png" 
+                alt="User" 
+                class="rounded-circle me-3" 
+                style="width: 50px; height: 50px;">
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>{{ $user->fullname }}</span>
+                </div>
+                <p class="text-muted mb-0">
+                  {{ $user->latest_message }}
+                </p>
+                <span class="message-time">{{ $user->formatted_time }}</span>
+              </div>
+            </a>
+            @endif
+          </div>
+        @empty
+            <div id="noMessages" class="d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
+                <img src="{{ asset('assets/images/messages.svg') }}" class="img-fluid mb-4" width="75%" alt="No Data Found">
+                <h3 class="fw-bold">No users found</h3>
+                <p style="color: #525356; font-size: 15px;">User list will be displayed here</p>
+            </div>
+        @endforelse
       </div>
     </div>
   
@@ -182,89 +191,13 @@
 
       <!-- Chat Messages -->
       <div class="overflow-auto p-3 flex-grow-1">
-        <!-- Message Received -->
-        <div class="d-flex mb-3 align-items-start">
-          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px; flex-shrink: 0;">
-          <div class="bg-light text-dark p-2 rounded">
-            <p class="mb-1">Hey there! It's been ages since we caught up.</p>
-            <p class="mb-0">How've you been?</p>
-          </div>
-        </div>
-        
-        <!-- Message Sent -->
-        <div class="d-flex flex-row-reverse mb-3 align-items-start">
-          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px; flex-shrink: 0;">
-          <div class="bg-primary text-white p-2 rounded">
-            <p class="mb-0">Hey! I know, right? I've been good, just busy with work and life. What about you?</p>
-          </div>
-        </div>
-    
-        <!-- Message Received -->
-        <div class="d-flex mb-3 align-items-start mb-2">
-          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px; flex-shrink: 0;">
-          <div class="bg-light text-dark p-2 rounded">
-            <p class="mb-1">Same here, the usual grind.</p>
-            <p class="mb-0">But guess what? I finally started that painting class I've been talking about forever.</p>
-          </div>
-        </div>
-    
-        <div class="d-flex mb-3 align-items-start mb-2">
-          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px; flex-shrink: 0;">
-          <div class="bg-light text-dark p-2 rounded">
-            <p class="mb-1">Same here, the usual grind.</p>
-            <p class="mb-0">But guess what? I finally started that painting class I've been talking about forever.</p>
-          </div>
-        </div>
-
-        <div class="d-flex mb-3 align-items-start mb-2">
-          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px; flex-shrink: 0;">
-          <div class="bg-light text-dark p-2 rounded">
-            <p class="mb-1">Same here, the usual grind.</p>
-            <p class="mb-0">But guess what? I finally started that painting class I've been talking about forever.</p>
-          </div>
-        </div>
-        
-        <div class="d-flex mb-3 align-items-start mb-2">
-          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px; flex-shrink: 0;">
-          <div class="bg-light text-dark p-2 rounded">
-            <p class="mb-1">Same here, the usual grind.</p>
-            <p class="mb-0">But guess what? I finally started that painting class I've been talking about forever.</p>
-          </div>
-        </div>
-        <!-- Message Sent -->
-        <div class="d-flex flex-row-reverse align-items-start mb-2">
-          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px; flex-shrink: 0;">
-          <div class="bg-primary text-white p-2 rounded">
-            <p class="mb-0">No way! That's awesome.</p>
-          </div>
-        </div>
-
-        <div class="d-flex flex-row-reverse align-items-start mb-2">
-          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px; flex-shrink: 0;">
-          <div class="bg-primary text-white p-2 rounded">
-            <p class="mb-0">No way! That's awesome.</p>
-          </div>
-        </div>
-
-        <div class="d-flex flex-row-reverse align-items-start mb-2">
-          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px; flex-shrink: 0;">
-          <div class="bg-primary text-white p-2 rounded">
-            <p class="mb-0">No way! That's awesome.</p>
-          </div>
-        </div>
-
-        <div class="d-flex flex-row-reverse align-items-start mb-2">
-          <img src="https://placehold.jp/3d4070/ffffff/30x30.png?css=%7B%22border-radius%22%3A%2250%25%22%7D" class="rounded-circle ms-2" alt="You" style="width: 30px; height: 30px; flex-shrink: 0;">
-          <div class="bg-primary text-white p-2 rounded">
-            <p class="mb-0">No way! That's awesome.</p>
-          </div>
-        </div>
+        <!-- Dynamic Messages -->
       </div>
     
       <!-- Chat Input -->
       <div class="d-flex p-3 sticky-bottom bg-white">
-        <input type="text" class="form-control me-2" placeholder="Write a message...">
-        <button class="btn btn-primary">
+        <input type="text" class="form-control me-2" id="messageBox" placeholder="Write a message...">
+        <button class="btn btn-primary" id="sendMessageBtn">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-send-2">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M4.698 4.034l16.302 7.966l-16.302 7.966a.503 .503 0 0 1 -.546 -.124a.555 .555 0 0 1 -.12 -.568l2.468 -7.274l-2.468 -7.274a.555 .555 0 0 1 .12 -.568a.503 .503 0 0 1 .546 -.124z" />

@@ -12,7 +12,7 @@
     </a>
 
     <!-- Title -->
-    <span class="fw-bold flex-grow-1 text-center">Notifications</span>
+    <span class="fw-bold flex-grow-1 text-center">Messages</span>
 
     <div class="dropdown position-absolute" style="right: 1rem;">
         <!-- Dropdown toggle icon without arrow -->
@@ -42,53 +42,78 @@
     <div class="container">
 
         <div class="container mt-4">
-            @forelse ($notifications as $notif)
-                <div class="card shadow-sm border-1 mb-3" style="border-radius: 10px;">
-                    <div class="card-body justify-content-between">
-                        <div class="d-flex gap-3">
-                            <div class="mt-1">
-                                <img src="{{ asset('assets/images/bali_logo.png')}}" alt="Notification Image" class="rounded-circle mb-3" style="width: 40px;">
+            <div class="d-flex overflow-auto custom-scrollbar mb-3">
+                <a href="#" class="list-group-item message-item">
+                    <div class="text-center me-3">
+                    <div class="position-relative">
+                        <img src="../assets/images/avatars/01.png" alt="User" class="rounded-circle" style="width: 50px; height: 50px;">
+                    </div>
+                    <div style="width: 60px; font-size: 13px; white-space: normal; word-wrap: break-word;">Sample Text</div>
+                    </div>
+                </a>
+            </div>
+              
+            <div id="messagesContainer">
+                <div id="messagesBlock" class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-start border-0 message-item">
+                        <img src="../assets/images/avatars/01.png" 
+                            alt="User" 
+                            class="rounded-circle me-3" 
+                            style="width: 50px; height: 50px;">
+
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Sample Name</span>
                             </div>
-                            <div class="w-100">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="mb-0 fw-bold">
-                                        {{ $notif->user->fullname }}
-                                        @if($notif->status == 'sent')
-                                            <span class="notification-status" data-id="{{ $notif->id }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#01A94D" class="icon icon-tabler icons-tabler-filled icon-tabler-point">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                    <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z"/>
-                                                </svg>
-                                            </span>
-                                        @endif
-                                    </h6>
-                                    <span class="text-muted small">{{ $notif->time_ago }}</span>
-                                </div>
-                                <div>
-                                    <p class="mt-2 mb-0">
-                                        {{ $notif->notification_msg }}
-                                    </p>
-                                </div>
-                            </div>
+                            <p class="text-muted mb-0">
+                                Message Here
+                            </p>
+                            <span class="message-time">1 minute ago</span>
                         </div>
-                    </div>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-start border-0 message-item">
+                        <img src="../assets/images/avatars/01.png" 
+                            alt="User" 
+                            class="rounded-circle me-3" 
+                            style="width: 50px; height: 50px;">
+
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Sample Name</span>
+                            </div>
+                            <p class="text-muted mb-0">
+                                Message Here
+                            </p>
+                            <span class="message-time">1 minute ago</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-start border-0 message-item">
+                        <img src="../assets/images/avatars/01.png" 
+                            alt="User" 
+                            class="rounded-circle me-3" 
+                            style="width: 50px; height: 50px;">
+
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Sample Name</span>
+                            </div>
+                            <p class="text-muted mb-0">
+                                Message Here
+                            </p>
+                            <span class="message-time">1 minute ago</span>
+                        </div>
+                    </a>
                 </div>
-            @empty
-                <div class="d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
-                    <div class="d-flex flex-column align-items-center justify-content-center p-4" style="height: 80vh;">
-                        <img src="{{ asset('assets/images/no-data.svg')}}" class="img-fluid mb-4" width="75%" alt="No Data Found">
-                        <h3 class="fw-bold">No notifications found</h3>
-                        <p style="color: #525356; font-size: 15px;">All of your notifications will be displayed here</p>
-                    </div>
-                </div>
-            @endforelse
+            </div>
         </div>
 
-        <div class="mt-4 mb-4">
+        {{-- <div class="mt-4 mb-4">
             <div class="text-center text-muted">
                 <span style="font-size: 0.8rem;">End of Results</span><br>
             </div>
-        </div>
+        </div> --}}
     </div>
 </main>
 
@@ -105,7 +130,7 @@
 
 <script>
     $(document).ready(function() {
-        markAllNotificationsAsRead();  // Trigger the function on page load
+        // markAllNotificationsAsRead();  // Trigger the function on page load
     });
     
     function markAllNotificationsAsRead() {

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 use Carbon\Carbon;
 use App\Events\NotificationSent;
+use App\Models\Messages;
 
 class NotificationController extends Controller
 {
@@ -32,33 +33,28 @@ class NotificationController extends Controller
         return view('admin.notifications.index', compact('notifications'));
     }
 
-    public function driver_index()
+    public function driver_index(Request $request)
     {
-        if (request()->ajax()) {
-            $notifications = Notification::with('user:id,fullname')
-                                ->whereIn('status', ['sent', 'read'])
-                                ->orderBy('created_at', 'desc')
-                                ->get()
-                                ->map(function ($notification) {
-                                    $notification->time_ago = Carbon::parse($notification->created_at)->diffForHumans();
-                                    return $notification;
-                                });
+        $messages = Messages::with(['sender', 'receiver'])
+            ->select('messages.*')
+            ->join(
+                \DB::raw('(SELECT MAX(id) as latest_id FROM messages WHERE user_id = '.auth()->id().' GROUP BY receiver_id) as latest_messages'),
+                'messages.id',
+                '=',
+                'latest_messages.latest_id'
+            )
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-            return response()->json(['notifications' => $notifications]);
+        // If the request is an AJAX request, return JSON response
+        if ($request->ajax()) {
+            return response()->json([
+                'messages' => $messages
+            ]);
         }
 
-        $notifications = Notification::with('user:id,fullname')
-                                ->whereIn('status', ['sent', 'read'])
-                                ->orderBy('created_at', 'desc')
-                                ->get()
-                                ->map(function ($notification) {
-                                    $notification->time_ago = Carbon::parse($notification->created_at)->diffForHumans();
-                                    return $notification;
-                                });
-
-        broadcast(new NotificationSent($notifications));
-
-        return view('driver.notifications.index', compact('notifications'));
+        // If it's not an AJAX request, return the regular view
+        return view('driver.notifications.index', compact('messages'));
     }
 
     public function getArchive()

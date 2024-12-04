@@ -14,6 +14,7 @@ class WasteComposition extends Model
     protected $fillable = [
         'user_id',
         'brgy_id',
+        'event_id',
         'waste_type',
         'collection_date',
         'metrics',
