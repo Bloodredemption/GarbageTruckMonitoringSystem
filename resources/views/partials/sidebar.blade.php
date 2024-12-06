@@ -7,10 +7,10 @@
             <!--Logo start-->
             <div class="logo-main align-items-center">
                 <div class="logo-normal">
-                    <img src="{{ asset('assets/images/logo.png') }}" width="95%" alt="GTMS Logo">
+                    <img src="{{ asset('assets/images/newlogo.png') }}" width="95%" alt="GTMS Logo">
                 </div>
                 <div class="logo-mini">
-                    <img src="{{ asset('assets/images/logo.png') }}" width="50%" alt="GTMS Logo">
+                    <img src="{{ asset('assets/images/newlogo.png') }}" width="50%" alt="GTMS Logo">
                 </div>
             </div>
             <!--logo End-->

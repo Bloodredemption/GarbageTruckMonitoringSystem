@@ -14,5 +14,6 @@ class WasteAnalysis extends Model
     protected $fillable = [
         'brgy_id', 
         'event_id', 
+        'wastecomp_id', 
     ];
 }

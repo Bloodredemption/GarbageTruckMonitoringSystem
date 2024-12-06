@@ -183,11 +183,11 @@
           </svg>
         </a>
         <img src="https://placehold.jp/3d4070/ffffff/40x40.png" class="rounded-circle me-2" alt="User" style="width: 30px; height: 30px;">
-        <h5 class="mb-0">Jeremy Dough</h5>
+        <h5 class="mb-0"></h5>
       </div>
   
       <!-- Timestamp -->
-      <div class="text-center text-muted small my-2">13 SEPT AT 10:24</div>
+      <div class="text-center text-muted small my-2"></div>
 
       <!-- Chat Messages -->
       <div class="overflow-auto p-3 flex-grow-1">

@@ -17,7 +17,7 @@
                                 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{ route('dashboard')}}">Dashboard</a></li>
-                                        <li class="breadcrumb-item active text-white" aria-current="page">Event</li>
+                                        <li class="breadcrumb-item active text-white" aria-current="page">Events</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -199,7 +199,6 @@
                                 <option value="Election Campaign">Election Campaign</option>
                                 <option value="Natural Disaster">Natural Disaster</option>
                                 <option value="Parade">Parade</option>
-                                <option value="No event">No event</option>
                             </select>
                         </div>
                         <div class="mb-3">

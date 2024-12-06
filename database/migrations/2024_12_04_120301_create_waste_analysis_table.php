@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('waste_analysis', function (Blueprint $table) {
             $table->id();
             $table->integer('brgy_id');
-            $table->integer('event_id');
+            $table->integer('event_id')->nullable();
+            $table->integer('wastecomp_id');
             $table->timestamps();
         });
     }

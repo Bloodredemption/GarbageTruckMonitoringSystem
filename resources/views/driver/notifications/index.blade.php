@@ -48,7 +48,7 @@
                     <div class="position-relative">
                         <img src="../assets/images/avatars/01.png" alt="User" class="rounded-circle" style="width: 50px; height: 50px;">
                     </div>
-                    <div style="width: 60px; font-size: 13px; white-space: normal; word-wrap: break-word;">Sample Text</div>
+                    <div style="width: 60px; font-size: 13px; white-space: normal; word-wrap: break-word;">MENRO Admin</div>
                     </div>
                 </a>
             </div>
@@ -63,48 +63,16 @@
 
                         <div class="flex-grow-1">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span>Sample Name</span>
+                                <span>MENRO Admin</span>
                             </div>
                             <p class="text-muted mb-0">
-                                Message Here
+                                Sample Message
                             </p>
                             <span class="message-time">1 minute ago</span>
                         </div>
                     </a>
 
-                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-start border-0 message-item">
-                        <img src="../assets/images/avatars/01.png" 
-                            alt="User" 
-                            class="rounded-circle me-3" 
-                            style="width: 50px; height: 50px;">
-
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span>Sample Name</span>
-                            </div>
-                            <p class="text-muted mb-0">
-                                Message Here
-                            </p>
-                            <span class="message-time">1 minute ago</span>
-                        </div>
-                    </a>
-
-                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-start border-0 message-item">
-                        <img src="../assets/images/avatars/01.png" 
-                            alt="User" 
-                            class="rounded-circle me-3" 
-                            style="width: 50px; height: 50px;">
-
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span>Sample Name</span>
-                            </div>
-                            <p class="text-muted mb-0">
-                                Message Here
-                            </p>
-                            <span class="message-time">1 minute ago</span>
-                        </div>
-                    </a>
+                    
                 </div>
             </div>
         </div>

@@ -416,7 +416,7 @@
     {{-- @include('partials.d-header') --}}
     <!-- Sticky Header -->
     <header class="sticky-header d-flex justify-content-between align-items-center p-3">
-        <img src="{{ asset('assets/images/logo.png')}}" alt="GTMS Logo" class="logo-img">
+        <img src="{{ asset('assets/images/newlogo.png')}}" alt="GTMS Logo" class="logo-img">
         
         <div class="d-flex align-items-center">
             <!-- Notification Icon with Dropdown -->

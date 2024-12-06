@@ -88,7 +88,7 @@
     <div class="container my-5">
         <!-- Centered Logo -->
         <div class="text-center mb-4">
-            <img src="{{ asset('assets/images/logo.png') }}" alt="System Logo" class="img-fluid logo-image" width="20%">
+            <img src="{{ asset('assets/images/newlogo.png') }}" alt="System Logo" class="img-fluid logo-image" width="20%">
         </div>
 
         <!-- Form Card -->

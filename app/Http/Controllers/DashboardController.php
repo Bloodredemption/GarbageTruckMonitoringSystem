@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\WasteConversion;
+use App\Models\WasteAnalysis;
+use App\Models\Barangay;
+use App\Models\Event;
 
 class DashboardController extends Controller
 {
@@ -493,5 +496,40 @@ class DashboardController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getDiagnosticData()
+    {
+        // Fetch all records from WasteAnalysis
+        $wasteAnalyses = WasteAnalysis::all();
+
+        $data = $wasteAnalyses->map(function ($analysis) {
+            // Fetch area_name from Barangay
+            $barangay = Barangay::find($analysis->brgy_id);
+            $areaName = $barangay ? $barangay->area_name : null;
+
+            // Fetch name from Event
+            $event = Event::find($analysis->event_id);
+            $eventName = $event ? $event->name : null;
+
+            // Fetch all WasteComposition rows with matching brgy_id
+            $wasteCompositions = WasteComposition::where('brgy_id', $analysis->brgy_id)->get();
+
+            // Calculate total metrics for the barangay
+            $totalMetrics = $wasteCompositions->sum('metrics');
+
+            return [
+                'area_name' => $areaName,
+                'event_name' => $eventName,
+                'total_metrics' => $totalMetrics,
+            ];
+        });
+
+        // Rank data by total metrics (highest to lowest)
+        $rankedData = $data->sortByDesc('total_metrics')->values()->all();
+
+        return response()->json([
+            'diagnosticData' => $rankedData,
+        ]);
     }
 }

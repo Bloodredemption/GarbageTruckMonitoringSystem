@@ -223,7 +223,7 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="add_event" class="form-label">Event <span style="color: red;">*</span></label>
+                                <label for="add_event" class="form-label">Event <span class="text-muted" style="font-size: 15px;">(Optional)</span></label>
                                 <select class="form-control" id="add_event" name="event" required>
                                     <option></option>
                                 </select>
@@ -231,11 +231,11 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" form="addWCForm" class="btn btn-primary" id="saveChanges">
+                        <button type="submit" form="addWCForm" class="btn btn-primary" id="saveChanges" style="background-color: #01A94D; color: white;">
                             <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="saveChangesSpinner">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
-                            Save changes
+                            Submit
                         </button>
                     </div>
                 </div>
@@ -279,7 +279,7 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="edit_event" class="form-label">Event <span style="color: red;">*</span></label>
+                                <label for="edit_event" class="form-label">Event <span class="text-muted" style="font-size: 15px;">(Optional)</span></label>
                                 <select class="form-control" id="edit_event" name="event" required>
                                     <option></option>
                                 </select>
@@ -287,7 +287,10 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" form="editWCForm" class="btn btn-primary">
+                        <button type="submit" form="editWCForm" class="btn btn-primary" id="editsaveChanges" style="background-color: #01A94D; color: white;">
+                            <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="editsaveChangesSpinner">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
                             Save changes
                         </button>
                     </div>
@@ -654,22 +657,20 @@
                 event_id: $('#edit_event').val(),
             };
 
+            $('#editsaveChanges').attr('disabled', true); 
+            $('#editsaveChangesSpinner').removeClass('d-none');
+
             $.ajax({
                 url: `/driver/waste-composition/${id}/update`,
                 type: "PUT",
                 data: formData,
                 success: function (response) {
                     fetchGridnListData();
+                    $('#editWCForm')[0].reset();
+                    $('#editWasteModal').modal('hide');
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Waste Composition Updated!',
-                        text: response.message,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: "#01A94D"
-                    }).then(() => {
-                        $('#editWasteModal').modal('hide');
-                    });
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
                 },
                 error: function (error) {
                     console.log("Error updating waste composition: ", error);
@@ -680,6 +681,11 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#d33'
                     });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#editsaveChanges').attr('disabled', false);
+                    $('#editsaveChangesSpinner').addClass('d-none'); // Hide spinner
                 }
             });
         });

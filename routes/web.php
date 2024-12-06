@@ -21,7 +21,7 @@ use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -54,6 +54,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dashboard/getWasteData', [DashboardController::class, 'getWasteData']);
     Route::get('/dashboard/fetchWasteDataForInfo', [DashboardController::class, 'fetchWasteDataForInfo']);
     Route::get('/dashboard/getTodayWasteConverted', [DashboardController::class, 'getTodayWasteConverted'])->name('getTodayWasteConverted');
+    Route::get('/dashboard/getDiagnosticData', [DashboardController::class, 'getDiagnosticData'])->name('getDiagnosticData');
 });
 
 // Live Tracking

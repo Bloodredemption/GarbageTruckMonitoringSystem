@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('residents_concerns', function (Blueprint $table) {
             $table->id();
-            $table->string('complaint_type');
             $table->string('fullname');
             $table->string('contact_num');
-            $table->string('brgy_location');
+            $table->string('address');
             $table->string('complaint_details');
             $table->string('dateOfIncident');
-            $table->json('attachments');
+            $table->string('status')->default('Pending');
             $table->timestamps();
         });
     }

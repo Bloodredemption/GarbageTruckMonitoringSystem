@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barangay;
 use App\Models\Event;
 use App\Models\CollectionSchedule;
+use App\Models\WasteAnalysis;
 use App\Models\WasteComposition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -208,11 +209,18 @@ class WasteCompositionController extends Controller
         $currentDateFormatted = $currentDate->format('Y-m-d'); // Format the date for comparison
 
         // Create the WasteComposition record
-        WasteComposition::create(array_merge(
+        $wasteComposition = WasteComposition::create(array_merge(
             $request->all(),
             ['user_id' => $userId],
             ['collection_date' => $currentDate]
         ));
+
+        // Create the WasteAnalysis record
+        WasteAnalysis::create([
+            'brgy_id' => $request->input('brgy_id'),
+            'event_id' => $request->input('event_id'),
+            'wastecomp_id' => $wasteComposition->id,
+        ]);
 
         // Update CollectionSchedule status to "Finished" based on matching criteria
         CollectionSchedule::where('user_id', $userId)
@@ -220,7 +228,7 @@ class WasteCompositionController extends Controller
             ->whereDate('scheduled_date', $currentDateFormatted) // Use whereDate for Y-m-d comparison
             ->update(['status' => 'Finished']);
 
-        return response()->json(['message' => 'Waste composition successfully added and collection status updated to Finished.']);
+        return response()->json(['message' => 'Waste composition successfully added.']);
     }
 
     /**
@@ -300,6 +308,27 @@ class WasteCompositionController extends Controller
 
         return response()->json($wasteData);
     }
+
+    // public function getWasteData(): JsonResponse
+    // {
+    //     $wasteData = WasteComposition::select(DB::raw('DATE_FORMAT(collection_date, "%Y-%m") as month'), 'waste_type', DB::raw('SUM(metrics) as total_metrics'))
+    //         ->groupBy('month', 'waste_type')
+    //         ->orderBy('month')
+    //         ->get()
+    //         ->groupBy('month')
+    //         ->map(function ($items, $month) {
+    //             $totalMetrics = $items->sum('total_metrics');
+    //             $wasteTypes = $items->pluck('total_metrics', 'waste_type');
+    //             return [
+    //                 'month' => Carbon::createFromFormat('Y-m', $month)->format('F Y'),
+    //                 'total_metrics' => $totalMetrics,
+    //                 'waste_type' => $wasteTypes
+    //             ];
+    //         })
+    //         ->values();
+
+    //     return response()->json($wasteData);
+    // }
 
     public function importData(Request $request)
     {

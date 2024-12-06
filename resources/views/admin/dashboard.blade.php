@@ -63,21 +63,41 @@
                 </div>
             </div>
         
-            <!-- Highest Waste Generated Area and Total waste info -->
-            <div class="col-lg-6 d-flex flex-column justify-content-between">
-                <!-- Highest Waste Generated Area -->
-                <div class="card flex-fill">
-                    <div class="card-body">
-                        <h5 class="card-title mb-4"><strong>High-Waste Zone (wkly)</strong></h5>
-                
-                        <!-- Scrollable wrapper -->
-                        <div class="scrollable-list" style="max-height: 320px; overflow-y: auto;">
-                            <ul class="list-group text-start">
-                                <!-- The list will be dynamically inserted here -->
-                            </ul>
+            <div class="col-lg-6">
+                <div class="col-lg-12">
+                    <!-- Total Waste Converted and Total Waste -->
+                    <div class="card mb-3 flex-fill">
+                        <div class="card-body">
+                            <h5><strong>Total waste converted (kg/day)</strong></h5>
+                            <h1 class="mt-2 mb-3 display-2 fw-bold" id="totalThisDay">0 kg</h1>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span id="wasteDiff">0 vs last week</span>
+                                <div id="percentageContainer" class="text-success rounded-pill p-1 border border-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: currentColor;transform: ;msFilter:;">
+                                        <path d="m18.707 12.707-1.414-1.414L13 15.586V6h-2v9.586l-4.293-4.293-1.414 1.414L12 19.414z"></path>
+                                    </svg>
+                                    <span>0%</span>
+                                </div>
+                            </div>
                         </div>
-                        <!-- End of scrollable wrapper -->
-                
+                    </div>
+                </div>
+    
+                <div class="col-lg-12">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h5><strong>Total waste collected (kg/week)</strong></h5>
+                            <h1 class="mt-2 mb-3 display-2 fw-bold" id="currentTotal">0 kg</h1>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="waste-difference">0 vs last week</span>
+                                <div class="percentage-container text-success rounded-pill p-1 border border-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: currentColor;">
+                                        <path d="M18.707 12.707l-1.414-1.414L13 15.586V6h-2v9.586l-4.293-4.293-1.414 1.414L12 19.414z"></path>
+                                    </svg>
+                                    <span>0%</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -89,55 +109,25 @@
                     <div class="flex-wrap card-header d-flex justify-content-between">
                         <div class="header-title">
                             <h5 class="card-title"><strong>Highest Waste Zone Diagnostic Analytics</strong></h5>            
-                        </div>   
+                        </div>
+                        
                     </div>
                     <div class="card-body" style="padding-top: 0;">
                         <div class="flex-wrap d-flex align-items-center justify-content-between">
                             <div id="diagnosticChart" class="col-md-6 col-sm-6 diagnosticChart p-2" style="min-height: 208.7px;">
-                                    {{-- Chart Here --}}
+                                {{-- Chart will render here --}}
                             </div>
                             <div class="col-md-6 p-2 ml-6">
                                 <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                                    <table class="table">
+                                    <table class="table" id="diagnosticTable">
                                         <thead>
                                             <tr>
-                                            <th scope="col">Barangay</th>
-                                            <th scope="col">Factors</th>
+                                                <th scope="col">Barangay</th>
+                                                <th scope="col">Factors</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Brgy Waterfall</td>
-                                                <td>Festival Celebration</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Brgy 6</td>
-                                                <td>High Population</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Brgy 5</td>
-                                                <td>High Commercial Industrial Waste</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Brgy 3</td>
-                                                <td>Festival Celebration</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Brgy Waterfall</td>
-                                                <td>Festival Celebration</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Brgy 6</td>
-                                                <td>High Population</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Brgy 5</td>
-                                                <td>High Commercial Industrial Waste</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Brgy 3</td>
-                                                <td>Festival Celebration</td>
-                                            </tr>
+                                            {{-- Table data will render here --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -148,44 +138,7 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-6">
-                <!-- Total Waste Converted and Total Waste -->
-                <div class="card mb-3 flex-fill">
-                    <div class="card-body">
-                        <h5><strong>Total waste converted (kg/day)</strong></h5>
-                        <h1 class="mt-2 mb-3 display-2 fw-bold" id="totalThisDay">0 kg</h1>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span id="wasteDiff">0 vs last week</span>
-                            <div id="percentageContainer" class="text-success rounded-pill p-1 border border-success">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: currentColor;transform: ;msFilter:;">
-                                    <path d="m18.707 12.707-1.414-1.414L13 15.586V6h-2v9.586l-4.293-4.293-1.414 1.414L12 19.414z"></path>
-                                </svg>
-                                <span>0%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="card flex-fill">
-                    <div class="card-body">
-                        <h5><strong>Total waste collected (kg/week)</strong></h5>
-                        <h1 class="mt-2 mb-3 display-2 fw-bold" id="currentTotal">0 kg</h1>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="waste-difference">0 vs last week</span>
-                            <div class="percentage-container text-success rounded-pill p-1 border border-success">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: currentColor;">
-                                    <path d="M18.707 12.707l-1.414-1.414L13 15.586V6h-2v9.586l-4.293-4.293-1.414 1.414L12 19.414z"></path>
-                                </svg>
-                                <span>0%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         <div class="row">
             <!-- Waste Generation Weekly Breakdown -->
@@ -235,10 +188,13 @@
     
             <div class="col-lg-6">
                 <div class="card flex-fill">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between">
                         <div class="header-title">
                             <h5 class="card-title" id="wgbreak"><strong>Waste Generation Forecasting</strong></h5>            
-                        </div> 
+                        </div>
+                        <div>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#performanceReportModal">View Performance Report</a>
+                        </div>
                     </div>
                     <div class="card-body">
                         <canvas id="wastePredictionChart" width="400" height="200"></canvas>
@@ -259,6 +215,56 @@
         </div>
     </div>
     
+    <div class="modal fade" id="performanceReportModal" tabindex="-1" aria-labelledby="performanceReportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="performanceReportModalLabel">Performance Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Content for the performance report goes here -->
+                    <div class="table-responsive">
+                        <table id="performanceMetricstbl" class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Metric</th>
+                                    <th scope="col">Value</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="mseRow">
+                                    <td>MSE</td>
+                                    <td id="mseValue"></td>
+                                    <td id="mseDescription"></td>
+                                </tr>
+                                <tr id="maeRow">
+                                    <td>MAE</td>
+                                    <td id="maeValue"></td>
+                                    <td id="maeDescription"></td>
+                                </tr>
+                                <tr id="smapeRow">
+                                    <td>sMAPE</td>
+                                    <td id="smapeValue"></td>
+                                    <td id="smapeDescription"></td>
+                                </tr>
+                                <tr id="accuracyRow">
+                                    <td>Accuracy</td>
+                                    <td id="accuracyValue"></td>
+                                    <td id="accuracyDescription"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer Section Start -->
     @include('partials.footer')
     <!-- Footer Section End -->    
@@ -276,8 +282,76 @@
             }
             const data = await response.json();
             updateChart(data); // Call function to update chart with fetched data
+            updateMetricsTable(data.performance_metrics); // Pass only the performance_metrics part
         } catch (error) {
             console.error("Error fetching prediction data:", error);
+        }
+    }
+
+    // Function to update the performance metrics table
+    function updateMetricsTable(metrics) {
+        // Update MSE row
+        const mseValue = metrics.mse; 
+        document.getElementById('mseValue').textContent = mseValue.toFixed(2); // Format to two decimal places
+        document.getElementById('mseDescription').innerHTML = getMseDescription(mseValue);
+
+        // Update MAE row
+        const maeValue = metrics.mae;
+        document.getElementById('maeValue').textContent = maeValue.toFixed(2); // Format to two decimal places
+        document.getElementById('maeDescription').innerHTML = getMaeDescription(maeValue);
+
+        // Update sMAPE row
+        const smapeValue = metrics.mape;
+        document.getElementById('smapeValue').textContent = smapeValue.toFixed(2) + '%'; // Format to two decimal places
+        document.getElementById('smapeDescription').innerHTML = getSmapeDescription(smapeValue);
+
+        // Update Accuracy row
+        const accuracyValue = metrics.accuracy;
+        document.getElementById('accuracyValue').textContent = accuracyValue.toFixed(2); // Format to two decimal places
+        document.getElementById('accuracyDescription').innerHTML = getAccuracyDescription(accuracyValue);
+    }
+
+    // Functions to generate dynamic descriptions based on metric values
+
+    function getMseDescription(value) {
+        if (value < 1000) {
+            return "A lower value indicates better model accuracy. In this case, the MSE is quite low, suggesting good model performance.";
+        } else if (value < 2000) {
+            return "A moderate value for MSE, indicating a reasonable level of prediction error.";
+        } else {
+            return "A higher MSE suggests significant prediction error. This could indicate room for model improvement.";
+        }
+    }
+
+    function getMaeDescription(value) {
+        if (value < 10) {
+            return "A lower value means the predictions are closer to the actual values. This suggests highly accurate predictions.";
+        } else if (value < 50) {
+            return "An average MAE, indicating moderate prediction accuracy with room for improvement.";
+        } else {
+            return "A higher MAE value suggests that, on average, the model’s predictions are off by a significant margin.";
+        }
+    }
+
+    function getSmapeDescription(value) {
+        if (value < 10) {
+            return "A very low sMAPE indicates highly accurate predictions, with the model being close to actual values.";
+        } else if (value < 30) {
+            return "A reasonable sMAPE indicating moderate prediction error, but still acceptable in many cases.";
+        } else {
+            return "A higher sMAPE suggests a significant discrepancy between predicted and actual values, indicating a need for improvement.";
+        }
+    }
+
+    function getAccuracyDescription(value) {
+        if (value >= 0.9) {
+            return "An R² value close to 1 indicates that the model explains almost all of the variance in the data, suggesting excellent model performance.";
+        } else if (value >= 0.7) {
+            return "An R² value above 0.7 indicates good model performance, explaining a large portion of the variance.";
+        } else if (value >= 0.5) {
+            return "An R² value of 0.5 suggests moderate performance, with significant room for improvement.";
+        } else {
+            return "An R² value below 0.5 indicates that the model is only explaining a small portion of the variance, suggesting poor model performance.";
         }
     }
 
@@ -425,6 +499,7 @@
 
 
         var calendarEl = document.getElementById('calendar');
+        let currentYear = new Date().getFullYear();
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
             dayMaxEvents: 3,
@@ -448,7 +523,7 @@
                             data: {
                                 api_key: '4CaWSd2hOXKX8hLx9Q6yCFeFj7jHt5Wf',
                                 country: 'PH',
-                                year: 2024 // Adjust to dynamic year based on the calendar views
+                                year: currentYear
                             },
                             success: function(response) {
                                 // Extract holidays and format them for FullCalendar
@@ -709,52 +784,75 @@
             fetchWasteData(selectedTimeframe);
         });
 
-        var colors11 = ['#ff0d0c', '#f95800', '#ffcc00', '#5b8201'];
+        $.ajax({
+            url: '/admin/dashboard/getDiagnosticData',
+            type: 'GET',
+            success: function (response) {
+                const diagnosticData = response.diagnosticData;
 
-        var options11 = {
-          series: [{
-          data: [30, 25, 20, 15]
-        }],
-          chart: {
-          height: 350,
-          type: 'bar',
-          events: {
-            click: function(chart, w, e) {
-              // console.log(chart, w, e)
+                // Render chart
+                renderChart(diagnosticData);
+
+                // Render table
+                renderTable(diagnosticData);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error);
             }
-          }
-        },
-        colors: colors11,
-        plotOptions: {
-          bar: {
-            columnWidth: '45%',
-            distributed: true,
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        legend: {
-          show: false
-        },
-        xaxis: {
-          categories: [
-            ['Brgy', 'Waterfall'], 
-            ['Brgy', '6'], 
-            ['Brgy', '5'], 
-            ['Brgy', '3'], 
-          ],
-          labels: {
-            style: {
-              colors: colors11,
-              fontSize: '12px'
-            }
-          }
+        });
+
+        function renderChart(data) {
+            const categories = data.map(item => item.area_name || "Unknown");
+            const series = data.map(item => item.total_metrics);
+
+            const options = {
+                series: [{
+                    data: series
+                }],
+                chart: {
+                    height: 350,
+                    type: 'bar',
+                },
+                colors: ['#ff0d0c', '#f95800', '#ffcc00', '#5b8201'], // Adjust as needed
+                plotOptions: {
+                    bar: {
+                        columnWidth: '45%',
+                        distributed: true,
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                legend: {
+                    show: false
+                },
+                xaxis: {
+                    categories: categories,
+                    labels: {
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#diagnosticChart"), options);
+            chart.render();
         }
-        };
 
-        var chart11 = new ApexCharts(document.querySelector("#diagnosticChart"), options11);
-        chart11.render();
+        function renderTable(data) {
+            const tableBody = $('#diagnosticTable tbody');
+            tableBody.empty(); // Clear existing table data
+
+            data.forEach(item => {
+                tableBody.append(`
+                    <tr>
+                        <td>${item.area_name || "Unknown"}</td>
+                        <td>${item.event_name || "N/A"}</td>
+                    </tr>
+                `);
+            });
+        }
     });
     
 </script>

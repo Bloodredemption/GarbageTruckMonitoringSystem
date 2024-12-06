@@ -82,10 +82,10 @@
                                         <!--Logo start-->
                                         <div class="logo-main d-flex flex-column align-items-center">
                                             <div class="logo-normal">
-                                                <img src="{{ asset('assets/images/logo.png') }}" width="70%" alt="GTMS Logo">
+                                                <img src="{{ asset('assets/images/newlogo.png') }}" width="70%" alt="GTMS Logo">
                                             </div>
                                             <div class="logo-mini">
-                                                <img src="{{ asset('assets/images/logo.png') }}" alt="GTMS Logo">
+                                                <img src="{{ asset('assets/images/newlogo.png') }}" alt="GTMS Logo">
                                             </div>
                                         </div>
                                         <!--Logo End-->

@@ -12,14 +12,12 @@ class ResidentsConcerns extends Model
     protected $table = 'residents_concerns';
 
     protected $fillable = [
-        'complaint_type',
         'fullname',
         'contact_num',
-        'brgy_location',
-        'complaint_subject',
+        'address',
         'complaint_details',
         'dateOfIncident',
-        'attachments',
+        'status',
     ];
 
     protected $casts = [

@@ -85,7 +85,6 @@
                                             <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                 <th>Conversion Method</th>
                                                 <th>Recyclable</th>
-                                                <th>Total Converted</th>
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
                                             </tr>
@@ -95,7 +94,6 @@
                                                 <tr>
                                                     <td>{{ $item->conversion_method }}</td>
                                                     <td>{{ $item->metrics_sum }} kg/s</td>
-                                                    <td>{{ $item->total_converted }} pcs</td>
                                                     <td>{{ $item->start_date }}</td>
                                                     <td>{{ $item->end_date }}</td>
                                                 </tr>
@@ -141,7 +139,6 @@
                         table.row.add([
                             data.conversion_method,               // Conversion Method
                             data.metrics_sum + ' kg/s',           // Metrics
-                            data.total_converted + ' pcs',        // Total Converted
                             data.start_date,                      // Start Date
                             data.end_date                         // End Date
                         ]);

@@ -22,7 +22,7 @@
                                 </nav>
                             </div>
                             <div class="d-flex">
-                                <div>
+                                {{-- <div>
                                     <a target="_blank" href="{{ route('rc.index') }}" class="btn btn-soft-light text-white me-2" type="button">
                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-external-link">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -32,7 +32,7 @@
                                         </svg>
                                         Complaint Form
                                     </a>
-                                </div>
+                                </div> --}}
                                 <div class="dropdown">
                                     <button class="btn btn-soft-light text-white dropdown-toggle me-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-settings">
@@ -89,34 +89,49 @@
                                             <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                 <th>No.</th>
                                                 <th>Complainant</th>
-                                                <th>Complaint Type</th>
-                                                <th>Area</th>
+                                                <th>Address</th>
+                                                <th>Status</th>
                                                 <th>Date of Incident</th>
-                                                {{-- <th>Action</th> --}}
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($concerns as $concerns)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><a href="#" class="view-concerns" data-id="{{ $concerns->id }}">{{ $concerns->fullname }}</a></td>
-                                                <td>{{ $concerns->complaint_type }}</td>
-                                                <td>{{ $concerns->brgy_location }}</td>
+                                                <td>{{ $concerns->fullname }}</td>
+                                                <td>{{ $concerns->address }}</td>
+                                                <td>{{ $concerns->status }}</td>
                                                 <td>{{ $concerns->dateOfIncident }}</td>
-                                                {{-- <td>
+                                                <td>
                                                     <div class="flex align-items-center list-user-action">
                                                         <!-- Archive Button with Tooltip -->
-                                                        <a class="btn btn-sm btn-icon btn-secondary archive-barangay-btn" data-bs-toggle="tooltip" title="Archive">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-archive">
+                                                        <a class="btn btn-sm btn-icon btn-secondary view-concerns btn-hover" data-id="{{ $concerns->id }}" data-bs-toggle="tooltip" title="Show">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                                <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/>
-                                                                <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"/>
-                                                                <path d="M10 12l4 0"/>
+                                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
                                                             </svg>
-                                                            Archive
+                                                            Show
+                                                        </a>
+                                                        <a class="btn btn-sm btn-icon btn-primary finish-concerns btn-hover" data-id="{{ $concerns->id }}" data-bs-toggle="tooltip" title="Finish">
+                                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-checkbox">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                <path d="M9 11l3 3l8 -8" />
+                                                                <path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" />
+                                                            </svg>
+                                                            Finish
+                                                        </a>
+                                                        <a class="btn btn-sm btn-icon btn-warning view-concerns btn-hover" data-id="{{ $concerns->id }}" data-bs-toggle="tooltip" title="Show">
+                                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-checkbox">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                <path d="M9 11l3 3l8 -8" />
+                                                                <path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" />
+                                                            </svg>
+                                                            Finish
                                                         </a>
                                                     </div>
-                                                </td> --}}
+                                                </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -151,9 +166,6 @@
                             </ul>
                         </li>
                         <li><strong>Location - </strong> <span id="brgy_location"></span></li>
-                        <li><strong>Attachments: </strong>
-                            <ul id="attachments" class="list-unstyled d-flex flex-wrap"></ul>
-                        </li>
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -240,36 +252,8 @@
                     $('#fullname').text(response.concern.fullname);
                     $('#contact_num').text(response.concern.contact_num);
                     $('#complaint_details').text(response.concern.complaint_details);
-                    $('#brgy_location').text(response.concern.brgy_location);
+                    $('#brgy_location').text(response.concern.address);
 
-                    // Clear previous attachments
-                    const attachmentsList = $('#attachments');
-                    attachmentsList.empty();
-
-                    // Check if attachments exist and populate them
-                    if (response.concern.attachments && response.concern.attachments.length > 0) {
-                        response.concern.attachments.forEach(function(attachment) {
-                            // Create an anchor with Lightbox attributes for each attachment
-                            let listItem = $('<li>');
-                            let link = $('<a>', {
-                                href: `/storage/${attachment}`, // Adjust path as needed
-                                'data-lightbox': 'attachments', // Group all images in a lightbox
-                                'data-title': attachment.split('/').pop() // Display filename as title
-                            });
-                            let image = $('<img>', {
-                                src: `/storage/${attachment}`, // Thumbnail preview
-                                alt: 'Attachment',
-                                class: 'img-thumbnail',
-                                style: 'max-width: 100px; max-height: 100px; margin-right: 10px; cursor: pointer;' // Styling for thumbnails
-                            });
-                            link.append(image);
-                            listItem.append(link);
-                            attachmentsList.append(listItem);
-                        });
-                    } else {
-                        // Show a message if there are no attachments
-                        attachmentsList.append('<li>No attachments available.</li>');
-                    }
 
                     // Show the modal
                     $('#viewConcernModal').modal('show');

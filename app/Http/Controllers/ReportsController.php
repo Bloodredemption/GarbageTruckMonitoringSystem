@@ -76,14 +76,14 @@ class ReportsController extends Controller
     {
         $currentDate = Carbon::now()->format('Y-m-d');
 
-        $wasteData = WasteConversion::select('conversion_method', 'waste_type', 'total_converted')
+        $wasteData = WasteConversion::select('conversion_method', 'waste_type')
             ->selectRaw('SUM(metrics) as metrics_sum')
             ->selectRaw('DATE_FORMAT(MIN(start_date), "%M %d, %Y") as start_date')
             ->selectRaw('DATE_FORMAT(MAX(end_date), "%M %d, %Y") as end_date')
             ->where('status', 'Finished')
             ->whereDate('start_date', '<=', $currentDate)
             ->whereDate('end_date', '>=', $currentDate)
-            ->groupBy('conversion_method', 'waste_type', 'total_converted')
+            ->groupBy('conversion_method', 'waste_type')
             ->get();
 
         return view('admin.reports.waste-converted', compact('wasteData'));
@@ -120,14 +120,14 @@ class ReportsController extends Controller
         }
 
         // Query WasteConversion model based on the selected timeframe
-        $wasteData = WasteConversion::select('conversion_method', 'waste_type', 'total_converted')
+        $wasteData = WasteConversion::select('conversion_method', 'waste_type')
             ->selectRaw('SUM(metrics) as metrics_sum')
             ->selectRaw('DATE_FORMAT(MIN(start_date), "%M %d, %Y") as start_date')
             ->selectRaw('DATE_FORMAT(MAX(end_date), "%M %d, %Y") as end_date')
             ->where('status', 'Finished')
             ->whereDate('start_date', '<=', $end) // Ensure that we are getting relevant data based on the timeframe
             ->whereDate('end_date', '>=', $start)
-            ->groupBy('conversion_method', 'waste_type', 'total_converted')
+            ->groupBy('conversion_method', 'waste_type')
             ->get();
 
         return response()->json($wasteData);
