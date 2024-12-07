@@ -114,15 +114,7 @@
                                                             </svg>
                                                             Show
                                                         </a>
-                                                        <a class="btn btn-sm btn-icon btn-primary finish-concerns btn-hover" data-id="{{ $concerns->id }}" data-bs-toggle="tooltip" title="Finish">
-                                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-checkbox">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                                <path d="M9 11l3 3l8 -8" />
-                                                                <path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" />
-                                                            </svg>
-                                                            Finish
-                                                        </a>
-                                                        <a class="btn btn-sm btn-icon btn-warning view-concerns btn-hover" data-id="{{ $concerns->id }}" data-bs-toggle="tooltip" title="Show">
+                                                        <a class="btn btn-sm btn-icon btn-primary finish-concern btn-hover" data-id="{{ $concerns->id }}" data-bs-toggle="tooltip" title="Finish">
                                                             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-checkbox">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                                                 <path d="M9 11l3 3l8 -8" />
@@ -264,6 +256,59 @@
                 }
             });
         });
+
+        $(document).on('click', '.finish-concern', function (e) {
+            e.preventDefault();
+
+            let concernId = $(this).data('id'); // Get the concern ID
+            let finishUrl = `/admin/residents-concerns/${concernId}/finish`; // Adjust the route as needed
+
+            // Show confirmation dialog using SweetAlert
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to mark this concern as finished?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Confirm",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Send AJAX request to mark concern as finished
+                    $.ajax({
+                        url: finishUrl,
+                        type: "PUT",
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content') // Add CSRF token
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    "Finished!",
+                                    response.message,
+                                    "success"
+                                );
+                            } else {
+                                Swal.fire(
+                                    "Failed!",
+                                    "Failed to mark the concern as finished.",
+                                    "error"
+                                );
+                            }
+                        },
+                        error: function (error) {
+                            console.error("Error finishing concern:", error);
+                            Swal.fire(
+                                "Error!",
+                                "An error occurred while processing your request.",
+                                "error"
+                            );
+                        }
+                    });
+                }
+            });
+        });
+
 
     });
 </script>

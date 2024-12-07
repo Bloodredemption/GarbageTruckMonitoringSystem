@@ -18,6 +18,7 @@ use App\Http\Controllers\ResidentsConcernsController;
 use App\Http\Controllers\TruckLocationController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\IndustrialEstablishmentController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -147,6 +148,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/residents-concerns', [ResidentsConcernsController::class, 'admin_index'])->name('residents-concerns');
     Route::get('/residents-concerns/{id}/show', [ResidentsConcernsController::class, 'show'])->name('viewConcerns');
+    Route::put('/residents-concerns/{id}/finish', [ResidentsConcernsController::class, 'finish'])->name('finishConcerns');
 });
 
 // Users
@@ -172,6 +174,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'admin_index'])->name('profile');
     Route::put('/profile/{id}/update', [ProfileController::class, 'admprofileUpdate'])->name('admprofileUpdate');
     Route::put('/profile/{id}/changePassword', [ProfileController::class, 'admchangePassword'])->name('admchangePassword');
+});
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/industrial-establishments', [IndustrialEstablishmentController::class, 'index'])->name('ie.index');
+    Route::get('/industrial-establishments/getBrgy', [IndustrialEstablishmentController::class, 'getBrgy'])->name('ie.getBrgy');
+    Route::post('/industrial-establishments/store', [IndustrialEstablishmentController::class, 'store'])->name('ie.store');
+    Route::get('/industrial-establishments/{id}/edit', [IndustrialEstablishmentController::class, 'edit'])->name('ie.edit');
+    Route::put('/industrial-establishments/{id}/update', [IndustrialEstablishmentController::class, 'update'])->name('ie.update');
 });
 
 Route::prefix('admin')->middleware('auth')->group(function () {

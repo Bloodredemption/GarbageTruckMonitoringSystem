@@ -139,7 +139,7 @@
                                                     <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                         <th>No.</th>
                                                         <th>Location</th>
-                                                        <th>Population</th>
+                                                        {{-- <th>Population</th> --}}
                                                         <th>Date Created</th>
                                                         <th style="min-width: 100px">Action</th>
                                                     </tr>
@@ -149,7 +149,6 @@
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $br->area_name }}</td>
-                                                        <td>{{ $br->population }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($br->created_at)->format('Y-m-d') }}</td>
                                                         <td>
                                                             <div class="flex align-items-center list-user-action">
@@ -190,7 +189,6 @@
                                                     <tr class="ligth" style="background-color: #01A94D; color: white;">
                                                         <th>No.</th>
                                                         <th>Location</th>
-                                                        <th>Population</th>
                                                         <th>Date Archived</th>
                                                         <th style="min-width: 100px">Action</th>
                                                     </tr>
@@ -266,10 +264,10 @@
                             <input type="text" id="custom_area_name" name="custom_name" class="form-control">
                         </div>
 
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="add_population" class="form-label">Population <span style="color: red;">*</span></label>
                             <input type="number" class="form-control" id="add_population" name="population" required>
-                        </div>
+                        </div> --}}
 
                     </form>
                 </div>
@@ -342,10 +340,10 @@
                             <label for="edit_custom_area_name" class="form-label">Custom Area Name <span style="color: red;">*</span></label>
                             <input type="text" id="edit_custom_area_name" name="custom_name" class="form-control">
                         </div>
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="edit_population" class="form-label">Population <span style="color: red;">*</span></label>
                             <input type="number" class="form-control" id="edit_population" name="population" required>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -505,7 +503,6 @@
                                 <tr>
                                     <td>${counter}</td>
                                     <td>${barangay.area_name}</td>
-                                    <td>${barangay.population}</td>
                                     <td>${formatteddate}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
@@ -632,7 +629,6 @@
                                 <tr>
                                     <td>${counter}</td>
                                     <td>${abarangay.area_name}</td>
-                                    <td>${abarangay.population}</td>
                                     <td>${formatteddate}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">

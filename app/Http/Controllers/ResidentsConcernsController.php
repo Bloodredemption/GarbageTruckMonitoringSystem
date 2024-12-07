@@ -6,6 +6,7 @@ use App\Events\ComplaintSubmitted;
 use App\Models\ResidentsConcerns;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ResidentsConcernsController extends Controller
 {
@@ -235,6 +236,62 @@ class ResidentsConcernsController extends Controller
                 'dateOfIncident' => $concerns->dateOfIncident,
             ]
         ]);
+    }
+
+    public function finish($id)
+    {
+        try {
+            // Find the concern by ID
+            $concern = ResidentsConcerns::findOrFail($id);
+
+            // Mark as finished
+            $concern->status = 'Finished'; // Ensure the `status` column exists in the database
+            $concern->save();
+
+            // Get the resident's phone number
+            $phoneNumber = $concern->contact_num; // Ensure `contact_num` exists in the database
+
+            if (!$phoneNumber) {
+                throw new \Exception('Phone number is not available.');
+            }
+
+            // Get API Key and Device ID from environment variables
+            $apiKey = '60fb227e-604a-4ca9-a8a4-000febc38bae';
+            $deviceId = '6732ba5a58ae3b6550860fd2';
+
+            if (empty($apiKey) || empty($deviceId)) {
+                throw new \Exception('SMS configuration is missing.');
+            }
+
+            // Send SMS confirmation
+            $response = Http::withHeaders([
+                'x-api-key' => $apiKey,
+            ])->post("https://api.textbee.dev/api/v1/gateway/devices/{$deviceId}/send-sms", [
+                'recipients' => [$phoneNumber],
+                'message' => "Dear resident, we are pleased to inform you that your complaint has been resolved. Thank you!",
+            ]);
+
+            // Check if the response indicates failure
+            if ($response->failed()) {
+                throw new \Exception('Failed to send SMS. Response: ' . $response->body());
+            }
+
+            // Return success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Concern marked as finished and SMS sent successfully.',
+                'data' => $concern,
+            ]);
+        } catch (\Exception $e) {
+            // Log the error (optional)
+            Log::error('Error finishing concern: ' . $e->getMessage());
+
+            // Return failure response
+            return response()->json([
+                'success' => false,
+                'message' => 'Error finishing concern: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
