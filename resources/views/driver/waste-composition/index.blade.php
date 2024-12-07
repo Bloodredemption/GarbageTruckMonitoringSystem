@@ -261,8 +261,7 @@
                                     <option></option>
                                     <option value="Biodegradable">Biodegradable</option>
                                     <option value="Residual">Residual</option>
-                                    {{-- <option value="Recyclables">Recyclables</option>
-                                    <option value="Hazards">Hazards</option> --}}
+                                    <option value="Recyclable">Recyclable</option>
                                 </select>
                             </div>
                             <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>

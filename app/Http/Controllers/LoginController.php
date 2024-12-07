@@ -60,6 +60,25 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
+        // Check if the user is already authenticated
+        if (Auth::check()) {
+            // Get the authenticated user's ID
+            $user = Auth::user();
+            
+            // Check the user_type in the Users model
+            if ($user->user_type == 'admin') {
+                // Redirect to the admin dashboard
+                return redirect()->route('dashboard');
+            } elseif ($user->user_type == 'driver') {
+                // Redirect to the driver dashboard
+                return redirect()->route('d.dashboard');
+            } elseif ($user->user_type == 'landfill') {
+                // Redirect to the landfill dashboard
+                return redirect()->route('lf.dashboard');
+            }
+        }
+
+        // If the user is not authenticated, show the login form
         return view('auth.login');
     }
 }

@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTMS Driver</title>
+    @if(request()->is('driver/account/personal-information'))
+        <title>Personal Information</title>
+    @elseif(request()->is('driver/account/personal-information/edit'))
+        <title>Edit</title>
+    @elseif(request()->is('driver/account/change-password'))
+        <title>Change Password</title>
+    @else
+        <title>GTMS Driver</title>
+    @endif
     <!-- Bootstrap 5 CSS -->
     <link rel="shortcut icon" href="{{ asset('assets/images/bali_logo.png') }}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
