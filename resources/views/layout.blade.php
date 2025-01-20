@@ -482,7 +482,7 @@
                     });
                 }
 
-                setInterval(refreshMessages, 5000);
+                // setInterval(refreshMessages, 5000);
 
                 function rebindMessageClickHandler() {
                     const mainBlock = document.getElementById('mainBlock');

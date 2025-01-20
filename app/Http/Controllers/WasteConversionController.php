@@ -31,7 +31,23 @@ class WasteConversionController extends Controller
                             ->orderBy('created_at', 'desc')
                             ->get();
 
-        return view('landfill.waste-conversions.index', compact('wasteConversions'));
+        // Fetch the total metrics for the waste_type "Recyclable"
+        $totalRecyclableMetrics = WasteComposition::where('waste_type', 'Recyclable')
+                            ->where('isDeleted', '0')
+                            ->sum('metrics');
+
+        return view('landfill.waste-conversions.index', compact('wasteConversions', 'totalRecyclableMetrics'));
+    }
+
+    public function fetchTotalConv(Request $request) 
+    {
+        $wasteType = $request->input('waste_type');
+
+        $totalRecyclableMetrics = WasteComposition::where('waste_type', $wasteType)
+                            ->where('isDeleted', '0')
+                            ->sum('metrics');
+
+        return response()->json(['totalRecyclableMetrics' => $totalRecyclableMetrics]);
     }
 
     public function admin_index()

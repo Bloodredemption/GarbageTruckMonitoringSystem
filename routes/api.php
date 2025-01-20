@@ -10,5 +10,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/waste-data', [WasteCompositionController::class, 'getWasteData']);
+Route::get('/brgy-waste-data', [WasteCompositionController::class, 'getBrgyWasteData']);
 
 Route::post('/truck-location', [TruckLocationController::class, 'store']);

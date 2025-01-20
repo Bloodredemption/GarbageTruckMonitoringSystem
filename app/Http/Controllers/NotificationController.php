@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 use Carbon\Carbon;
 use App\Events\NotificationSent;
-use App\Models\Messages;
+use App\Models\ResidentsConcerns;
 
 class NotificationController extends Controller
 {
@@ -33,28 +33,48 @@ class NotificationController extends Controller
         return view('admin.notifications.index', compact('notifications'));
     }
 
-    public function driver_index(Request $request)
+    public function driver_index()
     {
-        $messages = Messages::with(['sender', 'receiver'])
-            ->select('messages.*')
-            ->join(
-                \DB::raw('(SELECT MAX(id) as latest_id FROM messages WHERE user_id = '.auth()->id().' GROUP BY receiver_id) as latest_messages'),
-                'messages.id',
-                '=',
-                'latest_messages.latest_id'
-            )
-            ->orderBy('created_at', 'desc')
-            ->get();
+        if (request()->ajax()) {
+            $notifications = Notification::with('user:id,fullname')
+                                ->whereIn('status', ['sent', 'read'])
+                                ->orderBy('created_at', 'desc')
+                                ->get()
+                                ->map(function ($notification) {
+                                    $notification->time_ago = Carbon::parse($notification->created_at)->diffForHumans();
+                                    return $notification;
+                                });
 
-        // If the request is an AJAX request, return JSON response
-        if ($request->ajax()) {
-            return response()->json([
-                'messages' => $messages
-            ]);
+            return response()->json(['notifications' => $notifications]);
         }
 
-        // If it's not an AJAX request, return the regular view
-        return view('driver.notifications.index', compact('messages'));
+        $notifications = Notification::with('user:id,fullname')
+            ->whereIn('status', ['sent', 'read'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($notification) {
+                // Extract the ID from the notification_msg field
+                preg_match('/\d+/', $notification->notification_msg, $matches);
+                $residentsConcernId = $matches[0] ?? null;
+
+                // Fetch the status from the residents_concerns model
+                $residentsConcernStatus = null;
+                if ($residentsConcernId) {
+                    $residentsConcernStatus = ResidentsConcerns::where('id', $residentsConcernId)->value('status');
+                }
+
+                // Add the calculated status and time_ago to the notification
+                $notification->time_ago = Carbon::parse($notification->created_at)->diffForHumans();
+                $notification->residents_concern_status = $residentsConcernStatus;
+
+                return $notification;
+            });
+
+        // Broadcast the notifications
+        broadcast(new NotificationSent($notifications));
+
+        // Return the notifications to the view
+        return view('driver.notifications.index', compact('notifications'));
     }
 
     public function getArchive()
@@ -114,6 +134,21 @@ class NotificationController extends Controller
         }
     }
 
+    public function markAsRead(string $id)
+    {
+        $notification = Notification::find($id);
+
+        if ($notification && $notification->status == 'sent') {
+            // Update the status of the notification to 'read'
+            $notification->update(['status' => 'read']);
+
+            return response()->json(['success' => true, 'message' => 'Marked as read']);
+        } else {
+            // Notification not found or already marked as read
+            // return response()->json(['success' => false, 'message' => 'Notification not found or already marked as read']);
+        }
+    }
+
     /**
      * Display the specified resource.
      */
@@ -144,8 +179,6 @@ class NotificationController extends Controller
         $notification = Notification::findOrFail($id);
         $notification->update($request->all());
 
-        event(new NotificationSent($notification->notification_msg));
-        
         return response()->json(['message' => 'Notification successfully updated.']);
     }
 

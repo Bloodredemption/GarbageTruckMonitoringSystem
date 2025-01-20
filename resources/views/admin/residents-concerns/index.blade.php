@@ -91,7 +91,7 @@
                                                 <th>Complainant</th>
                                                 <th>Address</th>
                                                 <th>Status</th>
-                                                <th>Date of Incident</th>
+                                                <th>Date Reported</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -106,7 +106,7 @@
                                                 <td>
                                                     <div class="flex align-items-center list-user-action">
                                                         <!-- Archive Button with Tooltip -->
-                                                        <a class="btn btn-sm btn-icon btn-secondary view-concerns btn-hover" data-id="{{ $concerns->id }}" data-bs-toggle="tooltip" title="Show">
+                                                        <a class="btn btn-sm btn-icon btn-gray view-concerns btn-hover" data-id="{{ $concerns->id }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                                                 <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
@@ -114,14 +114,27 @@
                                                             </svg>
                                                             Show
                                                         </a>
-                                                        <a class="btn btn-sm btn-icon btn-primary finish-concern btn-hover" data-id="{{ $concerns->id }}" data-bs-toggle="tooltip" title="Finish">
-                                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-checkbox">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                                <path d="M9 11l3 3l8 -8" />
-                                                                <path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" />
-                                                            </svg>
-                                                            Finish
-                                                        </a>
+                                                        @if (!$concerns->notification)
+                                                            <a class="btn btn-sm btn-icon btn-secondary forwardTo btn-hover" data-id="{{ $concerns->id }}" data-bs-toggle="modal" data-bs-target="#forwardToModal">
+                                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-share-2">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                    <path d="M8 9h-1a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-8a2 2 0 0 0 -2 -2h-1" />
+                                                                    <path d="M12 14v-11" />
+                                                                    <path d="M9 6l3 -3l3 3" />
+                                                                </svg>
+                                                                Forward
+                                                            </a>
+                                                        @endif
+                                                        {{-- @if ($concerns->status == 'Pending')
+                                                            <a class="btn btn-sm btn-icon btn-primary finish-concern btn-hover" data-id="{{ $concerns->id }}" data-bs-toggle="tooltip" title="Finish">
+                                                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-checkbox">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                                    <path d="M9 11l3 3l8 -8" />
+                                                                    <path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" />
+                                                                </svg>
+                                                                Finish
+                                                            </a>
+                                                        @endif --}}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -167,10 +180,52 @@
         </div>
     </div>
 
+    <div class="modal fade" id="forwardToModal" tabindex="-1" aria-labelledby="forwardToLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="forwardToLabel">Forward Complaint To</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="forwardToForm" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="receiver" class="form-label">Recipient <span style="color: red;">*</span></label>
+                            <select class="form-control" id="receiver" name="recipient" required>
+                                <option></option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-soft-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" form="forwardToForm" class="btn btn-primary" id="saveChangesBtn">
+                        <div class="spinner-border spinner-border-sm text-white d-none" role="status" id="saveChangesSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer Section Start -->
     @include('partials.footer')
     <!-- Footer Section End -->    
 </main>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="userSuccessToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div id="toastMessage" class="toast-body">
+                <!-- Success message will be dynamically inserted here -->
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
 
 <script>
     $(document).ready(function() {
@@ -231,6 +286,92 @@
             table.button('.buttons-print').trigger();
         });
 
+        $(document).on('click', '.forwardTo', function() {
+            let concernId = $(this).data('id');
+            $('#forwardToForm').data('id', concernId); // Set the data-id on the form
+        });
+
+        $('#forwardToForm').on('submit', function (e) {
+            e.preventDefault();
+
+            $('#saveChangesBtn').attr('disabled', true); 
+            $('#saveChangesSpinner').removeClass('d-none');
+
+            let concernId = $(this).data('id');
+            
+            console.log(concernId);
+            
+            let formData = {
+                _token: "{{ csrf_token() }}", // Laravel CSRF token
+                notification_msg: concernId,
+                user_id: $('#receiver').val(),
+            };
+
+            $.ajax({
+                url: "{{ route('notifications.store') }}", // Route for storing barangay
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    $('#toastMessage').text('Complaint forwarded successfully!');
+
+                    // Trigger Bootstrap toast instead of SweetAlert
+                    var toastEl = new bootstrap.Toast(document.getElementById('userSuccessToast'));
+                    toastEl.show();
+
+                    $('#forwardToForm')[0].reset();
+                    $('#forwardToModal').modal('hide');
+
+                    location.reload();
+                },
+                error: function (error) {
+                    let errors = error.responseJSON.errors;
+                    let errorMessage = '';
+                    for (let field in errors) {
+                        errorMessage += errors[field][0] + '<br>';
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        html: errorMessage,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: "#01A94D"
+                    });
+                },
+                complete: function() {
+                    // Re-enable the button and hide spinner after the request is complete
+                    $('#saveChangesBtn').attr('disabled', false);
+                    $('#saveChangesSpinner').addClass('d-none'); // Hide spinner
+                }
+            });
+        });
+
+        function fetchDrivers() {
+            $.ajax({
+                url: "{{ route('notifications.getDrivers') }}", // Your route for fetching drivers
+                type: "GET",
+                success: function (response) {
+                    let driverSelect1 = $('#receiver'); // First driver select
+
+                    // Clear the select options for both select elements
+                    driverSelect1.empty();
+
+                    // Add default options for both selects
+                    driverSelect1.append('<option></option>');
+
+                    // Populate both selects with the drivers
+                    $.each(response.drivers, function (key, driver) {
+                        driverSelect1.append(`<option value="${driver.id}">${driver.fullname}</option>`);
+                    });
+                },
+                error: function (error) {
+                    console.log("Error fetching drivers: ", error);
+                }
+            });
+        }
+
+        // Call the fetch function when the page loads
+        fetchDrivers();
+
         $(document).on('click', '.view-concerns', function (e) {
             e.preventDefault();
             
@@ -288,6 +429,7 @@
                                     response.message,
                                     "success"
                                 );
+                                location.reload(); // Reload the page
                             } else {
                                 Swal.fire(
                                     "Failed!",

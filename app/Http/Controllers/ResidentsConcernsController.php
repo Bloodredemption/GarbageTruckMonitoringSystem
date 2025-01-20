@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ComplaintSubmitted;
 use App\Models\ResidentsConcerns;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -20,7 +21,13 @@ class ResidentsConcernsController extends Controller
 
     public function admin_index() 
     {
+        // Fetch the ResidentsConcerns records
         $concerns = ResidentsConcerns::orderBy('created_at', 'desc')->get();
+
+        // Fetch the related notifications
+        $concerns->each(function ($concern) {
+            $concern->notification = Notification::where('notification_msg', $concern->id)->first();
+        });
 
         return view('admin.residents-concerns.index', compact('concerns'));
     }
@@ -229,11 +236,14 @@ class ResidentsConcernsController extends Controller
         // Return user data as JSON
         return response()->json([
             'concern' => [
+                'id' => $concerns->id,
                 'fullname' => $concerns->fullname,
                 'contact_num' => $concerns->contact_num,
                 'address' => $concerns->address,
                 'complaint_details' => $concerns->complaint_details,
                 'dateOfIncident' => $concerns->dateOfIncident,
+                'status' => $concerns->status,
+                'remarks' => $concerns->remarks,
             ]
         ]);
     }
@@ -245,7 +255,7 @@ class ResidentsConcernsController extends Controller
             $concern = ResidentsConcerns::findOrFail($id);
 
             // Mark as finished
-            $concern->status = 'Finished'; // Ensure the `status` column exists in the database
+            $concern->status = 'Completed'; // Ensure the `status` column exists in the database
             $concern->save();
 
             // Get the resident's phone number
@@ -290,6 +300,125 @@ class ResidentsConcernsController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error finishing concern: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function reject(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'reason' => 'required|string|max:255',
+            ]);
+
+            // Find the concern by ID
+            $concern = ResidentsConcerns::findOrFail($id);
+
+            // Mark as rejected
+            $concern->status = 'Rejected'; // Ensure the `status` column exists in the database
+            $concern->remarks = $request->input('reason');
+            $concern->save();
+
+            // Get the resident's phone number
+            $phoneNumber = $concern->contact_num; // Ensure `contact_num` exists in the database
+
+            if (!$phoneNumber) {
+                throw new \Exception('Phone number is not available.');
+            }
+
+            // Get API Key and Device ID from environment variables
+            $apiKey = '60fb227e-604a-4ca9-a8a4-000febc38bae';
+            $deviceId = '6732ba5a58ae3b6550860fd2';
+
+            if (empty($apiKey) || empty($deviceId)) {
+                throw new \Exception('SMS configuration is missing.');
+            }
+
+            $reason = $request->input('reason');
+
+            // Send SMS confirmation
+            $response = Http::withHeaders([
+                'x-api-key' => $apiKey,
+            ])->post("https://api.textbee.dev/api/v1/gateway/devices/{$deviceId}/send-sms", [
+                'recipients' => [$phoneNumber],
+                'message' => "Dear resident, we regret to inform you that your complaint has been rejected due to the following reason: $reason. If you have any questions, please reply to this number. Thank you for your understanding.",
+            ]);
+
+            // Check if the response indicates failure
+            if ($response->failed()) {
+                throw new \Exception('Failed to send SMS. Response: ' . $response->body());
+            }
+
+            // Return success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Concern marked as rejected and SMS sent successfully.',
+                'data' => $concern,
+            ]);
+        } catch (\Exception $e) {
+            // Log the error (optional)
+            Log::error('Error rejecting concern: ' . $e->getMessage());
+
+            // Return failure response
+            return response()->json([
+                'success' => false,
+                'message' => 'Error rejecting concern: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+    public function complete($id)
+    {
+        try {
+            // Find the concern by ID
+            $concern = ResidentsConcerns::findOrFail($id);
+
+            // Mark as completed
+            $concern->status = 'Completed'; // Ensure the `status` column exists in the database
+            $concern->save();
+
+            // Get the resident's phone number
+            $phoneNumber = $concern->contact_num; // Ensure `contact_num` exists in the database
+
+            if (!$phoneNumber) {
+                throw new \Exception('Phone number is not available.');
+            }
+
+            // Get API Key and Device ID from environment variables
+            $apiKey = '60fb227e-604a-4ca9-a8a4-000febc38bae';
+            $deviceId = '6732ba5a58ae3b6550860fd2';
+
+            if (empty($apiKey) || empty($deviceId)) {
+                throw new \Exception('SMS configuration is missing.');
+            }
+
+            // Send SMS confirmation
+            $response = Http::withHeaders([
+                'x-api-key' => $apiKey,
+            ])->post("https://api.textbee.dev/api/v1/gateway/devices/{$deviceId}/send-sms", [
+                'recipients' => [$phoneNumber],
+                'message' => "Dear resident, we are pleased to inform you that your complaint has been resolved. Thank you!",
+            ]);
+
+            // Check if the response indicates failure
+            if ($response->failed()) {
+                throw new \Exception('Failed to send SMS. Response: ' . $response->body());
+            }
+
+            // Return success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Concern marked as completed and SMS sent successfully.',
+                'data' => $concern,
+            ]);
+        } catch (\Exception $e) {
+            // Log the error (optional)
+            Log::error('Error completing concern: ' . $e->getMessage());
+
+            // Return failure response
+            return response()->json([
+                'success' => false,
+                'message' => 'Error completing concern: ' . $e->getMessage(),
             ], 500);
         }
     }

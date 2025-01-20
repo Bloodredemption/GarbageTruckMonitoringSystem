@@ -114,6 +114,8 @@
                                                                 <option value="">Select Waste Type</option>
                                                                 <option value="Biodegradable">Biodegradable</option>
                                                                 <option value="Residual">Residual</option>
+                                                                <option value="Recyclable">Recyclable</option>
+                                                                <option value="Industrial Waste">Industrial Waste</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -132,6 +134,7 @@
                                                 <th>Collection Date</th>
                                                 <th>Metrics</th>
                                                 <th>Location</th>
+                                                <th>Added By</th>
                                                 <th style="min-width: 100px">Action</th>
                                             </tr>
                                         </thead>
@@ -143,6 +146,7 @@
                                                 <td>{{ $wc->collection_date }}</td>
                                                 <td>{{ $wc->metrics }} kg/s</td>
                                                 <td>{{ $wc->brgy->area_name }}</td>
+                                                <td>{{ $wc->user->fullname }}</td>
                                                 <td>
                                                     <div class="flex align-items-center list-user-action">
                                                         <a class="btn btn-sm btn-icon btn-warning edit-wc-btn" data-id="{{ $wc->id }}">

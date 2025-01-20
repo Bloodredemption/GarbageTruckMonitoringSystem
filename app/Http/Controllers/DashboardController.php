@@ -31,8 +31,10 @@ class DashboardController extends Controller
         // Get total metrics for each waste type
         $totalBiodegradable = WasteComposition::where('waste_type', 'Biodegradable')->sum('metrics');
         $totalResidual = WasteComposition::where('waste_type', 'Residual')->sum('metrics');
+        $totalRecyclable = WasteComposition::where('waste_type', 'Recyclable')->sum('metrics');
+        $totalIndustrialWaste = WasteComposition::where('waste_type', 'Industrial Waste')->sum('metrics');
 
-        return view('driver.dashboard', compact('totalBiodegradable', 'totalResidual'));
+        return view('driver.dashboard', compact('totalBiodegradable', 'totalResidual', 'totalRecyclable', 'totalIndustrialWaste'));
     }
 
     public function getWasteCollectionData(Request $request)

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('complaint_details');
             $table->string('dateOfIncident');
+            $table->string('remarks')->nullable();
             $table->string('status')->default('Pending');
             $table->timestamps();
         });

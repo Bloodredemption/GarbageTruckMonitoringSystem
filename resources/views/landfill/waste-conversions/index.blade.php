@@ -162,7 +162,6 @@
                                                         <th>Metrics</th>
                                                         <th>Conversion Date</th>
                                                         <th>Status</th>
-                                                        <th>Date Created</th>
                                                         <th style="min-width: 100px">Actions</th>
                                                     </tr>
                                                 </thead>
@@ -194,7 +193,6 @@
                                                                     </span>
                                                                 @endif
                                                             </td>
-                                                            <td>{{ \Carbon\Carbon::parse($wc->created_at)->format('Y-m-d') }}</td>
                                                             <td>
                                                                 <div class="flex align-items-center list-user-action">
                                                                     <a class="btn btn-sm btn-icon btn-primary edit-wcov-btn" style="cursor: pointer;" data-id="{{ $wc->id }}">
@@ -282,13 +280,25 @@
                             <label for="add_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
                             <select class="form-control" id="add_wt" name="wt" required>
                                 <option></option>
+                                <option value="Biodegradable">Biodegradable</option>
+                                <option value="Residual">Residual</option>
                                 <option value="Recyclable">Recyclable</option>
                             </select>
                         </div>
+
                         <div class="mb-3">
                             <label for="add_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="add_cm" name="cm" required>
+                            <select class="form-control" id="add_cm" name="cm" required>
+                                <option></option>
+                                <option value="Hollow Block">Hollow Block</option>
+                                <option value="Bricks">Bricks</option>
+                            </select>
                         </div>
+
+                        {{-- <div class="mb-3">
+                            <label for="add_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="add_cm" name="cm" required>
+                        </div> --}}
                         <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
                         <div class="input-group mb-3">
                             <input type="number" class="form-control" id="add_metrics" name="metrics">
@@ -350,13 +360,25 @@
                             <label for="edit_wt" class="form-label">Waste Type <span style="color: red;">*</span></label>
                             <select class="form-control" id="edit_wt" name="wt" required>
                                 <option></option>
+                                <option value="Biodegradable">Biodegradable</option>
+                                <option value="Residual">Residual</option>
                                 <option value="Recyclable">Recyclable</option>
                             </select>
                         </div>
+
                         <div class="mb-3">
                             <label for="edit_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
-                            <input type="text" class="form-control" id="edit_cm" name="cm" required>
+                            <select class="form-control" id="edit_cm" name="cm" required>
+                                <option></option>
+                                <option value="Hollow Block">Hollow Block</option>
+                                <option value="Bricks">Bricks</option>
+                            </select>
                         </div>
+
+                        {{-- <div class="mb-3">
+                            <label for="edit_cm" class="form-label">Conversion Method <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="edit_cm" name="cm" required>
+                        </div> --}}
                         <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
                         <div class="input-group mb-3">
                             <input type="number" class="form-control" id="edit_metrics" name="metrics" required aria-label="" aria-describedby="basic-addon2">
@@ -364,7 +386,6 @@
                                 <span class="input-group-text" id="editbasic-addon2">kg/s</span>
                             </div>
                         </div>
-                        
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -396,8 +417,47 @@
 </main>
 
 <script>
+    // document.getElementById('add_metrics').addEventListener('input', function (e) {
+    //     let max = parseInt(this.max);
+    //     if (parseInt(this.value) > max) {
+    //         this.value = max;
+    //     }
+    // });
+
     $(document).ready(function () {
-        
+
+        $('#add_wt').change(function() {
+            let selectedValue = $(this).val();
+
+            if (selectedValue) {
+                $.ajax({
+                    url: '{{ route("getTotalConv") }}',
+                    type: 'GET',
+                    data: { waste_type: selectedValue },
+                    success: function(response) {
+                        // Process the response here
+                        let maxMetrics = response.totalRecyclableMetrics;
+
+                        // console.log(maxMetrics);
+
+                        // Set the max and placeholder attributes for the input field
+                        $('#add_metrics').attr('max', maxMetrics);
+                        $('#add_metrics').attr('placeholder', `1 - ${maxMetrics}`);
+
+                        // Add event listener to limit the input value
+                        document.getElementById('add_metrics').addEventListener('input', function (e) {
+                            let max = parseInt(this.max);
+                            if (parseInt(this.value) > max) {
+                                this.value = max;
+                            }
+                        });
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
 
         // Get references to elements
         const singleDateRadio = document.getElementById('selectSingleDate');
@@ -546,7 +606,6 @@
                                         ${wasteConversions.end_date ? `${wasteConversions.start_date} to ${wasteConversions.end_date}` : `${wasteConversions.start_date} <span style="color: red;">[End date not set]</span>`}
                                     </td>
                                     <td>${status}</td>
-                                    <td>${formatteddate}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
                                             <a class="btn btn-sm btn-icon btn-primary edit-wcov-btn" data-id="${wasteConversions.id}">

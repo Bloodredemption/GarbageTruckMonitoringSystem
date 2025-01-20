@@ -4,7 +4,7 @@
 
 <main class="main-content">
     <div class="container">
-        <div class="row">
+        {{-- <div class="row">
             <h4 class="fw-semibold mb-3">Map Location</h4>
         </div>
 
@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row mb-4">
             <div class="col-lg-12">
@@ -54,7 +54,7 @@
                 <div class="card p-3 justify-content-between" style="background-color: #01A94D; color: white; border-radius: 10px; height: 150px;">
                     
                     <div class="d-flex justify-content-between align-items-center">
-                        <span style="font-size: 18px;">Biodegradable</span>           
+                        <span style="font-size: 18px;">Biodegradables</span>           
 
                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                     </div>
@@ -73,6 +73,30 @@
                     </div>
                     <div>
                         <h2 class="display-4 fw-semibold" id="totalResidual">{{ $totalResidual }} kg/s</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-6 col-lg-3 mb-3">
+                <div class="card justify-content-between p-3" style="background-color: #01A94D; color: white; border-radius: 10px; height: 150px;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span style="font-size: 18px;">Recyclables</span>
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                    </div>
+                    <div>
+                        <h2 class="display-4 fw-semibold" id="totalResidual">{{ $totalRecyclable }} kg/s</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-6 col-lg-3 mb-3">
+                <div class="card justify-content-between p-3" style="background-color: #01A94D; color: white; border-radius: 10px; height: 150px;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span style="font-size: 18px;">Industrial Waste</span>
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                    </div>
+                    <div>
+                        <h2 class="display-4 fw-semibold" id="totalResidual">{{ $totalIndustrialWaste }} kg/s</h2>
                     </div>
                 </div>
             </div>

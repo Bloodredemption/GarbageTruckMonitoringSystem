@@ -5,6 +5,40 @@
 <main class="main-content">
     <div class="container">
         
+        {{-- <div class="row">
+            <h4 class="fw-semibold mb-3">Total Waste Collected</h4>
+        </div>
+
+        <div class="row mb-4">
+            <!-- First Box -->
+            <div class="col-6 col-md-6 col-lg-3 mb-3">
+                <div class="card p-3 justify-content-between" style="background-color: #01A94D; color: white; border-radius: 10px; height: 150px;">
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span style="font-size: 18px;">Biodegradable</span>           
+
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                    </div>
+                    <div>
+                        <h2 class="display-4 fw-semibold" id="totalBiodegradable">{{ $totalBiodegradable }} kg/s</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Second Box -->
+            <div class="col-6 col-md-6 col-lg-3 mb-3">
+                <div class="card justify-content-between p-3" style="background-color: #01A94D; color: white; border-radius: 10px; height: 150px;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span style="font-size: 18px;">Residuals</span>
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                    </div>
+                    <div>
+                        <h2 class="display-4 fw-semibold" id="totalResidual">{{ $totalResidual }} kg/s</h2>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
         <h4 class="fw-bold mb-3">Waste Composition</h4>
 
         <div class="input-group mb-3">
@@ -206,7 +240,7 @@
                                     <option value="Biodegradable">Biodegradable</option>
                                     <option value="Residual">Residual</option>
                                     <option value="Recyclable">Recyclable</option>
-                                    <option value="Industrial Waste">Industrial Waste</option>
+                                    {{-- <option value="Industrial Waste">Industrial Waste</option> --}}
                                 </select>
                             </div>
                             <label for="add_metrics" id="add_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
@@ -222,12 +256,12 @@
                                     <option></option>
                                 </select>
                             </div>
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label for="add_event" class="form-label">Event <span class="text-muted" style="font-size: 15px;">(Optional)</span></label>
                                 <select class="form-control" id="add_event" name="event" required>
                                     <option></option>
                                 </select>
-                            </div>
+                            </div> --}}
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -262,6 +296,7 @@
                                     <option value="Biodegradable">Biodegradable</option>
                                     <option value="Residual">Residual</option>
                                     <option value="Recyclable">Recyclable</option>
+                                    {{-- <option value="Industrial Waste">Industrial Waste</option> --}}
                                 </select>
                             </div>
                             <label for="edit_metrics" id="edit_metrics_label" class="form-label">Weight <span style="color: red;">*</span></label>
@@ -277,12 +312,12 @@
                                     <option></option>
                                 </select>
                             </div>
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label for="edit_event" class="form-label">Event <span class="text-muted" style="font-size: 15px;">(Optional)</span></label>
                                 <select class="form-control" id="edit_event" name="event" required>
                                     <option></option>
                                 </select>
-                            </div>
+                            </div> --}}
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -434,25 +469,32 @@
         // Fetch barangays and display in the table
         function fetchBrgy() {
             $.ajax({
-                url: "{{ route('wc.getBrgy') }}", // Your route for fetching drivers
+                url: "{{ route('wc.getBrgy') }}", // Your route for fetching barangays
                 type: "GET",
                 success: function (response) {
-                    let driverSelect1 = $('#add_brgy'); // First driver select
-                    let driverSelect2 = $('#edit_brgy'); // Second driver select (new)
+                    let driverSelect1 = $('#add_brgy'); // First barangay select
+                    let driverSelect2 = $('#edit_brgy'); // Second barangay select (new)
 
                     // Clear the select options for both select elements
                     driverSelect1.empty();
                     driverSelect2.empty();
 
-                    // Add default options for both selects
-                    driverSelect1.append('<option></option>');
-                    driverSelect2.append('<option></option>');
+                    // Check if the response is empty
+                    if (response.barangays.length === 0) {
+                        // Display a message if there are no barangays
+                        driverSelect1.append('<option>(No schedule for today)</option>');
+                        driverSelect2.append('<option>(No schedule for today)</option>');
+                    } else {
+                        // Add default options for both selects
+                        driverSelect1.append('<option></option>');
+                        driverSelect2.append('<option></option>');
 
-                    // Populate both selects with the drivers
-                    $.each(response.barangays, function (key, barangay) {
-                        driverSelect1.append(`<option value="${barangay.id}">${barangay.area_name}</option>`);
-                        driverSelect2.append(`<option value="${barangay.id}">${barangay.area_name}</option>`);
-                    });
+                        // Populate both selects with the barangays
+                        $.each(response.barangays, function (key, barangay) {
+                            driverSelect1.append(`<option value="${barangay.id}">${barangay.area_name}</option>`);
+                            driverSelect2.append(`<option value="${barangay.id}">${barangay.area_name}</option>`);
+                        });
+                    }
                 },
                 error: function (error) {
                     console.log("Error fetching barangay: ", error);

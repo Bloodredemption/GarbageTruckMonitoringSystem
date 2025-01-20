@@ -14,23 +14,24 @@ class WasteCollectionController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $userId = Auth::id();
+            $wasteCompositions = WasteComposition::with(['brgy:id,area_name', 'user:id,fullname'])
+                                ->where('isDeleted', 0)
+                                ->whereHas('user', function ($query) {
+                                    $query->where('user_type', 'driver');
+                                })
+                                ->orderBy('created_at', 'desc')
+                                ->get();
             
-            $wasteCompositions = WasteComposition::with('brgy:id,area_name')
-                            ->where('user_id', $userId)
-                            ->where('isDeleted', 0)
-                            ->orderBy('created_at', 'desc')
-                            ->get();
-        
             return response()->json(['wasteCompositions' => $wasteCompositions]);
         }
 
-        $userId = Auth::id();
-            
-        $wasteCompositions = WasteComposition::with('brgy:id,area_name')
-                        ->where('user_id', $userId)
-                        ->orderBy('created_at', 'desc')
-                        ->get();
+        $wasteCompositions = WasteComposition::with(['brgy:id,area_name', 'user:id,fullname'])
+                            ->where('isDeleted', 0)
+                            ->whereHas('user', function ($query) {
+                                $query->where('user_type', 'driver');
+                            })
+                            ->orderBy('created_at', 'desc')
+                            ->get();
 
         return view('landfill.waste-collection.index', compact('wasteCompositions'));
     }

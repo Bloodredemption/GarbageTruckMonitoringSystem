@@ -18,6 +18,8 @@ use App\Http\Controllers\ResidentsConcernsController;
 use App\Http\Controllers\TruckLocationController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\ByProductsController;
 use App\Http\Controllers\IndustrialEstablishmentController;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,6 +58,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dashboard/fetchWasteDataForInfo', [DashboardController::class, 'fetchWasteDataForInfo']);
     Route::get('/dashboard/getTodayWasteConverted', [DashboardController::class, 'getTodayWasteConverted'])->name('getTodayWasteConverted');
     Route::get('/dashboard/getDiagnosticData', [DashboardController::class, 'getDiagnosticData'])->name('getDiagnosticData');
+});
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
 });
 
 // Live Tracking
@@ -225,6 +231,12 @@ Route::prefix('landfill')->middleware('auth')->group(function () {
     Route::put('/waste-conversions/{id}/restore', [WasteConversionController::class, 'restore']);
     Route::put('/waste-conversions/{id}/archive', [WasteConversionController::class, 'archive']);
     Route::get('/waste-conversions/getArchive', [WasteConversionController::class, 'getArchive'])->name('wcov.getArchive');
+    Route::get('/waste-conversions/getTotalConv', [WasteConversionController::class, 'fetchTotalConv'])->name('getTotalConv');
+});
+
+// By Products
+Route::prefix('landfill')->middleware('auth')->group(function () {
+    Route::get('/by-products', [ByProductsController::class, 'index'])->name('bp.index');
 });
 
 // Help
@@ -252,7 +264,7 @@ Route::prefix('driver')->middleware('auth')->group(function () {
 // Waste Composition
 Route::prefix('driver')->middleware('auth')->group(function () {
     Route::get('/waste-composition', [WasteCompositionController::class, 'index'])->name('wc.index');
-    Route::get('/waste-composition/getBarangay', [WasteCompositionController::class, 'getBarangay'])->name('wc.getBrgy');
+    Route::get('/waste-composition/getBarangay', [WasteCompositionController::class, 'getBarangaywSched'])->name('wc.getBrgy');
     Route::get('/waste-composition/getEvent', [WasteCompositionController::class, 'getEvent'])->name('wc.getEvent');
     Route::post('/waste-composition', [WasteCompositionController::class, 'store'])->name('wc.store');
     Route::get('/waste-composition/{id}/edit', [WasteCompositionController::class, 'edit']);
@@ -270,6 +282,9 @@ Route::prefix('driver')->middleware('auth')->group(function () {
 Route::prefix('driver')->middleware('auth')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'driver_index'])->name('notif.index');
     Route::post('/notifications/markAsRead', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    Route::post('/notifications/{id}/markedAsRead', [NotificationController::class, 'markAsRead'])->name('markAsRead');
+    Route::post('/notifications/{id}/reject', [ResidentsConcernsController::class, 'reject'])->name('rejectConcern');
+    Route::post('/notifications/{id}/complete', [ResidentsConcernsController::class, 'complete'])->name('completeConcern');
 });
 
 Route::prefix('driver')->middleware('auth')->group(function () {

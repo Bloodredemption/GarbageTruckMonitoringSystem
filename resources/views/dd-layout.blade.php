@@ -99,6 +99,44 @@
         .dropdown-toggle.no-arrow::after {
             display: none;
         }
+
+        .nav-tabs {
+            border-bottom: none;
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Align vertically to center */
+            /* background-color: #bdbdbd3d; */
+            border-radius: 50px;
+            padding: 5px; /* Add padding for spacing */
+        }
+
+        .nav-tabs .nav-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: #6c757d;
+            border-radius: 50px;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center; /* Center content inside the button */
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #28a745; /* Green color */
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background-color: #d4edda; /* Light green on hover */
+        }
+
+        .nav-tabs svg {
+            margin-right: 5px; /* Add spacing between icon and text */
+        }
     </style>
 </head>
 <body>

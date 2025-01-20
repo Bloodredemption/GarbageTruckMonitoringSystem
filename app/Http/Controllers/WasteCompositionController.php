@@ -45,7 +45,10 @@ class WasteCompositionController extends Controller
                         ->orderBy('created_at', 'desc')
                         ->get();
 
-        return view('driver.waste-composition.index', compact('wasteCompositions'));
+        $totalBiodegradable = WasteComposition::where('waste_type', 'Biodegradable')->sum('metrics');
+        $totalResidual = WasteComposition::where('waste_type', 'Residual')->sum('metrics');
+
+        return view('driver.waste-composition.index', compact('wasteCompositions','totalBiodegradable', 'totalResidual'));
     }
 
     public function search(Request $request)
@@ -172,6 +175,25 @@ class WasteCompositionController extends Controller
         ]);
     }
 
+    public function getBarangaywSched()
+    {
+        $currentDate = now();
+        $formattedDate = $currentDate->format('Y-m-d');
+        $formattedTime = $currentDate->format('H:i');
+
+        // Get the brgy_ids from CollectionSchedule
+        $brgyIds = CollectionSchedule::where('scheduled_date', $formattedDate)
+                    ->where('scheduled_time', '<', $formattedTime)
+                    ->pluck('brgy_id');
+
+        // Use the Barangay model to get details for the brgy_ids, selecting only id and area_name
+        $barangays = Barangay::whereIn('id', $brgyIds)
+                    ->select('id', 'area_name')
+                    ->get();
+
+        return response()->json(['barangays' => $barangays]);
+    }
+
     public function getBarangay()
     {
         $barangays = Barangay::get(['id', 'area_name']);
@@ -199,7 +221,6 @@ class WasteCompositionController extends Controller
     {
         $request->validate([
             'brgy_id' => 'required|exists:barangays,id',
-            'event_id' => 'required|exists:events,id',
             'waste_type' => 'required|string',
             'metrics' => 'required|string',
         ]);
@@ -255,7 +276,6 @@ class WasteCompositionController extends Controller
     {
         $request->validate([
             'brgy_id' => 'required|exists:barangays,id',
-            'event_id' => 'required|exists:events,id',
             'waste_type' => 'required|string',
             'metrics' => 'required|string',
         ]);
@@ -294,6 +314,27 @@ class WasteCompositionController extends Controller
         $wasteComposition->save();
 
         return response()->json(['message' => 'Waste composition successfully deleted.']);
+    }
+
+    public function getBrgyWasteData(): JsonResponse
+    {
+        // Calculate total metrics for each month grouped by brgy_id
+        $wasteData = WasteComposition::selectRaw('brgy_id, DATE_FORMAT(collection_date, "%Y-%m") as month, SUM(metrics) as total_metrics')
+            ->groupBy('brgy_id', 'month') // Group by brgy_id and month
+            ->orderBy('month')
+            ->orderBy('brgy_id')
+            ->get();
+
+        // Return only total_metrics for each month and barangay
+        $response = $wasteData->map(function ($item) {
+            return [
+                'brgy_id' => $item->brgy_id,
+                'month' => $item->month,
+                'total_metrics' => $item->total_metrics,
+            ];
+        });
+
+        return response()->json($response);
     }
 
     public function getWasteData(): JsonResponse

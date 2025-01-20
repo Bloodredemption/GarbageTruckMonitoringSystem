@@ -17,6 +17,7 @@ class ResidentsConcerns extends Model
         'address',
         'complaint_details',
         'dateOfIncident',
+        'remarks',
         'status',
     ];
 
