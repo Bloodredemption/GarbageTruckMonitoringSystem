@@ -298,3 +298,9 @@ Route::prefix('driver')->middleware('auth')->group(function () {
 });
 
 // End Driver Side //
+
+Route::get('/brgypredicted-data', [AnalyticsController::class, 'brgyWastePrediction'])->name('brgyWastePrediction');
+
+Route::get('/bppredicted-data', [AnalyticsController::class, 'byProductsPrediction'])->name('byProductsPrediction');
+
+Route::get('/waste-prediction', [AnalyticsController::class, 'wastePrediction'])->name('wastePrediction');

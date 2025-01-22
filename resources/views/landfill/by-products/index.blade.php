@@ -96,7 +96,7 @@
                                                 <th>No.</th>
                                                 <th>Conversion Method</th>
                                                 <th>Metrics</th>
-                                                <th>Conversion Period</th>
+                                                <th>Duration</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -105,7 +105,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $bp->conversion_method }}</td>
                                                 <td>{{ $bp->metrics }} kg/s</td>
-                                                <td>{{ $bp->start_date }} to {{ $bp->end_date }}</td>
+                                                <td>{{ $bp->days_took }} day</td>
                                             </tr>
                                             @endforeach
                                         </tbody>

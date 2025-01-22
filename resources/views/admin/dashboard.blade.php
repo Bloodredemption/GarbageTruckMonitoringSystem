@@ -187,6 +187,15 @@
             </div>
     
             <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Insert calendar here -->
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- <div class="col-lg-6">
                 <div class="card flex-fill">
                     <div class="card-header d-flex justify-content-between">
                         <div class="header-title">
@@ -200,9 +209,9 @@
                         <canvas id="wastePredictionChart" width="400" height="200"></canvas>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <!-- Calendar -->
             <div class="col-lg-12">
                 <div class="card">
@@ -212,10 +221,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
     
-    <div class="modal fade" id="performanceReportModal" tabindex="-1" aria-labelledby="performanceReportModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="performanceReportModal" tabindex="-1" aria-labelledby="performanceReportModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -263,7 +272,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Footer Section Start -->
     @include('partials.footer')
@@ -274,140 +283,140 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    async function fetchPredictionData() {
-        try {
-            const response = await fetch("http://127.0.0.1:8000/predict-next-month");
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            const data = await response.json();
-            updateChart(data); // Call function to update chart with fetched data
-            updateMetricsTable(data.performance_metrics); // Pass only the performance_metrics part
-        } catch (error) {
-            console.error("Error fetching prediction data:", error);
-        }
-    }
+    // async function fetchPredictionData() {
+    //     try {
+    //         const response = await fetch("http://127.0.0.1:8000/predict-next-month");
+    //         if (!response.ok) {
+    //             throw new Error("Network response was not ok");
+    //         }
+    //         const data = await response.json();
+    //         updateChart(data); // Call function to update chart with fetched data
+    //         updateMetricsTable(data.performance_metrics); // Pass only the performance_metrics part
+    //     } catch (error) {
+    //         console.error("Error fetching prediction data:", error);
+    //     }
+    // }
 
-    // Function to update the performance metrics table
-    function updateMetricsTable(metrics) {
-        // Update MSE row
-        const mseValue = metrics.mse; 
-        document.getElementById('mseValue').textContent = mseValue.toFixed(2); // Format to two decimal places
-        document.getElementById('mseDescription').innerHTML = getMseDescription(mseValue);
+    // // Function to update the performance metrics table
+    // function updateMetricsTable(metrics) {
+    //     // Update MSE row
+    //     const mseValue = metrics.mse; 
+    //     document.getElementById('mseValue').textContent = mseValue.toFixed(2); // Format to two decimal places
+    //     document.getElementById('mseDescription').innerHTML = getMseDescription(mseValue);
 
-        // Update MAE row
-        const maeValue = metrics.mae;
-        document.getElementById('maeValue').textContent = maeValue.toFixed(2); // Format to two decimal places
-        document.getElementById('maeDescription').innerHTML = getMaeDescription(maeValue);
+    //     // Update MAE row
+    //     const maeValue = metrics.mae;
+    //     document.getElementById('maeValue').textContent = maeValue.toFixed(2); // Format to two decimal places
+    //     document.getElementById('maeDescription').innerHTML = getMaeDescription(maeValue);
 
-        // Update sMAPE row
-        const smapeValue = metrics.mape;
-        document.getElementById('smapeValue').textContent = smapeValue.toFixed(2) + '%'; // Format to two decimal places
-        document.getElementById('smapeDescription').innerHTML = getSmapeDescription(smapeValue);
+    //     // Update sMAPE row
+    //     const smapeValue = metrics.mape;
+    //     document.getElementById('smapeValue').textContent = smapeValue.toFixed(2) + '%'; // Format to two decimal places
+    //     document.getElementById('smapeDescription').innerHTML = getSmapeDescription(smapeValue);
 
-        // Update Accuracy row
-        const accuracyValue = metrics.accuracy;
-        document.getElementById('accuracyValue').textContent = accuracyValue.toFixed(2); // Format to two decimal places
-        document.getElementById('accuracyDescription').innerHTML = getAccuracyDescription(accuracyValue);
-    }
+    //     // Update Accuracy row
+    //     const accuracyValue = metrics.accuracy;
+    //     document.getElementById('accuracyValue').textContent = accuracyValue.toFixed(2); // Format to two decimal places
+    //     document.getElementById('accuracyDescription').innerHTML = getAccuracyDescription(accuracyValue);
+    // }
 
-    // Functions to generate dynamic descriptions based on metric values
+    // // Functions to generate dynamic descriptions based on metric values
 
-    function getMseDescription(value) {
-        if (value < 1000) {
-            return "A lower value indicates better model accuracy. In this case, the MSE is quite low, suggesting good model performance.";
-        } else if (value < 2000) {
-            return "A moderate value for MSE, indicating a reasonable level of prediction error.";
-        } else {
-            return "A higher MSE suggests significant prediction error. This could indicate room for model improvement.";
-        }
-    }
+    // function getMseDescription(value) {
+    //     if (value < 1000) {
+    //         return "A lower value indicates better model accuracy. In this case, the MSE is quite low, suggesting good model performance.";
+    //     } else if (value < 2000) {
+    //         return "A moderate value for MSE, indicating a reasonable level of prediction error.";
+    //     } else {
+    //         return "A higher MSE suggests significant prediction error. This could indicate room for model improvement.";
+    //     }
+    // }
 
-    function getMaeDescription(value) {
-        if (value < 10) {
-            return "A lower value means the predictions are closer to the actual values. This suggests highly accurate predictions.";
-        } else if (value < 50) {
-            return "An average MAE, indicating moderate prediction accuracy with room for improvement.";
-        } else {
-            return "A higher MAE value suggests that, on average, the model’s predictions are off by a significant margin.";
-        }
-    }
+    // function getMaeDescription(value) {
+    //     if (value < 10) {
+    //         return "A lower value means the predictions are closer to the actual values. This suggests highly accurate predictions.";
+    //     } else if (value < 50) {
+    //         return "An average MAE, indicating moderate prediction accuracy with room for improvement.";
+    //     } else {
+    //         return "A higher MAE value suggests that, on average, the model’s predictions are off by a significant margin.";
+    //     }
+    // }
 
-    function getSmapeDescription(value) {
-        if (value < 10) {
-            return "A very low sMAPE indicates highly accurate predictions, with the model being close to actual values.";
-        } else if (value < 30) {
-            return "A reasonable sMAPE indicating moderate prediction error, but still acceptable in many cases.";
-        } else {
-            return "A higher sMAPE suggests a significant discrepancy between predicted and actual values, indicating a need for improvement.";
-        }
-    }
+    // function getSmapeDescription(value) {
+    //     if (value < 10) {
+    //         return "A very low sMAPE indicates highly accurate predictions, with the model being close to actual values.";
+    //     } else if (value < 30) {
+    //         return "A reasonable sMAPE indicating moderate prediction error, but still acceptable in many cases.";
+    //     } else {
+    //         return "A higher sMAPE suggests a significant discrepancy between predicted and actual values, indicating a need for improvement.";
+    //     }
+    // }
 
-    function getAccuracyDescription(value) {
-        if (value >= 0.9) {
-            return "An R² value close to 1 indicates that the model explains almost all of the variance in the data, suggesting excellent model performance.";
-        } else if (value >= 0.7) {
-            return "An R² value above 0.7 indicates good model performance, explaining a large portion of the variance.";
-        } else if (value >= 0.5) {
-            return "An R² value of 0.5 suggests moderate performance, with significant room for improvement.";
-        } else {
-            return "An R² value below 0.5 indicates that the model is only explaining a small portion of the variance, suggesting poor model performance.";
-        }
-    }
+    // function getAccuracyDescription(value) {
+    //     if (value >= 0.9) {
+    //         return "An R² value close to 1 indicates that the model explains almost all of the variance in the data, suggesting excellent model performance.";
+    //     } else if (value >= 0.7) {
+    //         return "An R² value above 0.7 indicates good model performance, explaining a large portion of the variance.";
+    //     } else if (value >= 0.5) {
+    //         return "An R² value of 0.5 suggests moderate performance, with significant room for improvement.";
+    //     } else {
+    //         return "An R² value below 0.5 indicates that the model is only explaining a small portion of the variance, suggesting poor model performance.";
+    //     }
+    // }
 
-    const ctx = document.getElementById('wastePredictionChart').getContext('2d');
-    const wastePredictionChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [], // Will be updated with fetched data
-            datasets: [
-                {
-                    label: 'Biodegradable Waste',
-                    data: [],
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                },
-                {
-                    label: 'Residual Waste',
-                    data: [],
-                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                },
-                {
-                    label: 'Recyclable Waste', // New dataset for recyclable waste
-                    data: [],
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Waste Metrics (kg)' }
-                },
-                x: {
-                    title: { display: true, text: 'Prediction Period' }
-                }
-            }
-        }
-    });
+    // const ctx = document.getElementById('wastePredictionChart').getContext('2d');
+    // const wastePredictionChart = new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: [], // Will be updated with fetched data
+    //         datasets: [
+    //             {
+    //                 label: 'Biodegradable Waste',
+    //                 data: [],
+    //                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
+    //             },
+    //             {
+    //                 label: 'Residual Waste',
+    //                 data: [],
+    //                 backgroundColor: 'rgba(255, 99, 132, 0.6)',
+    //             },
+    //             {
+    //                 label: 'Recyclable Waste', // New dataset for recyclable waste
+    //                 data: [],
+    //                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
+    //             },
+    //         ],
+    //     },
+    //     options: {
+    //         responsive: true,
+    //         scales: {
+    //             y: {
+    //                 beginAtZero: true,
+    //                 title: { display: true, text: 'Waste Metrics (kg)' }
+    //             },
+    //             x: {
+    //                 title: { display: true, text: 'Prediction Period' }
+    //             }
+    //         }
+    //     }
+    // });
 
-    // Function to update the chart with data from FastAPI
-    function updateChart(data) {
-        // Set labels to show the prediction period
-        wastePredictionChart.data.labels = [`${data.start_date} - ${data.end_date}`];
+    // // Function to update the chart with data from FastAPI
+    // function updateChart(data) {
+    //     // Set labels to show the prediction period
+    //     wastePredictionChart.data.labels = [`${data.start_date} - ${data.end_date}`];
         
-        // Update the dataset values
-        wastePredictionChart.data.datasets[0].data = [data.biodegradable];
-        wastePredictionChart.data.datasets[1].data = [data.residual];
-        wastePredictionChart.data.datasets[2].data = [data.recyclable]; // Update recyclable dataset
+    //     // Update the dataset values
+    //     wastePredictionChart.data.datasets[0].data = [data.biodegradable];
+    //     wastePredictionChart.data.datasets[1].data = [data.residual];
+    //     wastePredictionChart.data.datasets[2].data = [data.recyclable]; // Update recyclable dataset
         
-        // Refresh the chart to display updated data
-        wastePredictionChart.update();
-    }
+    //     // Refresh the chart to display updated data
+    //     wastePredictionChart.update();
+    // }
 
-    // Fetch data from FastAPI when the page loads
-    window.onload = fetchPredictionData;
+    // // Fetch data from FastAPI when the page loads
+    // window.onload = fetchPredictionData;
 
 
     function fetchTodayWasteConverted() {

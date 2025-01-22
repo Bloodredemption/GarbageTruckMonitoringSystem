@@ -50,9 +50,9 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('admin/analytics') ? 'active' : '' }}" aria-current="page" href="{{ route('analytics') }}">
                             <i class="icon">
-                                <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-20">
-                                    <path opacity="0.4" d="M16.0756 2H19.4616C20.8639 2 22.0001 3.14585 22.0001 4.55996V7.97452C22.0001 9.38864 20.8639 10.5345 19.4616 10.5345H16.0756C14.6734 10.5345 13.5371 9.38864 13.5371 7.97452V4.55996C13.5371 3.14585 14.6734 2 16.0756 2Z" fill="currentColor"></path>
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="currentColor"></path>
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="22"  height="22"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-presentation-analytics">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M21 3a1 1 0 0 1 0 2v9a3 3 0 0 1 -3 3h-5v2h2a1 1 0 0 1 0 2h-6a1 1 0 0 1 0 -2h2v-2h-5a3 3 0 0 1 -3 -3v-9a1 1 0 1 1 0 -2zm-12 4a1 1 0 0 0 -1 1v4a1 1 0 0 0 2 0v-4a1 1 0 0 0 -1 -1m6 2a1 1 0 0 0 -1 1v2a1 1 0 0 0 2 0v-2a1 1 0 0 0 -1 -1m-3 1a1 1 0 0 0 -1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0 -1 -1" />
                                 </svg>
                             </i>
                             <span class="item-name">Analytics</span>
@@ -276,24 +276,19 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('admin/industrial-establishments') ? 'active' : '' }}"  href="{{ route('ie.index') }}">
                             <i class="icon">
-                                <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                    @if(request()->is('admin/industrial-establishments'))
-                                        <rect width="30" height="30" fill="url(#pattern0_18_1461)"/>
-                                        <defs>
-                                            <pattern id="pattern0_18_1461" patternContentUnits="objectBoundingBox" width="1" height="1">
-                                            <use xlink:href="#image0_18_1461" transform="scale(0.0333333)"/>
-                                            </pattern>
-                                            <image id="image0_18_1461" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABKUlEQVR4nO3VPUoDQRgG4K1SaWnEQmMrsRMPIYhXCyoeQLyFgohCIsFCFLXRgIpeIKKN8sjIFmtg3d8Ei7zd7gzz8O03OxNF00yTErSxjRu84QO32MUqtvCKZ2xEVYMG9vAlPWHsPfH8VBWdwYnieamCzuKsBBoq3yyLzqOrXD6xUgZdDz1SLZ0i4DIOMjZR3lxlYae4QBNLeFBPhllwP554XTM+zILnwmeJJ99hAYu4rwhf5ultM664zso7mfAY8PA7tXPBNeM7udEa8XC8NsrALZwnFiqCh+N1pjAaknIh5MG7pdGQ+J6VgQ9Gxh7DWFQlOBpZtJfS80FiB69VQhM9PowrP46R5h/4fjTOSMdbY4XTjtdoUvG78v7E4AQertLez4tp/lu+Ael7Q+NPJQTiAAAAAElFTkSuQmCC"/>
-                                        </defs>
-                                    @else
-                                        <rect width="30" height="30" fill="url(#pattern0_18_1484)"/>
-                                        <defs>
-                                            <pattern id="pattern0_18_1484" patternContentUnits="objectBoundingBox" width="1" height="1">
-                                            <use xlink:href="#image0_18_1484" transform="scale(0.0333333)"/>
-                                            </pattern>
-                                            <image id="image0_18_1484" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABmUlEQVR4nO3VvUrDUBQH8Ds56ajioHWVuokPIYiv1KnYc1PanNPUyUXbeyJ5BAUpFlRKB1HURQUVfQFFF4ty+6GtJGm+LA79wx2SDL+ce05uhBhnHI/kLE4DKgTiSyB+lcjvktSVRC4Z5t4ylHgDiJ8l8aNB9pqIm0zGmZDIZUncksSfHqsFpN5614DqIR5qOZOSuOYDui9UT5FRgO0pSVwPi+rKoVRdj4RmTZ4F5OPQlXa2+SNXtJdCo4ZZWdU9ioL2VV0MDG4W7UVAVRkyRAF7zOe+mER1BMRNY2t3Jmc6C5L4NjbaGa4XXxhINbpbc5EojkPgLDrTels6Q8HXhUJlLl+254HUTUz4bGhvdaW64iQrDzxcSeLtz8nidCA4SRxIUWA0Qbymz/bwsFVNAanTvrcPg9f12S6iRLr8EILg+niNjOq0/7PuffvGAflu8Lm6189EnADywS/0xK3nPVxPcB7Viogbw6qmJKr9buWHGvEaOI0D8k5s1C9euH5R8dfJuhyvYlQxBitvjAz+wbmpB699Y5z/li/25Y4ksrHaBAAAAABJRU5ErkJggg=="/>
-                                        </defs>
-                                    @endif
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="22"  height="22"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-buildings">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M4 21v-15c0 -1 1 -2 2 -2h5c1 0 2 1 2 2v15" />
+                                    <path d="M16 8h2c1 0 2 1 2 2v11" />
+                                    <path d="M3 21h18" />
+                                    <path d="M10 12v0" />
+                                    <path d="M10 16v0" />
+                                    <path d="M10 8v0" />
+                                    <path d="M7 12v0" />
+                                    <path d="M7 16v0" />
+                                    <path d="M7 8v0" />
+                                    <path d="M17 12v0" />
+                                    <path d="M17 16v0" />
                                 </svg>
                             </i>
                             <span class="item-name">Industrial Establishment</span>
@@ -387,24 +382,9 @@
                     <li class="nav-item">
                         <a class="nav-link collapsed {{ request()->is('admin/reports*') ? 'active' : '' }}" data-bs-toggle="collapse" href="#sidebar-reports" role="button" aria-expanded="{{ request()->is('admin/reports*') ? 'true' : 'false' }}" aria-controls="sidebar-reports">
                             <i class="icon">
-                                <svg width="22" height="22" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    @if(request()->is('admin/reports*'))
-                                        <rect width="30" height="30" fill="url(#pattern0_367_813)"/>
-                                        <defs>
-                                            <pattern id="pattern0_367_813" patternContentUnits="objectBoundingBox" width="1" height="1">
-                                                <use xlink:href="#image0_367_813" transform="scale(0.0333333)"/>
-                                            </pattern>
-                                            <image id="image0_367_813" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAwUlEQVR4nO3WSwrCMBSF4Swos3aYBShuw4EV3HTtJDvoRH8HBg3FvHpTQcmBQuA2+cohgyrVopQCDsBEfmZgEJcHXCnL3T1nKVyaI3Bz+OVrsHrukeOsgKvgrITFOALY7T95F27YDAZMBJ+3hIsaCabB0oS7/YGqLdABvVuH5qYmbAHtvaMX+GvuPqwKbL1D9WJtP8xtDdhmQEFUAnepamOoBDaJy9RH5iJYnAa3qiW/t7GM75MTAfaV8BHYZcN/nQc5VjlIyycjUAAAAABJRU5ErkJggg=="/>
-                                        </defs>
-                                    @else
-                                        <rect width="30" height="30" fill="url(#pattern0_367_815)"/>
-                                        <defs>
-                                            <pattern id="pattern0_367_815" patternContentUnits="objectBoundingBox" width="1" height="1">
-                                                <use xlink:href="#image0_367_815" transform="scale(0.0333333)"/>
-                                            </pattern>
-                                            <image id="image0_367_815" width="30" height="30" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA80lEQVR4nO3TXQqCQBAH8DlQb/boAYqu0UMF3cMdfXDGM8zUubKXbtBLGSsIIvm9BZkLiwMj+1v+jgDzAoCQdWNYrsiaddmG5Y4k+9HhIWvaFc1hkme+WQ5j4awnvEXWh8WR9Pg1GADACY4DYCc4DoRH4zgCzvFEd8XA9Zp27AkHsfi1OMv9Y3DfRGrXDOPfRm1IbxGJZxJd2rqub6fcGWxIb2F8XhTv2LqMl/v2Yk5gUzrUPsu17VX71TQGwe8ObbuIk28ckXht0Tahg+EgFr9pmPJeTf/3fyecYZ5Q1Kkr1JBcOsMhn9YucIsi6aozPOn1AuAa8rg2SY4DAAAAAElFTkSuQmCC"/>
-                                        </defs>
-                                    @endif
+                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-clipboard-data">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M17.997 4.17a3 3 0 0 1 2.003 2.83v12a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3v-12a3 3 0 0 1 2.003 -2.83a4 4 0 0 0 3.997 3.83h4a4 4 0 0 0 3.98 -3.597zm-8.997 7.83a1 1 0 0 0 -1 1v4a1 1 0 0 0 2 0v-4a1 1 0 0 0 -1 -1m3 3a1 1 0 0 0 -1 1v1a1 1 0 0 0 1 1l.117 -.007a1 1 0 0 0 .883 -.993v-1a1 1 0 0 0 -1 -1m3 -1a1 1 0 0 0 -1 1v2a1 1 0 0 0 2 0v-2a1 1 0 0 0 -1 -1m-1 -12a2 2 0 1 1 0 4h-4a2 2 0 1 1 0 -4z" />
                                 </svg>
                             </i>
                             <span class="item-name">Reports</span>

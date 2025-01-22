@@ -19,13 +19,24 @@ class ByProductsController extends Controller
                         ->select('conversion_method', 'metrics', 'start_date', 'end_date')
                         ->get();
 
-        // Format the dates into human-readable format
+        // Calculate the days it took for each byProduct
         $byProducts->each(function ($byProduct) {
-            $byProduct->start_date = Carbon::parse($byProduct->start_date)->format('F j, Y');
-            $byProduct->end_date = Carbon::parse($byProduct->end_date)->format('F j, Y');
+            $startDate = Carbon::parse($byProduct->start_date);
+            $endDate = Carbon::parse($byProduct->end_date);
+            $byProduct->days_took = $startDate->diffInDays($endDate);
         });
 
         return view('landfill.by-products.index', compact('byProducts'));
+    }
+
+    public function byProductsAPI()
+    {
+        // Fetch the rows with the Finished status and get the specified columns
+        $byProducts = WasteConversion::where('status', 'Finished')
+                        ->select('conversion_method', 'metrics', 'start_date', 'end_date')
+                        ->get();
+
+        return response()->json($byProducts);
     }
 
     /**
